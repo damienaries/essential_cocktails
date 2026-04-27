@@ -13,10 +13,11 @@ export function Layout() {
         }}
       >
         <div style={{ fontWeight: 600, color: 'var(--text-h)' }}>Essential Cocktails</div>
-        <nav style={{ display: 'flex', gap: 12 }}>
+        <nav style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <NavLink to="/" end>
             Home
           </NavLink>
+          <NavLink to="/families">Families</NavLink>
           <NavLink to="/admin">Admin</NavLink>
         </nav>
       </header>

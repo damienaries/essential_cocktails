@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+# Essential Cocktails
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A curated compendium of classic cocktails—as reviewed and used by bar professionals—for bartenders, bar managers, training, and serious enthusiasts.
 
-Currently, two official plugins are available:
+## Vision
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Now:** trustworthy recipes and structure (families, variations) with a public, read-only browse experience.
+- **Later:** analytics for usage insights; **member-only** features such as featured cocktail menus (upload a full menu), social activity on drinks (comments/likes, optional user images); and a section for **ingredient recipes** (syrups, infusions, techniques).
 
-## React Compiler
+## MVP (current)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Public site:** no login required to browse.
+- **Home:** full drink list (~200 starters), **search / filter** by name, family, or ingredient.
+- **Families:** browse by cocktail family (Martini, Sour, Daiquiri, Old Fashioned, etc.).
+- **Detail:** click a card to open recipe details (ingredients, build, garnish, notes).
+- **Admin:** single maintainer during build; CRUD and image tooling will land after browse parity.
+- **Images:** AI-generated placeholders in development only until real photography or assets exist.
 
-## Expanding the ESLint configuration
+Stack: **React**, **TypeScript**, **Vite**, **React Router**, **TanStack Query**, **Firebase** (Firestore for drinks).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Setup
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env.local
+# Fill VITE_FIREBASE_* from Firebase Console → Project settings → Your apps (Web).
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Firestore expects a **`drinks`** collection with documents ordered by **`name`** (same as the legacy Vue app). Security rules should allow **public read** for the MVP; **writes** stay restricted to admins when you wire auth and rules.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Command       | Action              |
+| ------------- | ------------------- |
+| `npm run dev` | Start dev server    |
+| `npm run build` | Production build  |
+| `npm run preview` | Preview production build |
+
+## License
+
+Private / all rights reserved unless you add a license.
