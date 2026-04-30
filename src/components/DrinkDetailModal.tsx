@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button } from './atoms/Button'
 import type { Drink } from '../types/drink'
 import { formatGarnish, formatMethod } from '../lib/drinkDisplay'
 
@@ -73,23 +74,9 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
           <p style={{ textTransform: 'capitalize', margin: '8px 0' }}>{formatGarnish(drink)}</p>
 
           <div style={{ position: 'relative', marginTop: 24 }}>
-            <button
-              type="button"
-              onClick={() => setMetric((v) => !v)}
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                fontSize: 12,
-                padding: '4px 10px',
-                borderRadius: 999,
-                border: '1px solid var(--border)',
-                background: 'var(--code-bg)',
-                cursor: 'pointer',
-              }}
-            >
+            <Button variant="modal-unit" onClick={() => setMetric((v) => !v)}>
               {metric ? 'cl' : 'oz'}
-            </button>
+            </Button>
             <ul style={{ listStyle: 'none', padding: 0, margin: '28px 0 0' }}>
               {ingredients.map((ing, idx) => {
                 const qty = ing.quantity
@@ -120,20 +107,9 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
             <small style={{ display: 'block', marginTop: 16, lineHeight: 1.5 }}>{drink.description}</small>
           ) : null}
 
-          <button
-            type="button"
-            onClick={onClose}
-            style={{
-              marginTop: 24,
-              padding: '8px 16px',
-              cursor: 'pointer',
-              borderRadius: 4,
-              border: '1px solid var(--border)',
-              background: 'transparent',
-            }}
-          >
+          <Button variant="modal-close" onClick={onClose}>
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>
