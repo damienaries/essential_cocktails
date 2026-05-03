@@ -4,9 +4,15 @@ type Props = {
 	onClose: () => void;
 	children: ReactNode;
 	ariaLabelledBy?: string;
+	closeOnBackdrop?: boolean;
 };
 
-export function Modal({ onClose, children, ariaLabelledBy }: Props) {
+export function Modal({
+	onClose,
+	children,
+	ariaLabelledBy,
+	closeOnBackdrop = true,
+}: Props) {
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') onClose();
@@ -18,17 +24,8 @@ export function Modal({ onClose, children, ariaLabelledBy }: Props) {
 	return (
 		<div
 			role="presentation"
-			style={{
-				position: 'fixed',
-				inset: 0,
-				background: 'rgba(0,0,0,0.45)',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				padding: 16,
-				zIndex: 50,
-			}}
-			onClick={onClose}
+			className="modal-backdrop"
+			onClick={closeOnBackdrop ? onClose : undefined}
 		>
 			<div
 				role="dialog"

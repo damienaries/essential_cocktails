@@ -13,6 +13,11 @@
 	--shadow:
 		rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
+	/* Modal overlay: light frosted tint + dim base so the dialog reads above the page */
+	--modal-backdrop-tint: rgba(255, 255, 255, 0.2);
+	--modal-backdrop-base: rgba(6, 5, 12, 0.48);
+	--modal-backdrop-blur: 12px;
+
 	--sans: system-ui, 'Segoe UI', Roboto, sans-serif;
 	--heading: system-ui, 'Segoe UI', Roboto, sans-serif;
 	--mono: ui-monospace, Consolas, monospace;
@@ -45,6 +50,10 @@
 		--social-bg: rgba(47, 48, 58, 0.5);
 		--shadow:
 			rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+		--modal-backdrop-tint: rgba(230, 228, 242, 0.2);
+		--modal-backdrop-base: rgba(2, 3, 6, 0.78);
+		--modal-backdrop-blur: 14px;
 	}
 
 	#social .button-icon {
@@ -93,8 +102,89 @@ h2 {
 		font-size: 20px;
 	}
 }
-p {
-	margin: 0;
+
+.modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	box-sizing: border-box;
+	background:
+		linear-gradient(var(--modal-backdrop-tint), var(--modal-backdrop-tint)),
+		var(--modal-backdrop-base);
+	backdrop-filter: blur(var(--modal-backdrop-blur));
+	-webkit-backdrop-filter: blur(var(--modal-backdrop-blur));
+}
+
+/* Admin drink form (legacy Vue parity) */
+.admin-form-row {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin: 1.25rem auto;
+}
+
+@media screen and (max-width: 800px) {
+	.admin-form-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+.admin-form-row label,
+.admin-form-row > span:first-child {
+	flex: 0 0 20%;
+	max-width: 20%;
+	text-align: left;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--text-h);
+}
+
+.admin-form-row input:not([type='checkbox']),
+.admin-form-row select,
+.admin-form-row textarea {
+	flex: 1 1 auto;
+	width: 100%;
+	max-width: 80%;
+	border-radius: 8px;
+	padding: 12px 20px;
+	background: var(--bg);
+	color: var(--text);
+	border: 1px solid var(--border);
+	box-sizing: border-box;
+}
+
+.admin-form-row input:focus,
+.admin-form-row select:focus,
+.admin-form-row textarea:focus {
+	outline: 1px solid var(--accent-border);
+}
+
+@media screen and (max-width: 800px) {
+	.admin-form-row label,
+	.admin-form-row > span:first-child {
+		max-width: 100%;
+	}
+	.admin-form-row input:not([type='checkbox']),
+	.admin-form-row select,
+	.admin-form-row textarea {
+		max-width: 100%;
+	}
+}
+
+.admin-table-cell {
+	border: 1px solid var(--border);
+	padding: 0.5rem 1rem;
+	background: var(--bg);
+	text-align: left;
+	vertical-align: top;
 }
 
 code,
