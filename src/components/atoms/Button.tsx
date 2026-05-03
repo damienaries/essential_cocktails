@@ -11,7 +11,6 @@ type Props = {
 	href?: string | null;
 	variant?: ButtonVariant;
 	color?: ButtonColor;
-	/** Tighter padding and text for dense forms (e.g. admin). */
 	size?: ButtonSize;
 	fill?: boolean;
 	children: React.ReactNode;

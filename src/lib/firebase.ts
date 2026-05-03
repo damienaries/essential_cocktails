@@ -40,6 +40,11 @@ export function getFirebaseDb(): Firestore {
 
 export function getFirebaseStorage(): FirebaseStorage {
   initFirebase()
+  if (!readFirebaseConfig().storageBucket?.trim()) {
+    throw new Error(
+      'VITE_FIREBASE_STORAGE_BUCKET is required for image uploads. Copy it from Firebase Console → Project settings → Your apps (same value as the web app storageBucket).',
+    )
+  }
   if (!storage) storage = getStorage(app!)
   return storage
 }
