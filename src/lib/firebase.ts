@@ -1,5 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getFirestore, type Firestore } from 'firebase/firestore'
+import { getStorage, type FirebaseStorage } from 'firebase/storage'
 
 function readFirebaseConfig() {
   return {
@@ -15,9 +16,10 @@ function readFirebaseConfig() {
 
 let app: FirebaseApp | null = null
 let db: Firestore | null = null
+let storage: FirebaseStorage | null = null
 
-export function getFirebaseDb(): Firestore {
-  if (db) return db
+function initFirebase(): FirebaseApp {
+  if (app) return app
 
   const config = readFirebaseConfig()
   if (!config.apiKey || !config.projectId) {
@@ -27,6 +29,17 @@ export function getFirebaseDb(): Firestore {
   }
 
   app = initializeApp(config)
-  db = getFirestore(app)
+  return app
+}
+
+export function getFirebaseDb(): Firestore {
+  initFirebase()
+  if (!db) db = getFirestore(app!)
   return db
+}
+
+export function getFirebaseStorage(): FirebaseStorage {
+  initFirebase()
+  if (!storage) storage = getStorage(app!)
+  return storage
 }

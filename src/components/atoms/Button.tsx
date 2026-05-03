@@ -5,10 +5,14 @@ type ButtonColor = 'primary' | 'secondary' | 'danger';
 /** `default` uses `color` + `fill`. Modal variants are self-contained (temporary until redesign). */
 type ButtonVariant = 'default' | 'modal-unit' | 'modal-close';
 
+type ButtonSize = 'default' | 'sm';
+
 type Props = {
 	href?: string | null;
 	variant?: ButtonVariant;
 	color?: ButtonColor;
+	/** Tighter padding and text for dense forms (e.g. admin). */
+	size?: ButtonSize;
 	fill?: boolean;
 	children: React.ReactNode;
 	onClick?: (
@@ -27,6 +31,7 @@ function buildClassName(
 	variant: ButtonVariant,
 	color: ButtonColor,
 	fill: boolean,
+	size: ButtonSize,
 ): string {
 	if (variant === 'modal-unit') {
 		return [
@@ -47,7 +52,9 @@ function buildClassName(
 	}
 
 	let classes =
-		'px-6 py-1 rounded text-center hover:shadow transition-all duration-300 max-h-8';
+		size === 'sm'
+			? 'px-3 py-1 text-sm rounded text-center hover:shadow transition-all duration-300 min-h-7 max-h-7 leading-tight'
+			: 'px-6 py-1 rounded text-center hover:shadow transition-all duration-300 max-h-8';
 
 	if (color === 'primary') {
 		classes += ' text-black bg-blue-100 hover:bg-blue-200';
@@ -67,12 +74,13 @@ export function Button({
 	href = null,
 	variant = 'default',
 	color = 'primary',
+	size = 'default',
 	fill = false,
 	children,
 	onClick,
 	...rest
 }: Props) {
-	const classes = buildClassName(variant, color, fill);
+	const classes = buildClassName(variant, color, fill, size);
 
 	const handleClick = (
 		e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>,

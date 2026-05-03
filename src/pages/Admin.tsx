@@ -7,11 +7,9 @@ export function AdminPage() {
 			<h1 className="text-[var(--text-h)] text-3xl mt-0 mb-2">Admin</h1>
 			<p className="text-sm text-[var(--text)] mb-8 max-w-2xl">
 				Create, edit, and delete drinks in Firestore. Auth for this area will be
-				added before launch. Optional: set{' '}
-				<code className="text-[15px]">VITE_DRINK_IMAGE_API_URL</code> to your
-				local image server (e.g.{' '}
-				<code className="text-[15px]">http://localhost:3000</code>) to auto-fill
-				images like the legacy Vue app.
+				added before launch. Image prompts use ChatGPT (or similar) manually; uploads
+				go to Firebase Storage (<code className="text-[15px]">cocktail_images/</code>
+				) when Storage rules allow it.
 			</p>
 
 			<DrinkForm mode="add" />

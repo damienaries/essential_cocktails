@@ -16,7 +16,7 @@ export function EditDrinkModal({ drink, onClose }: Props) {
           <h2 id="edit-drink-title" className="text-[var(--text-h)] text-xl m-0 text-left">
             Edit {drink.name}
           </h2>
-          <Button type="button" color="primary" onClick={onClose}>
+          <Button type="button" color="primary" size="sm" onClick={onClose}>
             Cancel
           </Button>
         </div>

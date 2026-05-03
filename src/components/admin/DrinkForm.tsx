@@ -19,12 +19,9 @@ import {
 	type DrinkFormFields,
 	type IngredientFieldRow,
 } from '../../lib/drinkFormAdmin';
-import {
-	hasRenderableDrinkImageUrl,
-	tryGenerateDrinkImage,
-} from '../../lib/generateDrinkImage';
 import type { Drink } from '../../types/drink';
 import { Button } from '../atoms/Button';
+import { DrinkImagePromptAndUpload } from './DrinkImagePromptAndUpload';
 import { IngredientRowInput } from './IngredientRowInput';
 
 type Props =
@@ -40,7 +37,7 @@ export function DrinkForm(props: Props) {
 		() => props.mode === 'edit' && Boolean(props.drink.description?.trim()),
 	);
 	const [formError, setFormError] = useState<string | null>(null);
-	const [generateAiImage, setGenerateAiImage] = useState(false);
+	const [imageToolsKey, setImageToolsKey] = useState(0);
 
 	const saveMutation = useMutation({
 		mutationFn: async () => {
@@ -52,11 +49,7 @@ export function DrinkForm(props: Props) {
 				if (await drinkNameExists(name)) {
 					throw new Error(`A drink named "${name}" already exists.`);
 				}
-				let payload = formFieldsToWritePayload(fields);
-				if (generateAiImage && !hasRenderableDrinkImageUrl(payload.imageUrl)) {
-					const imagePath = await tryGenerateDrinkImage(name);
-					if (imagePath) payload = { ...payload, imageUrl: imagePath };
-				}
+				const payload = formFieldsToWritePayload(fields);
 				await addDrinkToFirestore(payload);
 				return;
 			}
@@ -72,7 +65,7 @@ export function DrinkForm(props: Props) {
 			if (props.mode === 'add') {
 				setFields(emptyDrinkForm());
 				setShowDescription(false);
-				setGenerateAiImage(false);
+				setImageToolsKey((k) => k + 1);
 			} else {
 				props.onDone();
 			}
@@ -189,35 +182,7 @@ export function DrinkForm(props: Props) {
 					}
 				/>
 			</div>
-			<div className="admin-form-row">
-				<label htmlFor="admin-drink-image">Image URL</label>
-				<input
-					id="admin-drink-image"
-					type="text"
-					value={fields.imageUrl}
-					onChange={(e) =>
-						setFields((f) => ({ ...f, imageUrl: e.target.value }))
-					}
-					placeholder="Optional"
-				/>
-			</div>
-			{props.mode === 'add' ? (
-				<div className="admin-form-row items-start">
-					<label htmlFor="admin-generate-ai-image">Generate AI image</label>
-					<div className="w-full md:w-4/5">
-						<div className="flex items-center gap-2 min-h-11">
-							<input
-								id="admin-generate-ai-image"
-								type="checkbox"
-								checked={generateAiImage}
-								onChange={(e) => setGenerateAiImage(e.target.checked)}
-								aria-describedby="admin-generate-ai-image-hint"
-								className="accent-[var(--accent)] size-4 shrink-0 rounded border-[var(--border)]"
-							/>
-						</div>
-					</div>
-				</div>
-			) : null}
+
 			<div className="admin-form-row">
 				<label htmlFor="admin-drink-family">Family</label>
 				<select
@@ -254,14 +219,21 @@ export function DrinkForm(props: Props) {
 					))}
 				</div>
 				<div className="flex gap-2 justify-end">
-					<Button type="button" color="secondary" onClick={removeIngredientRow}>
+					<Button type="button" color="secondary" size="sm" onClick={removeIngredientRow}>
 						−
 					</Button>
-					<Button type="button" color="secondary" onClick={addIngredientRow}>
+					<Button type="button" color="secondary" size="sm" onClick={addIngredientRow}>
 						+
 					</Button>
 				</div>
 			</div>
+
+			<DrinkImagePromptAndUpload
+				key={imageToolsKey}
+				fields={fields}
+				drinkId={props.mode === 'edit' ? props.drink.id : undefined}
+				onImageUrl={(url) => setFields((f) => ({ ...f, imageUrl: url }))}
+			/>
 
 			<div className="admin-form-row items-start">
 				<span className="pt-2">Description</span>
@@ -292,6 +264,7 @@ export function DrinkForm(props: Props) {
 				type="submit"
 				fill
 				color="secondary"
+				size="sm"
 				disabled={saveMutation.isPending}
 			>
 				{saveMutation.isPending ? 'Saving…' : submitLabel}
