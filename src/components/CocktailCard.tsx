@@ -1,3 +1,4 @@
+import { drinkPhotoImgProps } from '../lib/drinkImageAttrs'
 import type { Drink } from '../types/drink'
 
 type Props = {
@@ -6,52 +7,44 @@ type Props = {
 }
 
 export function CocktailCard({ drink, onSelect }: Props) {
-  const image = drink.imageUrl
-  const bg = image
-    ? `linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,.5)), url(${image})`
-    : 'linear-gradient(145deg, rgba(42,36,56,0.9), rgba(26,23,32,0.95))'
+  const imageUrl = drink.imageUrl?.trim()
 
   return (
-    <figure
-      style={{
-        position: 'relative',
-        margin: 0,
-        height: 200,
-        borderRadius: 8,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        boxShadow: 'var(--shadow)',
-      }}
+    <button
+      type="button"
       onClick={() => onSelect(drink)}
+      aria-label={`Open details for ${drink.name}`}
+      className="m-0 w-full cursor-pointer rounded-lg border-0 bg-transparent p-0 text-left font-[inherit] shadow-[var(--shadow)] transition-transform duration-300 hover:opacity-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-border)]"
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: bg,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'transform 0.35s ease',
-        }}
-      >
-        <div
-          style={{
-            position: 'relative',
-            fontSize: '1.15rem',
-            color: '#fff',
-            textAlign: 'center',
-            padding: 12,
-            textTransform: 'capitalize',
-            fontWeight: 500,
-            textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-          }}
+      <span className="relative block h-[200px] w-full overflow-hidden rounded-lg">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt=""
+            width={440}
+            height={200}
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+            loading="lazy"
+            {...drinkPhotoImgProps}
+          />
+        ) : (
+          <span
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(145deg,rgba(42,36,56,0.95),rgba(26,23,32,0.98))]"
+          />
+        )}
+        <span
+          aria-hidden
+          className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(to_right,rgba(0,0,0,.5),rgba(0,0,0,.5))]"
         >
-          {drink.name}
-        </div>
-      </div>
-    </figure>
+          <span
+            className="relative px-3 text-center text-[1.15rem] font-medium capitalize text-white"
+            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+          >
+            {drink.name}
+          </span>
+        </span>
+      </span>
+    </button>
   )
 }

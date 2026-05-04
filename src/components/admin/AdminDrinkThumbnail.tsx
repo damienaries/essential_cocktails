@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { drinkPhotoImgProps } from '../../lib/drinkImageAttrs'
 
 type Props = {
   imageUrl?: string | null
@@ -42,6 +43,7 @@ export function AdminDrinkThumbnail({ imageUrl }: Props) {
           alt=""
           className="w-full h-full object-cover"
           loading="lazy"
+          {...drinkPhotoImgProps}
           onError={() => setBroken(true)}
         />
       ) : (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from './atoms/Button';
 import { Modal } from './atoms/Modal';
 import type { Drink } from '../types/drink';
+import { drinkPhotoImgProps } from '../lib/drinkImageAttrs';
 import { formatGarnish, formatMethod } from '../lib/drinkDisplay';
 
 type Props = {
@@ -14,18 +15,25 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 
 	const unit = metric ? 'cl' : 'oz';
 	const ingredients = drink.ingredients ?? [];
+	const imageUrl = drink.imageUrl?.trim();
 
 	return (
 		<Modal onClose={onClose} ariaLabelledBy="drink-detail-title">
 			<div
-				style={{
-					flex: '1 1 280px',
-					minHeight: 280,
-					background: drink.imageUrl
-						? `url(${drink.imageUrl}) center/cover no-repeat`
-						: 'linear-gradient(145deg, #2a2438, #1a1720)',
-				}}
-			/>
+				className="relative min-h-[280px] min-w-0 flex-[1_1_280px] overflow-hidden bg-[linear-gradient(145deg,#2a2438,#1a1720)]"
+			>
+				{imageUrl ? (
+					<img
+						src={imageUrl}
+						alt={`Photo of ${drink.name}`}
+						className="block h-full min-h-[280px] w-full object-cover object-center"
+						width={560}
+						height={560}
+						{...drinkPhotoImgProps}
+						fetchPriority="high"
+					/>
+				) : null}
+			</div>
 			<div
 				style={{
 					flex: '1 1 320px',

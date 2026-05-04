@@ -1,13 +1,12 @@
 /**
  * Client-side cocktail image prep for Storage.
  *
- * Sharp (and similar) only run in Node; this app uploads from the browser straight to
- * Firebase, so we resize + WebP-encode here. A future @2x asset (e.g. 1000px) can follow
- * the same pattern or move encoding to a Cloud Function if you need server-side sharp.
+ * this app uploads from the browser straight to Firebase, so we resize + WebP-encode here.
  */
 
-export const COCKTAIL_IMAGE_DISPLAY_PX = 500;
-/** Soft target for payload size (bytes); we only log if exceeded, not a hard cap. */
+/** Square output edge length (px) */
+export const COCKTAIL_IMAGE_DISPLAY_PX = 1000;
+/** Soft target for payload size (bytes) */
 export const COCKTAIL_IMAGE_TARGET_BYTES = 100 * 1024;
 
 const WEBP_MIME = 'image/webp';
@@ -35,19 +34,21 @@ function canvasToWebp(
 	});
 }
 
-/** Draw image contained in a square canvas without upscaling; letterbox with solid bg. */
-function drawContainedSquare(
+/**
+ * Scale and center-crop to a square (like CSS `object-fit: cover`).
+ * Avoids the white side/top bars you get with "contain" + letterboxing on portrait shots.
+ */
+function drawCoverSquare(
 	canvas: HTMLCanvasElement,
 	bitmap: ImageBitmap,
 	side: number,
-	letterboxRgb: [number, number, number],
 ): void {
 	const ctx = canvas.getContext('2d');
 	if (!ctx) throw new Error('Could not get canvas context.');
 
 	const w = bitmap.width;
 	const h = bitmap.height;
-	const scale = Math.min(side / w, side / h, 1);
+	const scale = Math.max(side / w, side / h);
 	const tw = w * scale;
 	const th = h * scale;
 	const ox = (side - tw) / 2;
@@ -55,8 +56,6 @@ function drawContainedSquare(
 
 	canvas.width = side;
 	canvas.height = side;
-	ctx.fillStyle = `rgb(${letterboxRgb[0]}, ${letterboxRgb[1]}, ${letterboxRgb[2]})`;
-	ctx.fillRect(0, 0, side, side);
 	ctx.drawImage(bitmap, ox, oy, tw, th);
 }
 
@@ -70,20 +69,15 @@ function warnIfOverTarget(blob: Blob, targetBytes: number): void {
 }
 
 /**
- * Resize (down only; never upscales) into a square, encode WebP.
+ * Resize to a square WebP (cover crop), encode WebP.
  * Returns a Blob ready for `uploadBytes`.
  */
 export async function optimizeCocktailImageForUpload(
 	file: File,
-	options?: {
-		targetBytes?: number;
-		side?: number;
-		letterboxRgb?: [number, number, number];
-	},
+	options?: { targetBytes?: number; side?: number },
 ): Promise<Blob> {
 	const targetBytes = options?.targetBytes ?? COCKTAIL_IMAGE_TARGET_BYTES;
 	const side = options?.side ?? COCKTAIL_IMAGE_DISPLAY_PX;
-	const letterboxRgb = options?.letterboxRgb ?? [255, 255, 255];
 
 	let bitmap: ImageBitmap;
 	try {
@@ -94,7 +88,7 @@ export async function optimizeCocktailImageForUpload(
 
 	try {
 		const canvas = document.createElement('canvas');
-		drawContainedSquare(canvas, bitmap, side, letterboxRgb);
+		drawCoverSquare(canvas, bitmap, side);
 		const blob = await canvasToWebp(canvas, WEBP_QUALITY);
 		warnIfOverTarget(blob, targetBytes);
 		return blob;
