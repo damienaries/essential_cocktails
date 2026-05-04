@@ -1,14 +1,9 @@
-export const CHATGPT_ORIGIN = 'https://chatgpt.com'
-
-/**
- * Max characters for the AI image prompt textarea.
- * Based on a representative generated prompt (~462 chars for an Aviation-style drink) × 3.
- */
-export const AI_IMAGE_PROMPT_MAX_CHARS = 462 * 3
+export const CHATGPT_ORIGIN = 'https://chatgpt.com';
+export const AI_IMAGE_PROMPT_MAX_CHARS = 1000;
 
 export function clampAiImagePrompt(prompt: string): string {
-  if (prompt.length <= AI_IMAGE_PROMPT_MAX_CHARS) return prompt
-  return prompt.slice(0, AI_IMAGE_PROMPT_MAX_CHARS)
+	if (prompt.length <= AI_IMAGE_PROMPT_MAX_CHARS) return prompt;
+	return prompt.slice(0, AI_IMAGE_PROMPT_MAX_CHARS);
 }
 
 /**
@@ -16,7 +11,7 @@ export function clampAiImagePrompt(prompt: string): string {
  * Prompt is clamped to {@link AI_IMAGE_PROMPT_MAX_CHARS} so URLs stay practical.
  */
 export function buildChatGptPrefillUrl(prompt: string): string {
-  const q = clampAiImagePrompt(prompt).trim()
-  if (!q) return CHATGPT_ORIGIN
-  return `${CHATGPT_ORIGIN}/?q=${encodeURIComponent(q)}`
+	const q = clampAiImagePrompt(prompt).trim();
+	if (!q) return CHATGPT_ORIGIN;
+	return `${CHATGPT_ORIGIN}/?q=${encodeURIComponent(q)}`;
 }

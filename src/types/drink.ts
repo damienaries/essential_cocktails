@@ -1,6 +1,7 @@
 export type DrinkIngredient = {
   name: string | null
-  quantity: number | null
+  /** Plain volumes like `1.5` (number, oz/cl toggle applies); free text e.g. `1 dash`, `top`. */
+  quantity: number | string | null
   unit: string | null
 }
 

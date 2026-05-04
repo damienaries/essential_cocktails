@@ -40,8 +40,8 @@ export function buildDrinkImagePrompt(fields: DrinkFormFields): string {
   const p = getRandomImagePromptParams()
   const name = fields.name.trim() || 'cocktail'
   const ingredients = fields.ingredients
-    .filter((i) => i.name.trim() && i.quantity.trim())
-    .map((i) => `${i.name.trim()} (${i.quantity.trim()} ${i.unit || 'oz'})`)
+    .map((i) => i.name.trim())
+    .filter(Boolean)
     .join(', ')
 
   return [

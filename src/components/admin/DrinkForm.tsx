@@ -190,6 +190,7 @@ export function DrinkForm(props: Props) {
 					value={fields.family}
 					onChange={(e) => setFields((f) => ({ ...f, family: e.target.value }))}
 				>
+					<option value="">Select a family</option>
 					{COCKTAIL_FAMILIES.map((fam) => (
 						<option key={fam.slug} value={fam.label}>
 							{fam.label}
@@ -219,10 +220,20 @@ export function DrinkForm(props: Props) {
 					))}
 				</div>
 				<div className="flex gap-2 justify-end">
-					<Button type="button" color="secondary" size="sm" onClick={removeIngredientRow}>
+					<Button
+						type="button"
+						color="secondary"
+						size="sm"
+						onClick={removeIngredientRow}
+					>
 						−
 					</Button>
-					<Button type="button" color="secondary" size="sm" onClick={addIngredientRow}>
+					<Button
+						type="button"
+						color="secondary"
+						size="sm"
+						onClick={addIngredientRow}
+					>
 						+
 					</Button>
 				</div>

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { deleteDrinkFromFirestore } from '../../api/drinks'
 import { useDrinksQuery } from '../../hooks/useDrinksQuery'
 import { formatGarnish, formatMethod } from '../../lib/drinkDisplay'
+import { formatIngredientQuantityCell } from '../../lib/ingredientQuantity'
 import type { Drink } from '../../types/drink'
 import { Button } from '../atoms/Button'
 import { SvgIcon } from '../atoms/SvgIcon'
@@ -173,9 +174,7 @@ export function DrinkAdminTable() {
                                 {ing.name ?? '—'}
                               </td>
                               <td className="p-2 border-b border-[var(--border)] w-1/3">
-                                {ing.quantity != null && !Number.isNaN(Number(ing.quantity))
-                                  ? `${ing.quantity} ${ing.unit ?? 'oz'}`
-                                  : '—'}
+                                {formatIngredientQuantityCell(ing)}
                               </td>
                             </tr>
                           ))}

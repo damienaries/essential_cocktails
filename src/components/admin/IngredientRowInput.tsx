@@ -1,4 +1,5 @@
 import type { IngredientFieldRow } from '../../lib/drinkFormAdmin'
+import { isPlainNumericQuantityString } from '../../lib/ingredientQuantity'
 
 type Props = {
   ingredient: IngredientFieldRow
@@ -6,7 +7,8 @@ type Props = {
 }
 
 export function IngredientRowInput({ ingredient, onChange }: Props) {
-  const showUnit = Boolean(ingredient.quantity.trim()) && !Number.isNaN(Number(ingredient.quantity))
+  const q = ingredient.quantity.trim()
+  const showUnit = Boolean(q) && isPlainNumericQuantityString(q)
 
   return (
     <div className="flex border-b border-[var(--border)] bg-[var(--bg)]">

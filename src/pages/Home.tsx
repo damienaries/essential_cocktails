@@ -11,7 +11,12 @@ export function HomePage() {
   const [selected, setSelected] = useState<Drink | null>(null)
   const { data, isPending, isError, error } = useDrinksQuery()
 
-  const visible = useMemo(() => filterDrinks(data ?? [], search), [data, search])
+  const visible = useMemo(() => {
+    const filtered = filterDrinks(data ?? [], search)
+    return [...filtered].sort((a, b) =>
+      (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+    )
+  }, [data, search])
 
   if (isPending) {
     return <p style={{ textAlign: 'center' }}>Loading drinks…</p>
