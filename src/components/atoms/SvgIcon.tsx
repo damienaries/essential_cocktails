@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 type Props = {
   icon: string
@@ -23,7 +23,6 @@ function parseSvg(svgText: string): LoadedSvg | null {
   const text = svgText.trim()
   if (!text) return null
 
-  // If the file is a full `<svg ...>...</svg>`, extract `viewBox` + inner markup.
   const svgMatch = text.match(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/i)
   if (svgMatch) {
     const attrs = svgMatch[1] ?? ''
@@ -38,36 +37,44 @@ function parseSvg(svgText: string): LoadedSvg | null {
     }
   }
 
-  // Otherwise assume it’s already inner markup (paths/groups), keep a default viewBox.
   return { inner: text, viewBox: '0 0 24 24' }
 }
 
+/**
+ * Bundle-time "dynamic" icons: Vite only allows `import(\`./x/${a}\`)`-style patterns
+ * when files are listed via `import.meta.glob`. Each `*.svg` here is included in the
+ * build; at runtime we look up by `icon` name — no `fetch` to `/public`.
+ *
+ * For code-split per icon (separate async chunks), use the same glob with `eager: false`
+ * and `await loaders[path]()`.
+ */
+const iconRawByName = (() => {
+  const rawGlob = import.meta.glob<string>('../../assets/icons/*.svg', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  })
+  const map = new Map<string, string>()
+  for (const [path, content] of Object.entries(rawGlob)) {
+    const m = path.match(/\/([^/]+)\.svg$/)
+    if (m?.[1]) map.set(m[1], content)
+  }
+  return map
+})()
+
+function getParsedIcon(icon: string): LoadedSvg | null {
+  const raw = iconRawByName.get(icon)
+  if (raw == null) {
+    console.error(
+      `SvgIcon: no bundled icon "${icon}". Add src/assets/icons/${icon}.svg or fix the name.`,
+    )
+    return null
+  }
+  return parseSvg(raw)
+}
+
 export function SvgIcon({ icon, size = 24, color = 'currentColor' }: Props) {
-  const [loaded, setLoaded] = useState<LoadedSvg | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function load() {
-      try {
-        const res = await fetch(`/assets/icons/${encodeURIComponent(icon)}.svg`)
-        if (!res.ok) throw new Error('SVG not found')
-        const svgText = await res.text()
-        const parsed = parseSvg(svgText)
-        if (!cancelled) setLoaded(parsed)
-      } catch (err) {
-        // Keep behavior aligned with Vue: log and render nothing on failure.
-        console.error(`Error loading icon: ${icon}`, err)
-        if (!cancelled) setLoaded(null)
-      }
-    }
-
-    load()
-    return () => {
-      cancelled = true
-    }
-  }, [icon])
-
+  const loaded = useMemo(() => getParsedIcon(icon), [icon])
   const svgClass = useMemo(() => `icon icon-${icon}`, [icon])
 
   if (!loaded?.inner) return null
@@ -90,4 +97,3 @@ export function SvgIcon({ icon, size = 24, color = 'currentColor' }: Props) {
     />
   )
 }
-
