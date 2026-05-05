@@ -21,7 +21,7 @@ export function IngredientRowInput({ ingredient, onChange }: Props) {
       />
       <input
         type="text"
-        inputMode="decimal"
+        autoComplete="off"
         className="w-1/3 py-2 px-4 border-x border-[var(--border)] rounded-none bg-[var(--bg)] text-[var(--text)] border-y-0 focus:outline focus:outline-1 focus:outline-[var(--accent-border)]"
         placeholder="Quantity"
         value={ingredient.quantity}

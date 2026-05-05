@@ -5,6 +5,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import './index.css'
 import App from './App.tsx'
+import { StartupDrinksSync } from './components/StartupDrinksSync'
 import { createAppQueryClient, QUERY_GC_TIME_MS } from './lib/queryClient'
 
 const queryClient = createAppQueryClient()
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
       }}
     >
       <BrowserRouter>
+        <StartupDrinksSync />
         <App />
       </BrowserRouter>
     </PersistQueryClientProvider>

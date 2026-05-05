@@ -11,3 +11,9 @@ export function formatGarnish(drink: Drink): string {
   if (g == null || (typeof g === 'string' && g.trim() === '')) return 'No garnish'
   return Array.isArray(g) ? g.join(', ') : g
 }
+
+export function formatIce(drink: Drink): string {
+  const ice = drink.ice
+  if (ice == null || (typeof ice === 'string' && ice.trim() === '')) return ''
+  return typeof ice === 'string' ? ice.trim() : String(ice)
+}

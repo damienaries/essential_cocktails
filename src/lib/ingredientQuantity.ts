@@ -1,9 +1,15 @@
 import type { DrinkIngredient } from '../types/drink'
 
-/** True when the whole cell is just a decimal number (stored as number for oz/cl). */
+/**
+ * True when the cell is only a volume amount (stored as number for oz/cl).
+ * Allows integers, `1.5`, `.5`, `.75`, and `1.` while the user is typing.
+ */
 export function isPlainNumericQuantityString(raw: string): boolean {
   const t = raw.trim()
-  return t !== '' && /^\d+(\.\d+)?$/.test(t)
+  return (
+    t !== '' &&
+    /^(?:\d+\.\d*|\.\d+|\d+)$/.test(t)
+  )
 }
 
 /**
