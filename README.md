@@ -1,4 +1,4 @@
-# Essential Cocktails
+# Swizzle
 
 A curated compendium of classic cocktails—as reviewed and used by bar professionals—for bartenders, bar managers, training, and serious enthusiasts.
 
@@ -31,10 +31,10 @@ Firestore expects a **`drinks`** collection with documents ordered by **`name`**
 
 ## Scripts
 
-| Command       | Action              |
-| ------------- | ------------------- |
-| `npm run dev` | Start dev server    |
-| `npm run build` | Production build  |
+| Command           | Action                   |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start dev server         |
+| `npm run build`   | Production build         |
 | `npm run preview` | Preview production build |
 
 ## License
