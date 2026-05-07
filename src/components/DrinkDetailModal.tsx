@@ -36,14 +36,11 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 				className={[
 					'relative min-w-0 overflow-hidden bg-[linear-gradient(145deg,#2a2438,#1a1720)]',
 					'w-full flex-[1_1_100%]',
-					/* Mobile/tablet stack: large hero (~half viewport) but cap px so tall phones don’t push ingredients entirely below fold */
 					'min-h-[120px] max-h-[min(48svh,380px)]',
 					'sm:min-h-[140px] sm:max-h-[min(52svh,440px)]',
-					/* Desktop row: wide column + stretch with sibling; no tiny md cap */
 					'md:flex-[1_1_300px] md:max-h-none md:min-h-[280px]',
 					'lg:min-h-[min(52vh,420px)] lg:flex-[1_1_340px]',
-				].join(' ')}
-			>
+				].join(' ')}>
 				{imageUrl ? (
 					<img
 						src={imageUrl}
@@ -63,8 +60,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					'text-sm leading-snug',
 					'md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[15px] md:leading-normal',
 					'lg:px-6 lg:py-5 lg:text-base',
-				].join(' ')}
-			>
+				].join(' ')}>
 				<button
 					type="button"
 					onClick={onClose}
@@ -73,25 +69,22 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 						'rounded-md border border-transparent bg-transparent text-xl leading-none text-[var(--text-h)]',
 						'transition-colors hover:bg-[var(--code-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-border)]',
 					].join(' ')}
-					aria-label="Close dialog"
-				>
+					aria-label="Close dialog">
 					×
 				</button>
 
-				<header className="flex flex-col gap-3 pr-10 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:pr-11">
+				<header className="px-10 text-center sm:px-11">
 					<h2
 						id="drink-detail-title"
-						className="m-0 min-w-0 flex-1 text-lg font-medium uppercase tracking-wide text-[var(--text-h)] sm:text-xl md:text-2xl"
-					>
+						className="mb-2 text-lg font-medium uppercase tracking-wide text-[var(--text-h)] sm:text-xl md:text-2xl">
 						{drink.name}
 					</h2>
 					<div
-						className="shrink-0 space-y-1 text-right text-xs leading-snug sm:max-w-[55%] sm:text-[13px] md:text-sm"
+						className="mt-2 flex items-center justify-between gap-0.5 text-xs leading-snug sm:text-[13px] md:text-sm"
 						role="group"
-						aria-label="Preparation"
-					>
-						<MetaLine label="Method" value={methodStr} />
+						aria-label="Preparation">
 						<MetaLine label="Garnish" value={garnishStr} />
+						<MetaLine label="Method" value={methodStr} />
 						<MetaLine label="Ice" value={iceStr} />
 					</div>
 				</header>
@@ -100,7 +93,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					<Button variant="modal-unit" onClick={() => setMetric((v) => !v)}>
 						{metric ? 'cl' : 'oz'}
 					</Button>
-					<ul className="m-0 mt-6 list-none p-0 md:mt-8">
+					<ul className="m-0 mt-10 list-none p-0 md:mt-12">
 						{ingredients.map((ing, idx) => {
 							const q = ing.quantity;
 							let amountLabel: string;
@@ -117,9 +110,10 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 							return (
 								<li
 									key={`${ing.name ?? 'ing'}-${idx}`}
-									className="flex justify-between gap-2 border-b border-[var(--border)] py-1.5 text-[var(--text)] last:border-b-0 md:gap-3 md:py-2"
-								>
-									<span className="min-w-0 flex-1">{ing.name ?? '—'}</span>
+									className="flex justify-between gap-2 border-b border-[var(--border)] py-1.5 text-[var(--text)] last:border-b-0 md:gap-3 md:py-2">
+									<span className="text-left min-w-0 flex-1">
+										{ing.name ?? '—'}
+									</span>
 									<span className="shrink-0 whitespace-nowrap text-right tabular-nums">
 										{amountLabel}
 									</span>

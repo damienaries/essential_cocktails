@@ -34,7 +34,7 @@ function buildClassName(
 ): string {
 	if (variant === 'modal-unit') {
 		return [
-			'absolute top-0 right-0 max-h-none min-h-0',
+			'absolute -top-6 right-0 max-h-none min-h-0',
 			'px-2.5 py-1 text-xs rounded-full w-fit',
 			'border border-[var(--border)] bg-[var(--code-bg)] text-[var(--text-h)]',
 			'hover:bg-[var(--code-bg)] transition-all duration-300',
@@ -94,8 +94,7 @@ export function Button({
 				href={href ?? undefined}
 				className={classes}
 				onClick={handleClick}
-				{...anchorProps}
-			>
+				{...anchorProps}>
 				{children}
 			</a>
 		);
@@ -107,8 +106,7 @@ export function Button({
 			type="button"
 			className={classes}
 			onClick={handleClick}
-			{...buttonProps}
-		>
+			{...buttonProps}>
 			{children}
 		</button>
 	);
