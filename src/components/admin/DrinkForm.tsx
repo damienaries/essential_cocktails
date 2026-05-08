@@ -21,6 +21,7 @@ import {
 } from '../../lib/drinkFormAdmin';
 import type { Drink } from '../../types/drink';
 import { Button } from '../atoms/Button';
+import { useAdminBanner } from './AdminBanner';
 import { DrinkImagePromptAndUpload } from './DrinkImagePromptAndUpload';
 import { IngredientRowInput } from './IngredientRowInput';
 
@@ -30,18 +31,17 @@ type Props =
 
 export function DrinkForm(props: Props) {
 	const queryClient = useQueryClient();
+	const { showBanner } = useAdminBanner();
 	const [fields, setFields] = useState<DrinkFormFields>(() =>
 		props.mode === 'edit' ? drinkToFormFields(props.drink) : emptyDrinkForm(),
 	);
 	const [showDescription, setShowDescription] = useState(
 		() => props.mode === 'edit' && Boolean(props.drink.description?.trim()),
 	);
-	const [formError, setFormError] = useState<string | null>(null);
 	const [imageToolsKey, setImageToolsKey] = useState(0);
 
 	const saveMutation = useMutation({
 		mutationFn: async () => {
-			setFormError(null);
 			const name = fields.name.trim();
 			if (!name) throw new Error('Name is required.');
 
@@ -62,6 +62,10 @@ export function DrinkForm(props: Props) {
 		},
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: ['drinks'] });
+			showBanner(
+				'success',
+				props.mode === 'add' ? 'Drink added' : 'Drink updated',
+			);
 			if (props.mode === 'add') {
 				setFields(emptyDrinkForm());
 				setShowDescription(false);
@@ -73,7 +77,7 @@ export function DrinkForm(props: Props) {
 		onError: (err: unknown) => {
 			const message =
 				err instanceof Error ? err.message : 'Something went wrong.';
-			setFormError(message);
+			showBanner('error', message);
 		},
 	});
 
@@ -114,12 +118,6 @@ export function DrinkForm(props: Props) {
 			aria-busy={saveMutation.isPending}
 		>
 			<h4 className="text-lg text-[var(--text-h)] mt-0 mb-4">{title}</h4>
-
-			{formError ? (
-				<p className="text-red-500 dark:text-red-400 text-sm mb-4" role="alert">
-					{formError}
-				</p>
-			) : null}
 
 			<div className="admin-form-row">
 				<label htmlFor="admin-drink-name">Name</label>

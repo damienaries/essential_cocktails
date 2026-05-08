@@ -2,47 +2,36 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { deleteDrinkFromFirestore } from '../../api/drinks'
 import { useDrinksQuery } from '../../hooks/useDrinksQuery'
+import { useLetterFilter } from '../../hooks/useLetterFilter'
 import { formatGarnish, formatMethod } from '../../lib/drinkDisplay'
 import { formatIngredientQuantityCell } from '../../lib/ingredientQuantity'
 import type { Drink } from '../../types/drink'
 import { Button } from '../atoms/Button'
+import { LetterFilterToolbar } from '../LetterFilterToolbar'
 import { SvgIcon } from '../atoms/SvgIcon'
 import { AdminDrinkThumbnail } from './AdminDrinkThumbnail'
 import { EditDrinkModal } from './EditDrinkModal'
-
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('') as readonly string[]
-
-/** A–Z if the drink name starts with that letter (Latin); otherwise null (still listed when unfiltered). */
-function drinkNameFirstLetter(name: string | null | undefined): string | null {
-  const t = (name ?? '').trim()
-  if (!t) return null
-  const ch = t[0].toLocaleUpperCase('en-US').normalize('NFD')[0]
-  if (ch >= 'A' && ch <= 'Z') return ch
-  return null
-}
 
 export function DrinkAdminTable() {
   const queryClient = useQueryClient()
   const { data: drinks = [], isLoading, isError, error } = useDrinksQuery()
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [drinkToEdit, setDrinkToEdit] = useState<Drink | null>(null)
-  const [letterFilter, setLetterFilter] = useState<string | null>(null)
 
-  const { lettersPresent, visibleDrinks } = useMemo(() => {
-    const sorted = [...drinks].sort((a, b) =>
-      (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
-    )
-    const lettersPresent = new Set<string>()
-    for (const d of sorted) {
-      const L = drinkNameFirstLetter(d.name)
-      if (L) lettersPresent.add(L)
-    }
-    const visibleDrinks =
-      letterFilter == null
-        ? sorted
-        : sorted.filter((d) => drinkNameFirstLetter(d.name) === letterFilter)
-    return { lettersPresent, visibleDrinks }
-  }, [drinks, letterFilter])
+  const sorted = useMemo(
+    () =>
+      [...drinks].sort((a, b) =>
+        (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+      ),
+    [drinks],
+  )
+
+  const {
+    letterFilter,
+    setLetterFilter,
+    lettersPresent,
+    filteredByLetter: visibleDrinks,
+  } = useLetterFilter(sorted)
 
   const deleteMutation = useMutation({
     mutationFn: deleteDrinkFromFirestore,
@@ -72,45 +61,11 @@ export function DrinkAdminTable() {
 
   return (
     <>
-      <div
-        className="flex flex-wrap justify-center gap-1 mb-4"
-        role="toolbar"
-        aria-label="Filter drinks by first letter"
-      >
-        {LETTERS.map((letter) => {
-          const hasAny = lettersPresent.has(letter)
-          const isSelected = letterFilter === letter
-          return (
-            <button
-              key={letter}
-              type="button"
-              disabled={!hasAny}
-              aria-pressed={isSelected}
-              title={
-                hasAny
-                  ? isSelected
-                    ? `Filter ${letter} (active) — click to show all`
-                    : `Show names starting with ${letter}`
-                  : `No drinks starting with ${letter}`
-              }
-              onClick={() => {
-                if (!hasAny) return
-                setLetterFilter((current) => (current === letter ? null : letter))
-              }}
-              className={[
-                'min-w-[1.65rem] px-1.5 py-1 text-xs rounded border font-medium transition-colors',
-                !hasAny
-                  ? 'opacity-35 cursor-not-allowed border-[var(--border)] text-[var(--text)] bg-transparent'
-                  : isSelected
-                    ? 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--text-h)] cursor-pointer'
-                    : 'border-[var(--border)] bg-[var(--bg)] text-[var(--text-h)] hover:bg-[var(--code-bg)] cursor-pointer',
-              ].join(' ')}
-            >
-              {letter}
-            </button>
-          )
-        })}
-      </div>
+      <LetterFilterToolbar
+        lettersPresent={lettersPresent}
+        letterFilter={letterFilter}
+        onChange={setLetterFilter}
+      />
 
       <section className="text-left space-y-2">
         {letterFilter != null && visibleDrinks.length === 0 ? (
