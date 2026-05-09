@@ -3,11 +3,10 @@ import { drinkPhotoImgProps } from '../../lib/drinkImageAttrs'
 
 type Props = {
   imageUrl?: string | null
-  /** Reserved for future glassware-specific placeholders from `public/`. */
+  /** Reserved for future glassware-specific placeholders. */
   glass?: string | null
 }
 
-/** Generic glass silhouette until per-glass assets exist in `public/assets/admin/`. */
 function PlaceholderGlyph() {
   return (
     <svg
@@ -35,7 +34,7 @@ export function AdminDrinkThumbnail({ imageUrl }: Props) {
   return (
     <div
       className="w-11 h-11 shrink-0 rounded-md overflow-hidden border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center"
-      title={showPhoto ? undefined : 'No image — swap for glassware art in public/assets/admin/'}
+      title={showPhoto ? undefined : 'No image — add glassware art under src/assets/images/'}
     >
       {showPhoto ? (
         <img

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import heroBg from '../assets/images/hero-bg.webp';
 import { CocktailCard } from '../components/CocktailCard';
 import { DrinkDetailModal } from '../components/DrinkDetailModal';
 import { LetterFilterToolbar } from '../components/LetterFilterToolbar';
@@ -27,33 +28,45 @@ export function HomePage() {
 
 	return (
 		<div className="mx-auto max-w-[1120px]">
-			<div className="mb-6 text-center">
-				<h1 className="mt-0">Swizzle</h1>
-				<p className="mb-4 text-[var(--text)]">
-					Upgrade your classic cocktails, reviewed and used by bar
-					professionals.
-				</p>
-				<input
-					id="drink-search"
-					type="search"
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					autoComplete="off"
-					aria-label="Search drinks"
-					placeholder="Search by name, family, or ingredient"
-					className="mx-auto block w-1/2 max-w-[600px] rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2.5 text-base text-[var(--text-h)]"
+			<div className="relative mb-6 overflow-hidden rounded-lg">
+				<img
+					src={heroBg}
+					alt=""
+					aria-hidden
+					className="absolute inset-0 h-full w-full object-cover"
 				/>
-				<div className="flex items-center justify-between w-1/2 max-w-[600px] mx-auto">
-					<p className="mt-2 text-sm">
-						<Link to="/families" className="text-[var(--accent)]">
-							Browse by family
-						</Link>
+				<div
+					aria-hidden
+					className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/55 to-black/75"
+				/>
+				<div className="relative px-4 py-12 text-center text-white sm:py-16">
+					<h1 className="mt-0 text-white">Swizzle</h1>
+					<p className="mb-6 text-white/85">
+						Upgrade your classic cocktails, reviewed and used by bar
+						professionals.
 					</p>
-					{!isPending && !isError ? (
-						<p className="mt-1 text-sm text-[var(--text)]">
-							Showing {filteredByLetter.length} of {(data ?? []).length}
+					<input
+						id="drink-search"
+						type="search"
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						autoComplete="off"
+						aria-label="Search drinks"
+						placeholder="Search by name, family, or ingredient"
+						className="mx-auto block w-1/2 max-w-[600px] rounded-md border border-white/25 bg-white/10 px-3 py-2.5 text-base text-white backdrop-blur placeholder:text-white/65 focus:border-white/60 focus:outline-none"
+					/>
+					<div className="flex items-center justify-between w-1/2 max-w-[600px] mx-auto">
+						<p className="mt-2 text-sm">
+							<Link to="/families" className="text-white/90 underline-offset-2 hover:underline">
+								Browse by family
+							</Link>
 						</p>
-					) : null}
+						{!isPending && !isError ? (
+							<p className="mt-1 text-sm text-white/75">
+								Showing {filteredByLetter.length} of {(data ?? []).length}
+							</p>
+						) : null}
+					</div>
 				</div>
 			</div>
 
