@@ -51,8 +51,8 @@ export function LetterFilterToolbar({
 							!hasAny
 								? 'opacity-35 cursor-not-allowed border-chalk text-smoke bg-transparent dark:border-charcoal dark:text-sand'
 								: isSelected
-									? 'border-brass/40 bg-brass/10 text-ink dark:text-cream cursor-pointer'
-									: 'border-chalk bg-paper text-ink hover:bg-chalk dark:border-charcoal dark:bg-coal dark:text-cream dark:hover:bg-carbon cursor-pointer',
+									? 'border-brass bg-gold-tint text-gold-deep dark:border-brass dark:bg-brass/20 dark:text-brass cursor-pointer'
+									: 'border-chalk bg-paper text-ink hover:border-palm/40 hover:bg-palm/15 dark:border-charcoal dark:bg-coal dark:text-cream dark:hover:border-brass/40 dark:hover:bg-brass/10 cursor-pointer',
 						].join(' ')}
 					>
 						{letter}

@@ -3,7 +3,7 @@ import logoSvg from '../assets/icons/swizzle-logo.svg?raw';
 
 export function Header() {
 	return (
-		<header className="flex items-center justify-between border-b border-chalk px-5 pt-4 dark:border-charcoal">
+		<header className="app-container flex items-center justify-between pt-4">
 			<NavLink
 				to="/"
 				end

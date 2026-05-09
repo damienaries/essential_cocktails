@@ -1,5 +1,13 @@
 /* Global classes that don't translate cleanly to Tailwind utilities yet. */
 
+.app-container {
+	width: 100%;
+	max-width: 1200px;
+	margin-inline: auto;
+	padding-inline: 1.25rem;
+}
+
+
 .modal-backdrop {
 	position: fixed;
 	inset: 0;

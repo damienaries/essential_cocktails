@@ -29,7 +29,7 @@ export function FamilyDrinksPage() {
 
   if (!slug || !isFamilySlug(slug)) {
     return (
-      <div className="mx-auto max-w-[720px]">
+      <div className="max-w-[720px]">
         <p>Unknown family.</p>
         <Link to="/families">Back to families</Link>
       </div>
@@ -42,7 +42,7 @@ export function FamilyDrinksPage() {
 
   if (isError) {
     return (
-      <div className="mx-auto max-w-[720px]">
+      <div className="max-w-[720px]">
         <p role="alert">Could not load drinks: {error instanceof Error ? error.message : 'Unknown error'}</p>
         <Link to="/families">Back to families</Link>
       </div>
@@ -50,7 +50,7 @@ export function FamilyDrinksPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1120px]">
+    <>
       <div className="mb-5">
         <Link to="/families" className="text-brass">
           ← All families
@@ -68,6 +68,6 @@ export function FamilyDrinksPage() {
       </section>
 
       {selected ? <DrinkDetailModal drink={selected} onClose={() => setSelected(null)} /> : null}
-    </div>
+    </>
   )
 }

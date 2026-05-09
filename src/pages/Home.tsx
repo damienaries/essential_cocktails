@@ -27,7 +27,7 @@ export function HomePage() {
 		useLetterFilter(sortedAfterSearch);
 
 	return (
-		<div className="mx-auto max-w-[1120px]">
+		<>
 			<div className="relative mb-6 overflow-hidden rounded-lg">
 				<img
 					src={heroBg}
@@ -53,7 +53,7 @@ export function HomePage() {
 						autoComplete="off"
 						aria-label="Search drinks"
 						placeholder="Search by name, family, or ingredient"
-						className="mx-auto block w-1/2 max-w-[600px] rounded-md border border-white/25 bg-white/10 px-3 py-2.5 text-base text-white backdrop-blur placeholder:text-white/65 focus:border-white/60 focus:outline-none"
+						className="mx-auto block w-1/2 max-w-[600px] rounded-md border border-white/25 bg-white/10 px-3 py-2.5 text-base text-white backdrop-blur placeholder:text-white/65 focus:outline-2 focus:outline-offset-2 focus:outline-brass/70"
 					/>
 					<div className="flex items-center justify-between w-1/2 max-w-[600px] mx-auto">
 						<p className="mt-2 text-sm">
@@ -63,11 +63,6 @@ export function HomePage() {
 								Browse by family
 							</Link>
 						</p>
-						{!isPending && !isError ? (
-							<p className="mt-1 text-sm text-white/75">
-								Showing {filteredByLetter.length} of {(data ?? []).length}
-							</p>
-						) : null}
 					</div>
 				</div>
 			</div>
@@ -108,6 +103,6 @@ export function HomePage() {
 			{selected ? (
 				<DrinkDetailModal drink={selected} onClose={() => setSelected(null)} />
 			) : null}
-		</div>
+		</>
 	);
 }

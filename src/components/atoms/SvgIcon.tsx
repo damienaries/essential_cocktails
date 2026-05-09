@@ -75,14 +75,16 @@ function getParsedIcon(icon: string): LoadedSvg | null {
 
 export function SvgIcon({ icon, size = 24, color = 'currentColor' }: Props) {
   const loaded = useMemo(() => getParsedIcon(icon), [icon])
-  const svgClass = useMemo(() => `icon icon-${icon}`, [icon])
+  const svgClass = useMemo(
+    () => `icon icon-${icon} inline-block align-middle`,
+    [icon],
+  )
 
   if (!loaded?.inner) return null
 
   return (
     <svg
       className={svgClass}
-      className="inline-block align-middle"
       style={{ color }}
       width={size}
       height={size}

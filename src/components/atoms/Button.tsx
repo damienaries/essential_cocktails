@@ -34,7 +34,7 @@ function buildClassName(
 ): string {
 	if (variant === 'modal-unit') {
 		return [
-			'absolute -top-6 right-0 max-h-none min-h-0',
+			'absolute -top-6 right-0 max-h-none min-h-0 cursor-pointer',
 			'px-2.5 py-1 text-xs rounded-full w-fit',
 			'border border-chalk bg-chalk text-ink dark:border-charcoal dark:bg-carbon dark:text-cream',
 			'hover:bg-chalk dark:hover:bg-carbon transition-all duration-300',
@@ -52,17 +52,18 @@ function buildClassName(
 
 	let classes =
 		size === 'sm'
-			? 'px-3 py-1 text-sm rounded text-center hover:shadow transition-all duration-300 min-h-7 max-h-7 leading-tight'
-			: 'px-6 py-1 rounded text-center hover:shadow transition-all duration-300 max-h-8';
+			? 'px-3 py-1 text-sm rounded text-center border cursor-pointer transition-colors duration-200 min-h-7 max-h-7 leading-tight'
+			: 'px-6 py-1.5 rounded text-center border cursor-pointer transition-colors duration-200';
 
 	if (color === 'primary') {
-		classes += ' text-black bg-blue-100 hover:bg-blue-200';
+		classes += ' bg-palm text-white border-transparent hover:bg-palm/90';
 	}
 	if (color === 'secondary') {
-		classes += ' text-white bg-blue-500 hover:bg-blue-600';
+		classes +=
+			' bg-paper text-palm border-palm hover:bg-palm/10 dark:bg-transparent dark:text-cream dark:hover:bg-palm/20';
 	}
 	if (color === 'danger') {
-		classes += ' text-white bg-red-300 hover:bg-red-400';
+		classes += ' bg-red-600 text-white border-transparent hover:bg-red-700';
 	}
 
 	classes += fill ? ' w-full' : ' w-fit';

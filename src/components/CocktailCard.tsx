@@ -35,7 +35,7 @@ export function CocktailCard({ drink, onSelect }: Props) {
       ref={ref}
       onClick={() => onSelect(drink)}
       aria-label={`Open details for ${drink.name}`}
-      className="m-0 w-full cursor-pointer rounded-lg border-0 bg-transparent p-0 text-left font-[inherit] shadow-md transition-transform duration-300 hover:opacity-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50"
+      className="group m-0 w-full cursor-pointer rounded-lg border-0 bg-transparent p-0 text-left font-[inherit] shadow-md transition-shadow duration-300 hover:shadow-lg hover:shadow-palm/40 dark:hover:shadow-brass/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50"
     >
       <span className="relative block h-[200px] w-full overflow-hidden rounded-lg">
         <span

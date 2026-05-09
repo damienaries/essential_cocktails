@@ -272,7 +272,7 @@ export function DrinkForm(props: Props) {
 			<Button
 				type="submit"
 				fill
-				color="secondary"
+				color="primary"
 				size="sm"
 				disabled={saveMutation.isPending}
 			>
