@@ -100,11 +100,11 @@ export function DrinkImagePromptAndUpload({
 	};
 
 	return (
-		<div className="mb-6 p-4 rounded-lg border border-[var(--border)] bg-[var(--bg)] text-left space-y-3">
-			<h5 className="text-sm font-medium text-[var(--text-h)] m-0">
+		<div className="mb-6 p-4 rounded-lg border border-chalk dark:border-charcoal bg-paper dark:bg-coal text-left space-y-3">
+			<h5 className="text-sm font-medium text-ink dark:text-cream m-0">
 				Prompt for AI image creation
 			</h5>
-			<p className="text-xs text-[var(--text)] opacity-85 m-0">
+			<p className="text-xs text-smoke dark:text-sand opacity-85 m-0">
 				Generate a scene with random style/surface/location. Edit the text, then
 				open ChatGPT (prefills the composer when supported) or copy. Upload an
 				image file below; it is stored in Firebase and the drink record keeps
@@ -143,7 +143,7 @@ export function DrinkImagePromptAndUpload({
 
 			<div>
 				<textarea
-					className="w-full min-h-[140px] rounded-lg px-3 py-2 text-sm bg-[var(--code-bg)] text-[var(--text)] border border-[var(--border)] focus:outline focus:outline-1 focus:outline-[var(--accent-border)] box-border font-[inherit]"
+					className="w-full min-h-[140px] rounded-lg px-3 py-2 text-sm bg-chalk dark:bg-carbon text-smoke dark:text-sand border border-chalk dark:border-charcoal focus:outline focus:outline-1 focus:outline-brass/50 box-border font-[inherit]"
 					value={promptText}
 					maxLength={AI_IMAGE_PROMPT_MAX_CHARS}
 					onChange={(e) => setPromptText(clampAiImagePrompt(e.target.value))}
@@ -157,7 +157,7 @@ export function DrinkImagePromptAndUpload({
 				/>
 				<p
 					id="admin-ai-prompt-counter"
-					className="text-xs text-[var(--text)] opacity-80 m-0 mt-1.5 text-right tabular-nums"
+					className="text-xs text-smoke dark:text-sand opacity-80 m-0 mt-1.5 text-right tabular-nums"
 				>
 					{charsLeft} character{charsLeft === 1 ? '' : 's'} left
 				</p>
@@ -169,13 +169,13 @@ export function DrinkImagePromptAndUpload({
 				</p>
 			) : null}
 
-			<div className="pt-2 border-t border-[var(--border)]">
-				<p className="text-xs font-medium text-[var(--text-h)] m-0 mb-2">
+			<div className="pt-2 border-t border-chalk dark:border-charcoal">
+				<p className="text-xs font-medium text-ink dark:text-cream m-0 mb-2">
 					Upload image to Firebase
 				</p>
 				{fields.imageUrl?.trim() ? (
 					<div className="flex flex-wrap items-center gap-3 mb-3">
-						<span className="text-xs text-[var(--text)]">Saved image</span>
+						<span className="text-xs text-smoke dark:text-sand">Saved image</span>
 						<AdminDrinkThumbnail
 							imageUrl={fields.imageUrl}
 							glass={fields.glass}
@@ -200,7 +200,7 @@ export function DrinkImagePromptAndUpload({
 					>
 						{uploading ? 'Uploading…' : 'Choose image file'}
 					</Button>
-					<span className="text-xs text-[var(--text)] opacity-80">
+					<span className="text-xs text-smoke dark:text-sand opacity-80">
 						Path <code className="text-[12px]">cocktail_images/…</code> —
 						replaces any previous saved image URL.
 					</span>

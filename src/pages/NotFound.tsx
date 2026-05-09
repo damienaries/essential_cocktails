@@ -3,21 +3,11 @@ import notFoundIllustration from '../assets/images/404.png';
 
 export function NotFoundPage() {
 	return (
-		<div
-			style={{
-				maxWidth: 560,
-				margin: '0 auto',
-				textAlign: 'center',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				gap: 20,
-			}}
-		>
+		<div className="mx-auto flex max-w-[560px] flex-col items-center gap-5 text-center">
 			<img
 				src={notFoundIllustration}
 				alt=""
-				style={{ maxWidth: 'min(100%, 480px)', height: 'auto' }}
+				className="h-auto max-w-[min(100%,480px)]"
 			/>
 			<div>
 				<p>

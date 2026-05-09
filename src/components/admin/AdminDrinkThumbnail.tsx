@@ -33,7 +33,7 @@ export function AdminDrinkThumbnail({ imageUrl }: Props) {
 
   return (
     <div
-      className="w-11 h-11 shrink-0 rounded-md overflow-hidden border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center"
+      className="w-11 h-11 shrink-0 rounded-md overflow-hidden border border-chalk bg-paper dark:border-charcoal dark:bg-coal flex items-center justify-center"
       title={showPhoto ? undefined : 'No image — add glassware art under src/assets/images/'}
     >
       {showPhoto ? (
@@ -46,7 +46,7 @@ export function AdminDrinkThumbnail({ imageUrl }: Props) {
           onError={() => setBroken(true)}
         />
       ) : (
-        <span className="text-[var(--text)] opacity-55 flex items-center justify-center w-full h-full bg-[var(--code-bg)]">
+        <span className="text-smoke opacity-55 flex items-center justify-center w-full h-full bg-chalk dark:text-sand dark:bg-carbon">
           <PlaceholderGlyph />
         </span>
       )}

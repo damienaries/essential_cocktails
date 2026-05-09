@@ -1,5 +1,6 @@
-/* Brand palette + typography tokens */
-
+/* Brand palette + typography tokens (Tailwind v4 @theme).
+ * Generates utility classes: bg-cream, text-ink, border-brass, font-sans, etc.
+ * These are constants — light/dark switching is done with `dark:` variants in JSX. */
 @theme {
 	--color-cream: #f3eee6;
 	--color-paper: #fbfaf7;
@@ -16,50 +17,4 @@
 	--color-charcoal: #2a2d2f;
 
 	--font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-}
-
-/* Legacy variables — kept until Pass 2 replaces every `var(--*)` consumer with
- * the new utilities + `dark:` variants. Once nothing references these, delete this block. */
-:root {
-	--text: #6b6375;
-	--text-h: #08060d;
-	--bg: #fff;
-	--border: #e5e4e7;
-	--code-bg: #f4f3ec;
-	--accent: #aa3bff;
-	--accent-bg: rgba(170, 59, 255, 0.1);
-	--accent-border: rgba(170, 59, 255, 0.5);
-	--social-bg: rgba(244, 243, 236, 0.5);
-	--shadow:
-		rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-	--logo-color: #1a1410;
-
-	--modal-backdrop-tint: rgba(255, 255, 255, 0.2);
-	--modal-backdrop-base: rgba(6, 5, 12, 0.48);
-	--modal-backdrop-blur: 12px;
-
-	--sans: 'Plus Jakarta Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
-	--heading: 'Plus Jakarta Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
-	--mono: ui-monospace, Consolas, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--text: #9ca3af;
-		--text-h: #f3f4f6;
-		--bg: #16171d;
-		--border: #2e303a;
-		--code-bg: #1f2028;
-		--accent: #c084fc;
-		--accent-bg: rgba(192, 132, 252, 0.15);
-		--accent-border: rgba(192, 132, 252, 0.5);
-		--social-bg: rgba(47, 48, 58, 0.5);
-		--shadow:
-			rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-		--logo-color: #d2b48c;
-
-		--modal-backdrop-tint: rgba(230, 228, 242, 0.2);
-		--modal-backdrop-base: rgba(2, 3, 6, 0.78);
-		--modal-backdrop-blur: 14px;
-	}
 }

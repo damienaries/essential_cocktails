@@ -48,7 +48,7 @@ export function DrinkAdminTable() {
   }
 
   if (isLoading) {
-    return <p className="text-[var(--text)] text-sm">Loading drinks…</p>
+    return <p className="text-smoke dark:text-sand text-sm">Loading drinks…</p>
   }
 
   if (isError) {
@@ -69,16 +69,16 @@ export function DrinkAdminTable() {
 
       <section className="text-left space-y-2">
         {letterFilter != null && visibleDrinks.length === 0 ? (
-          <p className="text-sm text-[var(--text)] m-0 py-4 text-center">
+          <p className="text-sm text-smoke dark:text-sand m-0 py-4 text-center">
             No drinks match this filter.
           </p>
         ) : null}
         {visibleDrinks.map((drink) => (
-          <div key={drink.id} className="mb-2 shadow-[var(--shadow)] rounded overflow-hidden border border-[var(--border)]">
-            <div className="flex justify-between items-center bg-[var(--code-bg)] border-b border-[var(--border)] p-4 gap-3">
+          <div key={drink.id} className="mb-2 shadow-md rounded overflow-hidden border border-chalk dark:border-charcoal">
+            <div className="flex justify-between items-center bg-chalk dark:bg-carbon border-b border-chalk dark:border-charcoal p-4 gap-3">
               <button
                 type="button"
-                className="text-[var(--text-h)] bg-transparent border-0 cursor-pointer p-0 w-8 text-left font-mono shrink-0"
+                className="text-ink dark:text-cream bg-transparent border-0 cursor-pointer p-0 w-8 text-left font-mono shrink-0"
                 onClick={() => toggleCollapse(drink.id)}
                 aria-expanded={expandedId === drink.id}
                 aria-label={expandedId === drink.id ? 'Collapse details' : 'Expand details'}
@@ -86,7 +86,7 @@ export function DrinkAdminTable() {
                 {expandedId === drink.id ? '▼' : '▶'}
               </button>
               <AdminDrinkThumbnail imageUrl={drink.imageUrl} glass={drink.glass} />
-              <h5 className="flex-1 m-0 text-[var(--text-h)] text-base font-medium text-left min-w-0">
+              <h5 className="flex-1 m-0 text-ink dark:text-cream text-base font-medium text-left min-w-0">
                 {drink.name}
               </h5>
               <div className="flex gap-2 shrink-0">
@@ -107,12 +107,12 @@ export function DrinkAdminTable() {
             {expandedId === drink.id ? (
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="bg-[var(--code-bg)]">
-                    <th className="admin-table-cell font-medium text-[var(--text-h)]">Ingredients</th>
-                    <th className="admin-table-cell font-medium text-[var(--text-h)]">Method</th>
-                    <th className="admin-table-cell font-medium text-[var(--text-h)]">Glass</th>
-                    <th className="admin-table-cell font-medium text-[var(--text-h)]">Garnish</th>
-                    <th className="admin-table-cell font-medium text-[var(--text-h)]">Ice</th>
+                  <tr className="bg-chalk dark:bg-carbon">
+                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Ingredients</th>
+                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Method</th>
+                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Glass</th>
+                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Garnish</th>
+                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Ice</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -123,12 +123,12 @@ export function DrinkAdminTable() {
                           {(drink.ingredients ?? []).map((ing, idx) => (
                             <tr
                               key={`${ing.name ?? 'i'}-${idx}`}
-                              className={idx % 2 === 1 ? 'bg-[var(--code-bg)]/50' : ''}
+                              className={idx % 2 === 1 ? 'bg-chalk/50 dark:bg-carbon/50' : ''}
                             >
-                              <td className="p-2 border-b border-[var(--border)] w-2/3">
+                              <td className="p-2 border-b border-chalk dark:border-charcoal w-2/3">
                                 {ing.name ?? '—'}
                               </td>
-                              <td className="p-2 border-b border-[var(--border)] w-1/3">
+                              <td className="p-2 border-b border-chalk dark:border-charcoal w-1/3">
                                 {formatIngredientQuantityCell(ing)}
                               </td>
                             </tr>

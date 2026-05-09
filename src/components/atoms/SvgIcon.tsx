@@ -82,7 +82,8 @@ export function SvgIcon({ icon, size = 24, color = 'currentColor' }: Props) {
   return (
     <svg
       className={svgClass}
-      style={{ color, display: 'inline-block', verticalAlign: 'middle' }}
+      className="inline-block align-middle"
+      style={{ color }}
       width={size}
       height={size}
       viewBox={loaded.viewBox}

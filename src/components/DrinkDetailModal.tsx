@@ -13,7 +13,7 @@ type Props = {
 function MetaLine({ label, value }: { label: string; value: string }) {
 	const display = value.trim() === '' ? '—' : value;
 	return (
-		<p className="m-0 capitalize text-[var(--text)]">
+		<p className="m-0 capitalize text-smoke dark:text-sand">
 			<span className="sr-only">{label}: </span>
 			{display}
 		</p>
@@ -55,8 +55,8 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 			</div>
 			<div
 				className={[
-					'relative box-border flex-[1_1_300px] text-[var(--text)]',
-					'border-t border-[var(--border)] px-4 py-3',
+					'relative box-border flex-[1_1_300px] text-smoke dark:text-sand',
+					'border-t border-chalk dark:border-charcoal px-4 py-3',
 					'text-sm leading-snug',
 					'md:border-l md:border-t-0 md:px-5 md:py-4 md:text-[15px] md:leading-normal',
 					'lg:px-6 lg:py-5 lg:text-base',
@@ -66,8 +66,8 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					onClick={onClose}
 					className={[
 						'absolute right-2 top-2 z-10 flex h-9 w-9 cursor-pointer items-center justify-center',
-						'rounded-md border border-transparent bg-transparent text-xl leading-none text-[var(--text-h)]',
-						'transition-colors hover:bg-[var(--code-bg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-border)]',
+						'rounded-md border border-transparent bg-transparent text-xl leading-none text-ink dark:text-cream',
+						'transition-colors hover:bg-chalk dark:hover:bg-carbon focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50',
 					].join(' ')}
 					aria-label="Close dialog">
 					×
@@ -76,7 +76,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 				<header className="px-10 text-center sm:px-11">
 					<h2
 						id="drink-detail-title"
-						className="mb-2 text-lg font-medium uppercase tracking-wide text-[var(--text-h)] sm:text-xl md:text-2xl">
+						className="mb-2 text-lg font-medium uppercase tracking-wide text-ink dark:text-cream sm:text-xl md:text-2xl">
 						{drink.name}
 					</h2>
 					<div
@@ -110,7 +110,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 							return (
 								<li
 									key={`${ing.name ?? 'ing'}-${idx}`}
-									className="flex justify-between gap-2 border-b border-[var(--border)] py-1.5 text-[var(--text)] last:border-b-0 md:gap-3 md:py-2">
+									className="flex justify-between gap-2 border-b border-chalk dark:border-charcoal py-1.5 text-smoke dark:text-sand last:border-b-0 md:gap-3 md:py-2">
 									<span className="text-left min-w-0 flex-1">
 										{ing.name ?? '—'}
 									</span>
@@ -124,7 +124,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 				</div>
 
 				{drink.description ? (
-					<small className="mt-3 block text-xs leading-relaxed text-[var(--text)] opacity-95 md:mt-4 md:text-sm">
+					<small className="mt-3 block text-xs leading-relaxed text-smoke dark:text-sand opacity-95 md:mt-4 md:text-sm">
 						{drink.description}
 					</small>
 				) : null}

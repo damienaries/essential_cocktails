@@ -29,7 +29,7 @@ export function FamilyDrinksPage() {
 
   if (!slug || !isFamilySlug(slug)) {
     return (
-      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+      <div className="mx-auto max-w-[720px]">
         <p>Unknown family.</p>
         <Link to="/families">Back to families</Link>
       </div>
@@ -37,12 +37,12 @@ export function FamilyDrinksPage() {
   }
 
   if (isPending) {
-    return <p style={{ textAlign: 'center' }}>Loading drinks…</p>
+    return <p className="text-center">Loading drinks…</p>
   }
 
   if (isError) {
     return (
-      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+      <div className="mx-auto max-w-[720px]">
         <p role="alert">Could not load drinks: {error instanceof Error ? error.message : 'Unknown error'}</p>
         <Link to="/families">Back to families</Link>
       </div>
@@ -50,24 +50,18 @@ export function FamilyDrinksPage() {
   }
 
   return (
-    <div style={{ maxWidth: 1120, margin: '0 auto' }}>
-      <div style={{ marginBottom: 20 }}>
-        <Link to="/families" style={{ color: 'var(--accent)' }}>
+    <div className="mx-auto max-w-[1120px]">
+      <div className="mb-5">
+        <Link to="/families" className="text-brass">
           ← All families
         </Link>
-        <h1 style={{ margin: '12px 0 0' }}>{label}</h1>
-        <p style={{ margin: '8px 0 0', color: 'var(--text)' }}>
+        <h1 className="mt-3 mb-0">{label}</h1>
+        <p className="mt-2 mb-0 text-smoke dark:text-sand">
           {filtered.length} drink{filtered.length === 1 ? '' : 's'}
         </p>
       </div>
 
-      <section
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: 16,
-        }}
-      >
+      <section className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
         {filtered.map((drink) => (
           <CocktailCard key={drink.id} drink={drink} onSelect={setSelected} />
         ))}

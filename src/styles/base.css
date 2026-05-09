@@ -1,11 +1,18 @@
 :root {
 	color-scheme: light dark;
-	color: var(--text);
-	background: var(--bg);
+	color: var(--color-smoke);
+	background: var(--color-paper);
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color: var(--color-sand);
+		background: var(--color-coal);
+	}
 }
 
 body {
@@ -17,9 +24,15 @@ body {
 	max-width: 100%;
 	margin: 0 auto;
 	text-align: center;
-	border-inline: 1px solid var(--border);
+	border-inline: 1px solid var(--color-chalk);
 	min-height: 100svh;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+	#root {
+		border-inline-color: var(--color-charcoal);
+	}
 }

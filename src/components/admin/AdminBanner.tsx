@@ -72,11 +72,11 @@ export function AdminBannerProvider({ children }: { children: ReactNode }) {
 						role="status"
 						aria-live="polite"
 						className={[
-							'pointer-events-auto rounded-md border px-4 py-2 text-sm shadow-[var(--shadow)]',
+							'pointer-events-auto rounded-md border px-4 py-2 text-sm shadow-md',
 							'transition-opacity duration-200',
 							visible ? 'opacity-100' : 'opacity-0',
 							entry.kind === 'success'
-								? 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--text-h)]'
+								? 'border-brass/40 bg-brass/10 text-ink dark:text-cream'
 								: 'border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300',
 						].join(' ')}
 					>

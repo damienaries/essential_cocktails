@@ -110,14 +110,14 @@ export function DrinkForm(props: Props) {
 
 	return (
 		<form
-			className="p-4 mx-auto rounded-lg bg-[var(--code-bg)] border border-[var(--border)] text-left max-w-3xl shadow-[var(--shadow)]"
+			className="p-4 mx-auto rounded-lg bg-chalk dark:bg-carbon border border-chalk dark:border-charcoal text-left max-w-3xl shadow-md"
 			onSubmit={(e) => {
 				e.preventDefault();
 				saveMutation.mutate();
 			}}
 			aria-busy={saveMutation.isPending}
 		>
-			<h4 className="text-lg text-[var(--text-h)] mt-0 mb-4">{title}</h4>
+			<h4 className="text-lg text-ink dark:text-cream mt-0 mb-4">{title}</h4>
 
 			<div className="admin-form-row">
 				<label htmlFor="admin-drink-name">Name</label>
@@ -198,13 +198,13 @@ export function DrinkForm(props: Props) {
 			</div>
 
 			<div className="flex flex-col gap-2 relative mb-10">
-				<span className="w-full lg:w-1/5 text-[var(--text-h)] text-sm font-medium lg:pt-2">
+				<span className="w-full lg:w-1/5 text-ink dark:text-cream text-sm font-medium lg:pt-2">
 					Ingredients
 				</span>
-				<div className="w-full border border-[var(--border)] rounded overflow-hidden">
-					<div className="flex bg-[var(--accent-bg)] border-b border-[var(--border)] text-left text-sm">
+				<div className="w-full border border-chalk dark:border-charcoal rounded overflow-hidden">
+					<div className="flex bg-brass/10 border-b border-chalk dark:border-charcoal text-left text-sm">
 						<div className="w-1/2 py-2 px-4">Name</div>
-						<div className="w-1/3 py-2 px-4 border-x border-[var(--border)]">
+						<div className="w-1/3 py-2 px-4 border-x border-chalk dark:border-charcoal">
 							Quantity
 						</div>
 						<div className="w-1/6 py-2 px-4">Unit</div>
@@ -250,7 +250,7 @@ export function DrinkForm(props: Props) {
 					{!showDescription ? (
 						<button
 							type="button"
-							className="text-sm text-[var(--accent)] underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]"
+							className="text-sm text-brass underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]"
 							onClick={() => setShowDescription(true)}
 						>
 							Add description
@@ -258,7 +258,7 @@ export function DrinkForm(props: Props) {
 					) : (
 						<textarea
 							id="admin-drink-description"
-							className="w-full min-h-[120px] rounded-lg px-3 py-2 bg-[var(--bg)] text-[var(--text)] border border-[var(--border)] focus:outline focus:outline-1 focus:outline-[var(--accent-border)]"
+							className="w-full min-h-[120px] rounded-lg px-3 py-2 bg-paper dark:bg-coal text-smoke dark:text-sand border border-chalk dark:border-charcoal focus:outline focus:outline-1 focus:outline-brass/50"
 							rows={5}
 							value={fields.description}
 							onChange={(e) =>

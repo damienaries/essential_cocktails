@@ -3,12 +3,10 @@ import { Header } from './Header';
 
 export function Layout() {
 	return (
-		<div
-			style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
-		>
+		<div className="flex min-h-[100svh] flex-col">
 			<Header />
 
-			<main style={{ flex: 1, padding: '24px 20px' }}>
+			<main className="flex-1 px-5 py-6">
 				<Outlet />
 			</main>
 		</div>

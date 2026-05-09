@@ -1,5 +1,4 @@
-/* Global classes that don't translate cleanly to Tailwind utilities yet.
- * Will be migrated/inlined in Pass 2 where it makes sense. */
+/* Global classes that don't translate cleanly to Tailwind utilities yet. */
 
 .modal-backdrop {
 	position: fixed;
@@ -11,10 +10,20 @@
 	padding: 16px;
 	box-sizing: border-box;
 	background:
-		linear-gradient(var(--modal-backdrop-tint), var(--modal-backdrop-tint)),
-		var(--modal-backdrop-base);
-	backdrop-filter: blur(var(--modal-backdrop-blur));
-	-webkit-backdrop-filter: blur(var(--modal-backdrop-blur));
+		linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+		rgba(6, 5, 12, 0.48);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+@media (prefers-color-scheme: dark) {
+	.modal-backdrop {
+		background:
+			linear-gradient(rgba(230, 228, 242, 0.2), rgba(230, 228, 242, 0.2)),
+			rgba(2, 3, 6, 0.78);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+	}
 }
 
 /* Admin drink form (legacy Vue parity) */
@@ -42,7 +51,14 @@
 	text-align: left;
 	font-size: 0.875rem;
 	font-weight: 500;
-	color: var(--text-h);
+	color: var(--color-ink);
+}
+
+@media (prefers-color-scheme: dark) {
+	.admin-form-row label,
+	.admin-form-row > span:first-child {
+		color: var(--color-cream);
+	}
 }
 
 .admin-form-row input:not([type='checkbox']),
@@ -53,16 +69,26 @@
 	max-width: 80%;
 	border-radius: 8px;
 	padding: 12px 20px;
-	background: var(--bg);
-	color: var(--text);
-	border: 1px solid var(--border);
+	background: var(--color-paper);
+	color: var(--color-smoke);
+	border: 1px solid var(--color-chalk);
 	box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+	.admin-form-row input:not([type='checkbox']),
+	.admin-form-row select,
+	.admin-form-row textarea {
+		background: var(--color-coal);
+		color: var(--color-sand);
+		border-color: var(--color-charcoal);
+	}
 }
 
 .admin-form-row input:focus,
 .admin-form-row select:focus,
 .admin-form-row textarea:focus {
-	outline: 1px solid var(--accent-border);
+	outline: 1px solid rgba(212, 168, 90, 0.5);
 }
 
 @media screen and (max-width: 800px) {
@@ -78,9 +104,16 @@
 }
 
 .admin-table-cell {
-	border: 1px solid var(--border);
+	border: 1px solid var(--color-chalk);
 	padding: 0.5rem 1rem;
-	background: var(--bg);
+	background: var(--color-paper);
 	text-align: left;
 	vertical-align: top;
+}
+
+@media (prefers-color-scheme: dark) {
+	.admin-table-cell {
+		border-color: var(--color-charcoal);
+		background: var(--color-coal);
+	}
 }

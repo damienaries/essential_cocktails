@@ -36,8 +36,8 @@ function buildClassName(
 		return [
 			'absolute -top-6 right-0 max-h-none min-h-0',
 			'px-2.5 py-1 text-xs rounded-full w-fit',
-			'border border-[var(--border)] bg-[var(--code-bg)] text-[var(--text-h)]',
-			'hover:bg-[var(--code-bg)] transition-all duration-300',
+			'border border-chalk bg-chalk text-ink dark:border-charcoal dark:bg-carbon dark:text-cream',
+			'hover:bg-chalk dark:hover:bg-carbon transition-all duration-300',
 		].join(' ');
 	}
 
@@ -45,7 +45,7 @@ function buildClassName(
 		return [
 			'mt-6 px-6 py-1 rounded text-center w-fit cursor-pointer',
 			'bg-transparent hover:bg-transparent',
-			'border border-[var(--border)] text-[var(--text)]',
+			'border border-chalk text-smoke dark:border-charcoal dark:text-sand',
 			'transition-all duration-300',
 		].join(' ');
 	}

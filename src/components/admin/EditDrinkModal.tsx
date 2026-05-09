@@ -13,7 +13,7 @@ export function EditDrinkModal({ drink, onClose }: Props) {
     <Modal onClose={onClose} closeOnBackdrop={false} ariaLabelledBy="edit-drink-title">
       <div className="w-full flex-[1_1_100%] min-w-0 p-4 box-border">
         <div className="flex flex-wrap justify-between items-center gap-3 mb-2">
-          <h2 id="edit-drink-title" className="text-[var(--text-h)] text-xl m-0 text-left">
+          <h2 id="edit-drink-title" className="text-ink dark:text-cream text-xl m-0 text-left">
             Edit {drink.name}
           </h2>
           <Button type="button" color="primary" size="sm" onClick={onClose}>

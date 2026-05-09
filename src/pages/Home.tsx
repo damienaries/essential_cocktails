@@ -42,7 +42,7 @@ export function HomePage() {
 				<div className="relative px-4 py-12 text-center text-white sm:py-16">
 					<h1 className="mt-0 text-white">Swizzle</h1>
 					<p className="mb-6 text-white/85">
-						Upgrade your classic cocktails, reviewed and used by bar
+						Upgrade your classic cocktails, reviewed and used by the best bar
 						professionals.
 					</p>
 					<input
@@ -57,7 +57,9 @@ export function HomePage() {
 					/>
 					<div className="flex items-center justify-between w-1/2 max-w-[600px] mx-auto">
 						<p className="mt-2 text-sm">
-							<Link to="/families" className="text-white/90 underline-offset-2 hover:underline">
+							<Link
+								to="/families"
+								className="text-white/90 underline-offset-2 hover:underline">
 								Browse by family
 							</Link>
 						</p>
@@ -86,13 +88,13 @@ export function HomePage() {
 						Could not load drinks:{' '}
 						{error instanceof Error ? error.message : 'Unknown error'}
 					</p>
-					<p className="text-[var(--text)]">
+					<p className="text-smoke dark:text-sand">
 						If you just cloned the repo, add Firebase config in{' '}
 						<code>.env.local</code> (see <code>.env.example</code>).
 					</p>
 				</div>
 			) : filteredByLetter.length === 0 ? (
-				<p className="text-center text-sm text-[var(--text)]">
+				<p className="text-center text-sm text-smoke dark:text-sand">
 					No drinks match this filter.
 				</p>
 			) : (

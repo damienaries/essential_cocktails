@@ -31,20 +31,7 @@ export function Modal({
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby={ariaLabelledBy}
-				style={{
-					background: 'var(--bg)',
-					color: 'var(--text)',
-					maxWidth: 900,
-					width: '100%',
-					maxHeight: '90svh',
-					overflow: 'auto',
-					borderRadius: 8,
-					boxShadow: 'var(--shadow)',
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-					gap: 0,
-				}}
+				className="flex w-full max-w-[900px] max-h-[90svh] flex-row flex-wrap overflow-auto rounded-lg bg-paper text-smoke shadow-md dark:bg-coal dark:text-sand"
 				onClick={(e) => e.stopPropagation()}
 			>
 				{children}

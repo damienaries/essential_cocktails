@@ -11,10 +11,10 @@ export function IngredientRowInput({ ingredient, onChange }: Props) {
   const showUnit = Boolean(q) && isPlainNumericQuantityString(q)
 
   return (
-    <div className="flex border-b border-[var(--border)] bg-[var(--bg)]">
+    <div className="flex border-b border-chalk bg-paper dark:border-charcoal dark:bg-coal">
       <input
         type="text"
-        className="w-1/2 py-2 px-4 rounded-none bg-[var(--bg)] text-[var(--text)] border-0 focus:outline focus:outline-1 focus:outline-[var(--accent-border)]"
+        className="w-1/2 py-2 px-4 rounded-none bg-paper text-smoke border-0 dark:bg-coal dark:text-sand focus:outline focus:outline-1 focus:outline-brass/50"
         placeholder="Ingredient"
         value={ingredient.name}
         onChange={(e) => onChange({ ...ingredient, name: e.target.value })}
@@ -22,7 +22,7 @@ export function IngredientRowInput({ ingredient, onChange }: Props) {
       <input
         type="text"
         autoComplete="off"
-        className="w-1/3 py-2 px-4 border-x border-[var(--border)] rounded-none bg-[var(--bg)] text-[var(--text)] border-y-0 focus:outline focus:outline-1 focus:outline-[var(--accent-border)]"
+        className="w-1/3 py-2 px-4 border-x border-chalk rounded-none bg-paper text-smoke border-y-0 dark:border-charcoal dark:bg-coal dark:text-sand focus:outline focus:outline-1 focus:outline-brass/50"
         placeholder="Quantity"
         value={ingredient.quantity}
         onChange={(e) => onChange({ ...ingredient, quantity: e.target.value })}
@@ -31,7 +31,7 @@ export function IngredientRowInput({ ingredient, onChange }: Props) {
         <input
           type="text"
           readOnly
-          className="w-1/6 py-2 px-4 rounded-none bg-[var(--code-bg)] text-[var(--text-h)] border-0"
+          className="w-1/6 py-2 px-4 rounded-none bg-chalk text-ink border-0 dark:bg-carbon dark:text-cream"
           value={ingredient.unit}
           aria-label="Unit"
         />

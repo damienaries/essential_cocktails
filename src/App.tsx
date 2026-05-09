@@ -7,7 +7,6 @@ import { AdminListPage } from './pages/AdminListPage'
 import { NotFoundPage } from './pages/NotFound'
 import { FamiliesIndexPage } from './pages/FamiliesIndex'
 import { FamilyDrinksPage } from './pages/FamilyDrinks'
-import { ThemePreviewPage } from './pages/ThemePreview'
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="families" element={<FamiliesIndexPage />} />
         <Route path="families/:slug" element={<FamilyDrinksPage />} />
-        <Route path="themes" element={<ThemePreviewPage />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="list" replace />} />
           <Route path="list" element={<AdminListPage />} />

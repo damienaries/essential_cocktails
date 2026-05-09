@@ -49,10 +49,10 @@ export function LetterFilterToolbar({
 						className={[
 							'min-w-[1.65rem] px-1.5 py-1 text-xs rounded border font-medium transition-colors',
 							!hasAny
-								? 'opacity-35 cursor-not-allowed border-[var(--border)] text-[var(--text)] bg-transparent'
+								? 'opacity-35 cursor-not-allowed border-chalk text-smoke bg-transparent dark:border-charcoal dark:text-sand'
 								: isSelected
-									? 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--text-h)] cursor-pointer'
-									: 'border-[var(--border)] bg-[var(--bg)] text-[var(--text-h)] hover:bg-[var(--code-bg)] cursor-pointer',
+									? 'border-brass/40 bg-brass/10 text-ink dark:text-cream cursor-pointer'
+									: 'border-chalk bg-paper text-ink hover:bg-chalk dark:border-charcoal dark:bg-coal dark:text-cream dark:hover:bg-carbon cursor-pointer',
 						].join(' ')}
 					>
 						{letter}
