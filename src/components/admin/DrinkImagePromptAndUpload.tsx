@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	AI_IMAGE_PROMPT_MAX_CHARS,
 	buildChatGptPrefillUrl,
@@ -15,18 +15,24 @@ type Props = {
 	/** When editing, used in Storage path under `cocktail_images/{id}/`. */
 	drinkId?: string;
 	onImageUrl: (url: string) => void;
+	onUploadingChange?: (uploading: boolean) => void;
 };
 
 export function DrinkImagePromptAndUpload({
 	fields,
 	drinkId,
 	onImageUrl,
+	onUploadingChange,
 }: Props) {
 	const [promptText, setPromptText] = useState('');
 	const [copyDone, setCopyDone] = useState(false);
 	const [uploading, setUploading] = useState(false);
 	const [inlineError, setInlineError] = useState<string | null>(null);
 	const fileRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		onUploadingChange?.(uploading);
+	}, [uploading, onUploadingChange]);
 
 	const hasDrinkName = Boolean(fields.name.trim());
 	const hasPrompt = Boolean(promptText.trim());

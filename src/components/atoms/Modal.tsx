@@ -5,6 +5,7 @@ type Props = {
 	children: ReactNode;
 	ariaLabelledBy?: string;
 	closeOnBackdrop?: boolean;
+	closeOnEscape?: boolean;
 };
 
 export function Modal({
@@ -12,14 +13,16 @@ export function Modal({
 	children,
 	ariaLabelledBy,
 	closeOnBackdrop = true,
+	closeOnEscape = true,
 }: Props) {
 	useEffect(() => {
+		if (!closeOnEscape) return;
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') onClose();
 		};
 		window.addEventListener('keydown', onKey);
 		return () => window.removeEventListener('keydown', onKey);
-	}, [onClose]);
+	}, [onClose, closeOnEscape]);
 
 	return (
 		<div

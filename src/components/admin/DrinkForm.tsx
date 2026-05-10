@@ -39,6 +39,7 @@ export function DrinkForm(props: Props) {
 		() => props.mode === 'edit' && Boolean(props.drink.description?.trim()),
 	);
 	const [imageToolsKey, setImageToolsKey] = useState(0);
+	const [imageUploading, setImageUploading] = useState(false);
 
 	const saveMutation = useMutation({
 		mutationFn: async () => {
@@ -108,11 +109,22 @@ export function DrinkForm(props: Props) {
 	const title = props.mode === 'add' ? 'Add cocktail' : 'Edit cocktail';
 	const submitLabel = props.mode === 'add' ? 'Add drink' : 'Save changes';
 
+	const requiredFieldsFilled =
+		fields.name.trim() !== '' && fields.glass.trim() !== '';
+	const canSubmit =
+		!saveMutation.isPending && !imageUploading && requiredFieldsFilled;
+	const submitButtonLabel = saveMutation.isPending
+		? 'Saving…'
+		: imageUploading
+			? 'Uploading image…'
+			: submitLabel;
+
 	return (
 		<form
 			className="p-4 mx-auto rounded-lg bg-chalk dark:bg-carbon border border-chalk dark:border-charcoal text-left max-w-3xl shadow-md"
 			onSubmit={(e) => {
 				e.preventDefault();
+				if (!canSubmit) return;
 				saveMutation.mutate();
 			}}
 			aria-busy={saveMutation.isPending}
@@ -242,6 +254,7 @@ export function DrinkForm(props: Props) {
 				fields={fields}
 				drinkId={props.mode === 'edit' ? props.drink.id : undefined}
 				onImageUrl={(url) => setFields((f) => ({ ...f, imageUrl: url }))}
+				onUploadingChange={setImageUploading}
 			/>
 
 			<div className="admin-form-row items-start">
@@ -274,9 +287,9 @@ export function DrinkForm(props: Props) {
 				fill
 				color="primary"
 				size="sm"
-				disabled={saveMutation.isPending}
+				disabled={!canSubmit}
 			>
-				{saveMutation.isPending ? 'Saving…' : submitLabel}
+				{submitButtonLabel}
 			</Button>
 		</form>
 	);
