@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { motion } from 'motion/react';
 
 type Props = {
 	onClose: () => void;
@@ -25,20 +26,28 @@ export function Modal({
 	}, [onClose, closeOnEscape]);
 
 	return (
-		<div
+		<motion.div
 			role="presentation"
 			className="modal-backdrop"
 			onClick={closeOnBackdrop ? onClose : undefined}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.15, ease: 'easeOut' }}
 		>
-			<div
+			<motion.div
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby={ariaLabelledBy}
 				className="flex w-full max-w-[900px] max-h-[90svh] flex-row flex-wrap overflow-auto rounded-lg bg-paper text-smoke shadow-md dark:bg-coal dark:text-sand"
 				onClick={(e) => e.stopPropagation()}
+				initial={{ opacity: 0, scale: 0.96, y: 8 }}
+				animate={{ opacity: 1, scale: 1, y: 0 }}
+				exit={{ opacity: 0, scale: 0.96, y: 8 }}
+				transition={{ duration: 0.2, ease: 'easeOut' }}
 			>
 				{children}
-			</div>
-		</div>
+			</motion.div>
+		</motion.div>
 	);
 }

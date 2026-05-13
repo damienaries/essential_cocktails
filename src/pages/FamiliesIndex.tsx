@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence } from 'motion/react';
 import { CocktailCard } from '../components/CocktailCard';
 import { DrinkDetailModal } from '../components/DrinkDetailModal';
 import { COCKTAIL_FAMILIES, normalizeFamilyName } from '../constants/families';
@@ -92,9 +93,14 @@ export function FamiliesIndexPage() {
 				})}
 			</div>
 
-			{selected ? (
-				<DrinkDetailModal drink={selected} onClose={() => setSelected(null)} />
-			) : null}
+			<AnimatePresence>
+				{selected ? (
+					<DrinkDetailModal
+						drink={selected}
+						onClose={() => setSelected(null)}
+					/>
+				) : null}
+			</AnimatePresence>
 		</>
 	);
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { AnimatePresence } from 'motion/react'
 import { CocktailCard } from '../components/CocktailCard'
 import { DrinkDetailModal } from '../components/DrinkDetailModal'
 import {
@@ -67,7 +68,11 @@ export function FamilyDrinksPage() {
         ))}
       </section>
 
-      {selected ? <DrinkDetailModal drink={selected} onClose={() => setSelected(null)} /> : null}
+      <AnimatePresence>
+        {selected ? (
+          <DrinkDetailModal drink={selected} onClose={() => setSelected(null)} />
+        ) : null}
+      </AnimatePresence>
     </>
   )
 }

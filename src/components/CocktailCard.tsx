@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'motion/react'
 import { drinkPhotoImgProps } from '../lib/drinkImageAttrs'
 import type { Drink } from '../types/drink'
 
@@ -11,6 +12,7 @@ export function CocktailCard({ drink, onSelect }: Props) {
   const imageUrl = drink.imageUrl?.trim()
   const ref = useRef<HTMLButtonElement | null>(null)
   const [shouldLoad, setShouldLoad] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     if (!imageUrl || shouldLoad) return
@@ -43,13 +45,17 @@ export function CocktailCard({ drink, onSelect }: Props) {
           className="absolute inset-0 bg-[linear-gradient(145deg,rgba(42,36,56,0.95),rgba(26,23,32,0.98))]"
         />
         {imageUrl && shouldLoad ? (
-          <img
+          <motion.img
             src={imageUrl}
             alt=""
             width={440}
             height={200}
             className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
             loading="lazy"
+            onLoad={() => setLoaded(true)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
             {...drinkPhotoImgProps}
           />
         ) : null}

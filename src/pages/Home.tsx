@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence } from 'motion/react';
 import heroBg from '../assets/images/hero-bg.webp';
 import { CocktailCard } from '../components/CocktailCard';
 import { DrinkDetailModal } from '../components/DrinkDetailModal';
@@ -100,9 +101,14 @@ export function HomePage() {
 				</section>
 			)}
 
-			{selected ? (
-				<DrinkDetailModal drink={selected} onClose={() => setSelected(null)} />
-			) : null}
+			<AnimatePresence>
+				{selected ? (
+					<DrinkDetailModal
+						drink={selected}
+						onClose={() => setSelected(null)}
+					/>
+				) : null}
+			</AnimatePresence>
 		</>
 	);
 }

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
+import { AnimatePresence } from 'motion/react'
 import { deleteDrinkFromFirestore } from '../../api/drinks'
 import { useDrinksQuery } from '../../hooks/useDrinksQuery'
 import { useLetterFilter } from '../../hooks/useLetterFilter'
@@ -148,9 +149,11 @@ export function DrinkAdminTable() {
         ))}
       </section>
 
-      {drinkToEdit ? (
-        <EditDrinkModal drink={drinkToEdit} onClose={() => setDrinkToEdit(null)} />
-      ) : null}
+      <AnimatePresence>
+        {drinkToEdit ? (
+          <EditDrinkModal drink={drinkToEdit} onClose={() => setDrinkToEdit(null)} />
+        ) : null}
+      </AnimatePresence>
     </>
   )
 }
