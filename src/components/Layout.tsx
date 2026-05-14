@@ -8,7 +8,7 @@ export function Layout() {
 	const isAdmin = pathname.startsWith('/admin');
 
 	return (
-		<div className="flex min-h-[100svh] flex-col">
+		<div className="flex min-h-svh flex-col">
 			<Header />
 
 			<main className="app-container flex-1 py-6">
@@ -18,11 +18,10 @@ export function Layout() {
 					<AnimatePresence mode="wait">
 						<motion.div
 							key={pathname}
-							initial={{ opacity: 0, y: 8 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -8 }}
-							transition={{ duration: 0.2, ease: 'easeOut' }}
-						>
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.18, ease: 'easeOut' }}>
 							<Outlet />
 						</motion.div>
 					</AnimatePresence>

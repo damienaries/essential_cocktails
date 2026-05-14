@@ -1,3 +1,5 @@
+import { DaIceGlyph } from './DaIceGlyph';
+
 export function Footer() {
 	return (
 		<footer className="bg-palm text-cream">
@@ -7,9 +9,11 @@ export function Footer() {
 					href="https://www.damienaries.com"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="text-cream underline-offset-4 hover:underline"
+					className="inline-flex items-center text-cream transition-opacity hover:opacity-80"
+					aria-label="Made by DA — visit damienaries.com"
+					title="made with crushed ice by DA"
 				>
-					made with lots of crushed ice by DA
+					<DaIceGlyph />
 				</a>
 			</div>
 		</footer>
