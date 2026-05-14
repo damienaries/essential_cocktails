@@ -6,7 +6,9 @@ export function NotFoundPage() {
 		<div className="mx-auto flex max-w-[560px] flex-col items-center gap-5 text-center">
 			<img
 				src={notFoundIllustration}
-				alt=""
+				alt="Page not found"
+				width={1536}
+				height={1024}
 				className="h-auto max-w-[min(100%,480px)]"
 			/>
 			<div>

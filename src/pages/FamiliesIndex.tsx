@@ -69,7 +69,7 @@ export function FamiliesIndexPage() {
 								</span>
 							</header>
 							<div
-								className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3"
+								className="flex snap-x snap-mandatory gap-4 overflow-x-auto pl-8 pr-5 pb-3"
 								role="list"
 								aria-label={`${label} family drinks`}>
 								{namesake ? (

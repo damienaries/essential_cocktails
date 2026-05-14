@@ -32,8 +32,10 @@ export function HomePage() {
 			<div className="relative mb-6 overflow-hidden rounded-lg">
 				<img
 					src={heroBg}
-					alt=""
+					alt="a low lit back bar background image"
 					aria-hidden
+					width={1672}
+					height={941}
 					className="absolute inset-0 h-full w-full object-cover"
 				/>
 				<div
@@ -46,24 +48,23 @@ export function HomePage() {
 						Upgrade your classic cocktails, reviewed and used by the best bar
 						professionals.
 					</p>
-					<input
-						id="drink-search"
-						type="search"
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						autoComplete="off"
-						aria-label="Search drinks"
-						placeholder="Search by name, family, or ingredient"
-						className="mx-auto block w-1/2 max-w-[600px] rounded-md border border-white/25 bg-white/10 px-3 py-2.5 text-base text-white backdrop-blur placeholder:text-white/65 focus:outline-2 focus:outline-offset-2 focus:outline-brass/70"
-					/>
-					<div className="flex items-center justify-between w-1/2 max-w-[600px] mx-auto">
-						<p className="mt-2 text-sm">
-							<Link
-								to="/families"
-								className="text-white/90 underline-offset-2 hover:underline">
-								Browse by family
-							</Link>
-						</p>
+
+					<div className="mx-auto w-full text-left max-w-[600px]">
+						<input
+							id="drink-search"
+							type="search"
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							autoComplete="off"
+							aria-label="Search drinks"
+							placeholder="Search by name, family, or ingredient"
+							className="w-full rounded-md mb-2 border border-white/25 bg-white/10 px-3 py-2.5 text-base text-white backdrop-blur placeholder:text-white/65 focus:outline-2 focus:outline-offset-2 focus:outline-brass/70"
+						/>
+						<Link
+							to="/families"
+							className="text-white/90 underline-offset-2 hover:underline">
+							Browse by family
+						</Link>
 					</div>
 				</div>
 			</div>

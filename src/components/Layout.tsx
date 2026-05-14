@@ -11,7 +11,7 @@ export function Layout() {
 		<div className="flex min-h-svh flex-col">
 			<Header />
 
-			<main className="app-container flex-1 py-6">
+			<main className="app-container flex-1 pt-6 pb-12">
 				{isAdmin ? (
 					<Outlet />
 				) : (
