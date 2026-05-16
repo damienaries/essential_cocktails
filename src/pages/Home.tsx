@@ -62,7 +62,7 @@ export function HomePage() {
 						/>
 						<Link
 							to="/families"
-							className="text-white/90 underline-offset-2 hover:underline">
+							className="link text-white/90">
 							Browse by family
 						</Link>
 					</div>
@@ -95,7 +95,7 @@ export function HomePage() {
 					No drinks match this filter.
 				</p>
 			) : (
-				<section className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+				<section className="grid grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
 					{filteredByLetter.map((drink) => (
 						<CocktailCard key={drink.id} drink={drink} onSelect={setSelected} />
 					))}

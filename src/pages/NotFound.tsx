@@ -13,7 +13,7 @@ export function NotFoundPage() {
 			/>
 			<div>
 				<p>
-					That URL doesn’t exist. Head back <Link to="/">home</Link>.
+					That URL doesn’t exist. Head back <Link to="/" className="link">home</Link>.
 				</p>
 			</div>
 		</div>

@@ -14,7 +14,7 @@ export function LetterFilterToolbar({
 	className,
 }: Props) {
 	const wrapperClass = [
-		'flex flex-wrap justify-center gap-1 mb-4',
+		'flex flex-wrap justify-center gap-0.5 mb-4 sm:gap-1',
 		className,
 	]
 		.filter(Boolean)
@@ -47,7 +47,7 @@ export function LetterFilterToolbar({
 							onChange(letterFilter === letter ? null : letter);
 						}}
 						className={[
-							'min-w-[1.65rem] px-1.5 py-1 text-xs rounded border font-medium transition-colors',
+							'min-w-[1.4rem] px-1 py-0.5 text-[11px] rounded border font-medium transition-colors sm:min-w-[1.65rem] sm:px-1.5 sm:py-1 sm:text-xs',
 							!hasAny
 								? 'opacity-35 cursor-not-allowed border-chalk text-smoke bg-transparent dark:border-charcoal dark:text-sand'
 								: isSelected

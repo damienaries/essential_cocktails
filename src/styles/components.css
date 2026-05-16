@@ -7,6 +7,24 @@
 	padding-inline: 1.25rem;
 }
 
+.link {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.18s ease;
+}
+
+.link:hover,
+.link.active,
+.link.current {
+	color: var(--color-brass);
+}
+
+.link:focus-visible {
+	outline: 2px solid rgb(212 168 90 / 0.5);
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
 
 .modal-backdrop {
 	position: fixed;

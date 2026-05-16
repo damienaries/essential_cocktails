@@ -32,11 +32,15 @@ export function CocktailCard({ drink, onSelect }: Props) {
 	}, [imageUrl, shouldLoad]);
 
 	return (
-		<button
+		<motion.button
 			type="button"
 			ref={ref}
 			onClick={() => onSelect(drink)}
 			aria-label={`Open details for ${drink.name}`}
+			initial={{ opacity: 0 }}
+			whileInView={{ opacity: 1 }}
+			viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+			transition={{ duration: 0.5, ease: 'easeOut' }}
 			className="group m-0 w-full cursor-pointer rounded-lg border-0 bg-transparent p-0 text-left font-[inherit] shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50">
 			<span className="relative block h-[200px] w-full overflow-hidden rounded-lg">
 				<span
@@ -70,6 +74,6 @@ export function CocktailCard({ drink, onSelect }: Props) {
 					className="pointer-events-none absolute inset-0 bg-palm/0 transition-colors duration-300 group-hover:bg-palm/10 dark:group-hover:bg-brass/10"
 				/>
 			</span>
-		</button>
+		</motion.button>
 	);
 }

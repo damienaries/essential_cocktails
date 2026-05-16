@@ -8,12 +8,24 @@ export function Header() {
 				to="/"
 				end
 				aria-label="Swizzle home"
-				className="brand-logo inline-flex h-[50px] items-center text-ink dark:text-cream"
+				className="brand-logo inline-flex h-12.5 items-center text-ink dark:text-cream"
 				dangerouslySetInnerHTML={{ __html: logoSvg }}
 			/>
 			<nav className="flex flex-wrap gap-3">
-				<NavLink to="/families">Families</NavLink>
-				<NavLink to="/admin">Admin</NavLink>
+				<NavLink
+					to="/families"
+					className={({ isActive }) =>
+						isActive ? 'link current active' : 'link'
+					}>
+					Families
+				</NavLink>
+				<NavLink
+					to="/admin"
+					className={({ isActive }) =>
+						isActive ? 'link current active' : 'link'
+					}>
+					Admin
+				</NavLink>
 			</nav>
 		</header>
 	);
