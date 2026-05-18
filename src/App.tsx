@@ -7,6 +7,7 @@ import { AdminListPage } from './pages/AdminListPage'
 import { NotFoundPage } from './pages/NotFound'
 import { FamiliesIndexPage } from './pages/FamiliesIndex'
 import { FamilyDrinksPage } from './pages/FamilyDrinks'
+import { GlossaryPage } from './pages/Glossary'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="families" element={<FamiliesIndexPage />} />
         <Route path="families/:slug" element={<FamilyDrinksPage />} />
+        <Route path="glossary" element={<GlossaryPage />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="list" replace />} />
           <Route path="list" element={<AdminListPage />} />

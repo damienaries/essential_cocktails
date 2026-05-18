@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from './atoms/Button';
 import { Modal } from './atoms/Modal';
 import type { Drink } from '../types/drink';
 import { drinkPhotoImgProps } from '../lib/drinkImageAttrs';
 import { formatGarnish, formatIce, formatMethod } from '../lib/drinkDisplay';
+import {
+	glossarySlug,
+	isGlossaryIngredient,
+} from '../lib/ingredientCategory';
 
 type Props = {
 	drink: Drink;
@@ -112,7 +117,16 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 									key={`${ing.name ?? 'ing'}-${idx}`}
 									className="flex justify-between gap-2 border-b border-chalk dark:border-charcoal py-1.5 text-smoke dark:text-sand last:border-b-0 md:gap-3 md:py-2">
 									<span className="text-left min-w-0 flex-1">
-										{ing.name ?? '—'}
+										{ing.name && isGlossaryIngredient(ing.name) ? (
+											<Link
+												to={`/glossary#${glossarySlug(ing.name)}`}
+												onClick={onClose}
+												className="underline decoration-dotted decoration-smoke/50 underline-offset-4 transition-colors hover:text-brass hover:decoration-brass dark:decoration-sand/50">
+												{ing.name}
+											</Link>
+										) : (
+											(ing.name ?? '—')
+										)}
 									</span>
 									<span className="shrink-0 whitespace-nowrap text-right tabular-nums">
 										{amountLabel}
