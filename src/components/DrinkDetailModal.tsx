@@ -4,24 +4,44 @@ import { Button } from './atoms/Button';
 import { Modal } from './atoms/Modal';
 import type { Drink } from '../types/drink';
 import { drinkPhotoImgProps } from '../lib/drinkImageAttrs';
+import { SvgIcon } from './atoms/SvgIcon';
 import { formatGarnish, formatIce, formatMethod } from '../lib/drinkDisplay';
+import { formatCl, formatOz, ozToCl } from '../lib/ingredientQuantity';
+import { glossarySlug, isGlossaryIngredient } from '../lib/ingredientCategory';
 import {
-	glossarySlug,
-	isGlossaryIngredient,
-} from '../lib/ingredientCategory';
+	glassIconName,
+	iceIconName,
+	methodIconName,
+} from '../lib/metaIcons';
 
 type Props = {
 	drink: Drink;
 	onClose: () => void;
 };
 
-function MetaLine({ label, value }: { label: string; value: string }) {
-	const display = value.trim() === '' ? '—' : value;
+function MetaCell({
+	label,
+	textValue,
+	iconName,
+}: {
+	label: string;
+	textValue: string;
+	iconName?: string | null;
+}) {
+	const display = textValue.trim() === '' ? '—' : textValue;
 	return (
-		<p className="m-0 capitalize text-smoke dark:text-sand">
-			<span className="sr-only">{label}: </span>
-			{display}
-		</p>
+		<div
+			className="flex flex-col items-center gap-1 text-center text-smoke dark:text-sand"
+			title={display}>
+			<span className="sr-only">
+				{label}: {display}
+			</span>
+			{iconName ? (
+				<SvgIcon icon={iconName} size={28} />
+			) : (
+				<span className="capitalize">{display}</span>
+			)}
+		</div>
 	);
 }
 
@@ -85,12 +105,25 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 						{drink.name}
 					</h2>
 					<div
-						className="mt-2 flex items-center justify-between gap-0.5 text-xs leading-snug sm:text-[13px] md:text-sm"
+						className="mt-2 grid grid-cols-4 items-start gap-2 text-xs"
 						role="group"
 						aria-label="Preparation">
-						<MetaLine label="Garnish" value={garnishStr} />
-						<MetaLine label="Method" value={methodStr} />
-						<MetaLine label="Ice" value={iceStr} />
+						<MetaCell label="Garnish" textValue={garnishStr} />
+						<MetaCell
+							label="Method"
+							textValue={methodStr}
+							iconName={methodIconName(drink.method)}
+						/>
+						<MetaCell
+							label="Ice"
+							textValue={iceStr}
+							iconName={iceIconName(drink.ice)}
+						/>
+						<MetaCell
+							label="Glass"
+							textValue={drink.glass ?? ''}
+							iconName={glassIconName(drink.glass)}
+						/>
 					</div>
 				</header>
 
@@ -98,7 +131,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					<Button variant="modal-unit" onClick={() => setMetric((v) => !v)}>
 						{metric ? 'cl' : 'oz'}
 					</Button>
-					<ul className="m-0 mt-10 list-none p-0 md:mt-12">
+					<ul className="m-0 mt-16 list-none p-0">
 						{ingredients.map((ing, idx) => {
 							const q = ing.quantity;
 							let amountLabel: string;
@@ -107,7 +140,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 							} else if (typeof q === 'string') {
 								amountLabel = q.trim() || '—';
 							} else if (typeof q === 'number' && Number.isFinite(q)) {
-								const displayQty = metric ? String(q * 3) : String(q);
+								const displayQty = metric ? formatCl(ozToCl(q)) : formatOz(q);
 								amountLabel = `${displayQty} ${unit}`;
 							} else {
 								amountLabel = '—';

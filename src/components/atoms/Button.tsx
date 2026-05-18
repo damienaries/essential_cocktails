@@ -34,7 +34,7 @@ function buildClassName(
 ): string {
 	if (variant === 'modal-unit') {
 		return [
-			'absolute -top-6 right-0 max-h-none min-h-0 cursor-pointer',
+			'absolute -top-10 -right-1 max-h-none min-h-0 cursor-pointer',
 			'px-2.5 py-1 text-xs rounded-full w-fit',
 			'border border-chalk bg-chalk text-ink dark:border-charcoal dark:bg-carbon dark:text-cream',
 			'hover:bg-chalk dark:hover:bg-carbon transition-all duration-300',
