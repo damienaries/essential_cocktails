@@ -11,6 +11,15 @@
 			rel="stylesheet"
 		/>
 		<title>Swizzle</title>
+		<script>
+			(function () {
+				try {
+					var stored = localStorage.getItem('theme');
+					var isDark = stored === 'dark' || stored == null;
+					if (isDark) document.documentElement.classList.add('dark');
+				} catch (e) {}
+			})();
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>

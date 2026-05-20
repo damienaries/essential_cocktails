@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import logoSvg from '../assets/icons/swizzle-logo.svg?raw';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
 	return (
@@ -26,6 +27,7 @@ export function Header() {
 					}>
 					Admin
 				</NavLink>
+				<ThemeToggle />
 			</nav>
 		</header>
 	);

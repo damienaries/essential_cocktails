@@ -8,11 +8,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		color: var(--color-sand);
-		background: var(--color-coal);
-	}
+:root.dark {
+	color: var(--color-sand);
+	background: var(--color-coal);
 }
 
 body {

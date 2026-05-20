@@ -42,14 +42,12 @@
 	-webkit-backdrop-filter: blur(12px);
 }
 
-@media (prefers-color-scheme: dark) {
-	.modal-backdrop {
-		background:
-			linear-gradient(rgba(230, 228, 242, 0.2), rgba(230, 228, 242, 0.2)),
-			rgba(2, 3, 6, 0.78);
-		backdrop-filter: blur(14px);
-		-webkit-backdrop-filter: blur(14px);
-	}
+.dark .modal-backdrop {
+	background:
+		linear-gradient(rgba(230, 228, 242, 0.2), rgba(230, 228, 242, 0.2)),
+		rgba(2, 3, 6, 0.78);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
 }
 
 /* Admin drink form (legacy Vue parity) */
@@ -80,11 +78,9 @@
 	color: var(--color-ink);
 }
 
-@media (prefers-color-scheme: dark) {
-	.admin-form-row label,
-	.admin-form-row > span:first-child {
-		color: var(--color-cream);
-	}
+.dark .admin-form-row label,
+.dark .admin-form-row > span:first-child {
+	color: var(--color-cream);
 }
 
 .admin-form-row input:not([type='checkbox']),
@@ -101,14 +97,12 @@
 	box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-	.admin-form-row input:not([type='checkbox']),
-	.admin-form-row select,
-	.admin-form-row textarea {
-		background: var(--color-coal);
-		color: var(--color-sand);
-		border-color: var(--color-charcoal);
-	}
+.dark .admin-form-row input:not([type='checkbox']),
+.dark .admin-form-row select,
+.dark .admin-form-row textarea {
+	background: var(--color-coal);
+	color: var(--color-sand);
+	border-color: var(--color-charcoal);
 }
 
 .admin-form-row input:focus,
@@ -137,9 +131,7 @@
 	vertical-align: top;
 }
 
-@media (prefers-color-scheme: dark) {
-	.admin-table-cell {
-		border-color: var(--color-charcoal);
-		background: var(--color-coal);
-	}
+.dark .admin-table-cell {
+	border-color: var(--color-charcoal);
+	background: var(--color-coal);
 }

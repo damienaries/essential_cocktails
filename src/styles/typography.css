@@ -18,11 +18,9 @@
 		color: var(--color-ink);
 	}
 
-	@media (prefers-color-scheme: dark) {
-		h1,
-		h2 {
-			color: var(--color-cream);
-		}
+	.dark h1,
+	.dark h2 {
+		color: var(--color-cream);
 	}
 
 	h1 {
@@ -56,11 +54,9 @@
 		color: var(--color-ink);
 	}
 
-	@media (prefers-color-scheme: dark) {
-		code,
-		.counter {
-			color: var(--color-cream);
-		}
+	.dark code,
+	.dark .counter {
+		color: var(--color-cream);
 	}
 
 	code {
@@ -70,10 +66,8 @@
 		background: var(--color-chalk);
 	}
 
-	@media (prefers-color-scheme: dark) {
-		code {
-			background: var(--color-carbon);
-		}
+	.dark code {
+		background: var(--color-carbon);
 	}
 
 	.brand-logo svg {
