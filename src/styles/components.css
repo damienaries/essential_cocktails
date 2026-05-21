@@ -25,6 +25,35 @@
 	border-radius: 2px;
 }
 
+.text-input {
+	width: 100%;
+	border-radius: 0.375rem;
+	border: 1px solid var(--color-chalk);
+	background: var(--color-paper);
+	color: var(--color-ink);
+	font-size: 0.875rem;
+	padding: 0.5rem 0.75rem;
+}
+
+.text-input::placeholder {
+	color: var(--color-smoke);
+}
+
+.text-input:focus {
+	outline: 2px solid rgb(212 168 90 / 0.5);
+	outline-offset: 2px;
+}
+
+.dark .text-input {
+	border-color: var(--color-charcoal);
+	background: var(--color-coal);
+	color: var(--color-cream);
+}
+
+.dark .text-input::placeholder {
+	color: var(--color-sand);
+}
+
 
 .modal-backdrop {
 	position: fixed;

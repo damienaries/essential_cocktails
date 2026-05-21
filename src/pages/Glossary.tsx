@@ -54,7 +54,7 @@ export function GlossaryPage() {
 					onChange={(e) => setQuery(e.target.value)}
 					placeholder="Search glossary"
 					aria-label="Search glossary entries"
-					className="w-full max-w-[400px] rounded-md border border-chalk bg-paper px-3 py-2 text-sm text-ink placeholder:text-smoke focus:outline-2 focus:outline-offset-2 focus:outline-brass/50 dark:border-charcoal dark:bg-coal dark:text-cream dark:placeholder:text-sand"
+					className="text-input max-w-[400px]"
 				/>
 			</div>
 

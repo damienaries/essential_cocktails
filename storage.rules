@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// Phase A: drink images are publicly readable, admin-only writable.
+// Replace the UID literal(s) below with your own Firebase Auth UID(s).
+service firebase.storage {
+	match /b/{bucket}/o {
+		function isAdmin() {
+			return request.auth != null
+				&& request.auth.uid in ['2sWAHCy0BzUweYN9HBlUZNRnS543'];
+		}
+
+		match /drinks/{allPaths=**} {
+			allow read: if true;
+			allow write: if isAdmin();
+		}
+
+		// Default deny.
+		match /{allPaths=**} {
+			allow read, write: if false;
+		}
+	}
+}

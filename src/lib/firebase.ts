@@ -1,4 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
+import { getAuth, type Auth } from 'firebase/auth'
 import { getFirestore, type Firestore } from 'firebase/firestore'
 import { getStorage, type FirebaseStorage } from 'firebase/storage'
 
@@ -17,6 +18,7 @@ function readFirebaseConfig() {
 let app: FirebaseApp | null = null
 let db: Firestore | null = null
 let storage: FirebaseStorage | null = null
+let auth: Auth | null = null
 
 function initFirebase(): FirebaseApp {
   if (app) return app
@@ -47,4 +49,10 @@ export function getFirebaseStorage(): FirebaseStorage {
   }
   if (!storage) storage = getStorage(app!)
   return storage
+}
+
+export function getFirebaseAuth(): Auth {
+  initFirebase()
+  if (!auth) auth = getAuth(app!)
+  return auth
 }

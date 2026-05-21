@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Phase A: drinks/families are publicly readable, admin-only writable.
+// Replace the UID literal(s) below with your own Firebase Auth UID(s).
+// Phase B (user accounts) will add per-user collections.
+// Phase C (paid tier) will swap UID checks for custom claims.
+service cloud.firestore {
+	match /databases/{database}/documents {
+		function isAdmin() {
+			return request.auth != null
+				&& request.auth.uid in ['2sWAHCy0BzUweYN9HBlUZNRnS543'];
+		}
+
+		// Public drinks library — read-only for everyone, admin-only writes.
+		match /drinks/{drinkId} {
+			allow read: if true;
+			allow create, update, delete: if isAdmin();
+		}
+
+		// Catch-all: deny everything we haven't explicitly allowed.
+		match /{document=**} {
+			allow read, write: if false;
+		}
+	}
+}

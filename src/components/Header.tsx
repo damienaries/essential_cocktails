@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import logoSvg from '../assets/icons/swizzle-logo.svg?raw';
 import { SvgIcon } from './atoms/SvgIcon';
+import { useAuthUser } from '../hooks/useAuthUser';
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
 	return isActive ? 'link current active' : 'link';
@@ -11,6 +12,7 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 export function Header() {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const { pathname } = useLocation();
+	const { isAdmin } = useAuthUser();
 
 	useEffect(() => {
 		setDrawerOpen(false);
@@ -39,9 +41,11 @@ export function Header() {
 				<NavLink to="/families" className={navLinkClass}>
 					Families
 				</NavLink>
-				<NavLink to="/admin" className={navLinkClass}>
-					Admin
-				</NavLink>
+				{isAdmin ? (
+					<NavLink to="/admin" className={navLinkClass}>
+						Admin
+					</NavLink>
+				) : null}
 			</nav>
 
 			<button
@@ -97,9 +101,11 @@ export function Header() {
 								<NavLink to="/families" className={navLinkClass}>
 									Families
 								</NavLink>
-								<NavLink to="/admin" className={navLinkClass}>
-									Admin
-								</NavLink>
+								{isAdmin ? (
+									<NavLink to="/admin" className={navLinkClass}>
+										Admin
+									</NavLink>
+								) : null}
 							</nav>
 						</motion.aside>
 					</>
