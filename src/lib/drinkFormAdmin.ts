@@ -12,6 +12,7 @@ export const METHOD_OPTIONS = [
 	'Build',
 	'Dry Shake',
 	'Muddle',
+	'Swizzle',
 ] as const;
 export const ICE_OPTIONS = ['cube', 'crushed', 'up'] as const;
 

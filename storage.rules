@@ -9,9 +9,11 @@ service firebase.storage {
 				&& request.auth.uid in ['2sWAHCy0BzUweYN9HBlUZNRnS543'];
 		}
 
-		match /drinks/{allPaths=**} {
+		match /cocktail_images/{allPaths=**} {
 			allow read: if true;
-			allow write: if isAdmin();
+			allow write: if isAdmin()
+				&& request.resource.size < 5 * 1024 * 1024
+				&& request.resource.contentType.matches('image/.*');
 		}
 
 		// Default deny.

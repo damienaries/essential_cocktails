@@ -14,6 +14,7 @@ export function methodIconName(method: Drink['method']): string | null {
   if (v.startsWith('stir')) return 'method-stir'
   if (v.startsWith('build')) return 'method-build'
   if (v.startsWith('muddle')) return 'method-muddle'
+  if (v.startsWith('swizzle')) return 'method-swizzle'
   return null
 }
 
