@@ -41,6 +41,9 @@ export function Header() {
 				<NavLink to="/families" className={navLinkClass}>
 					Families
 				</NavLink>
+				<NavLink to="/about" className={navLinkClass}>
+					About
+				</NavLink>
 				{isAdmin ? (
 					<NavLink to="/admin" className={navLinkClass}>
 						Admin
@@ -100,6 +103,9 @@ export function Header() {
 								</NavLink>
 								<NavLink to="/families" className={navLinkClass}>
 									Families
+								</NavLink>
+								<NavLink to="/about" className={navLinkClass}>
+									About
 								</NavLink>
 								{isAdmin ? (
 									<NavLink to="/admin" className={navLinkClass}>

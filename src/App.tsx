@@ -9,6 +9,7 @@ import { NotFoundPage } from './pages/NotFound'
 import { FamiliesIndexPage } from './pages/FamiliesIndex'
 import { FamilyDrinksPage } from './pages/FamilyDrinks'
 import { GlossaryPage } from './pages/Glossary'
+import { AboutPage } from './pages/About'
 import { SignInPage } from './pages/SignIn'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="families" element={<FamiliesIndexPage />} />
         <Route path="families/:slug" element={<FamilyDrinksPage />} />
         <Route path="glossary" element={<GlossaryPage />} />
+        <Route path="about" element={<AboutPage />} />
         <Route path="signin" element={<SignInPage />} />
         <Route
           path="admin"
