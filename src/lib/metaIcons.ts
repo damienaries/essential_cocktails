@@ -28,7 +28,7 @@ export function iceIconName(ice: Drink['ice']): string | null {
 }
 
 const GLASS_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
-  [/coupe|martini|nick.?and.?nora|cocktail/i, 'glass-coupe'],
+  [/coupe|martini|nick.{0,3}nora|cocktail/i, 'glass-coupe'],
   [/highball|collins|tall/i, 'glass-highball'],
   [/rocks|old.?fashioned|tumbler|lowball|double rocks/i, 'glass-rocks'],
   [/flute|champagne|tulip|sparkling/i, 'glass-champagne'],
