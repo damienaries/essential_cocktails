@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { COCKTAIL_FAMILIES } from '../../constants/families';
 import {
 	addDrinkToFirestore,
 	drinkNameExists,
 	updateDrinkInFirestore,
 } from '../../api/drinks';
+import { useDrinksQuery } from '../../hooks/useDrinksQuery';
 import {
 	drinkToFormFields,
 	emptyDrinkForm,
@@ -29,9 +31,18 @@ type Props =
 	| { mode: 'add' }
 	| { mode: 'edit'; drink: Drink; onDone: () => void };
 
+function normalizeDrinkName(name: string): string {
+	return name
+		.trim()
+		.toLocaleLowerCase('en-US')
+		.normalize('NFD')
+		.replace(/[̀-ͯ]/g, '');
+}
+
 export function DrinkForm(props: Props) {
 	const queryClient = useQueryClient();
 	const { showBanner } = useAdminBanner();
+	const { data: allDrinks } = useDrinksQuery();
 	const [fields, setFields] = useState<DrinkFormFields>(() =>
 		props.mode === 'edit' ? drinkToFormFields(props.drink) : emptyDrinkForm(),
 	);
@@ -111,8 +122,22 @@ export function DrinkForm(props: Props) {
 
 	const requiredFieldsFilled =
 		fields.name.trim() !== '' && fields.glass.trim() !== '';
+
+	const duplicateDrink = useMemo(() => {
+		if (props.mode !== 'add') return null;
+		const trimmed = fields.name.trim();
+		if (!trimmed || !allDrinks) return null;
+		const normalized = normalizeDrinkName(trimmed);
+		return (
+			allDrinks.find((d) => normalizeDrinkName(d.name) === normalized) ?? null
+		);
+	}, [allDrinks, fields.name, props.mode]);
+
 	const canSubmit =
-		!saveMutation.isPending && !imageUploading && requiredFieldsFilled;
+		!saveMutation.isPending &&
+		!imageUploading &&
+		requiredFieldsFilled &&
+		!duplicateDrink;
 	const submitButtonLabel = saveMutation.isPending
 		? 'Saving…'
 		: imageUploading
@@ -137,10 +162,28 @@ export function DrinkForm(props: Props) {
 					id="admin-drink-name"
 					type="text"
 					required
+					aria-invalid={duplicateDrink != null}
+					aria-describedby={duplicateDrink ? 'admin-drink-name-error' : undefined}
 					value={fields.name}
 					onChange={(e) => setFields((f) => ({ ...f, name: e.target.value }))}
 				/>
 			</div>
+			{duplicateDrink ? (
+				<div className="admin-form-row -mt-3 mb-3 pt-0">
+					<span aria-hidden></span>
+					<p
+						id="admin-drink-name-error"
+						role="alert"
+						className="m-0 max-w-[80%] flex-1 text-sm text-red-600 dark:text-red-400">
+						A drink named &quot;{duplicateDrink.name}&quot; already exists.{' '}
+						<Link
+							to={`/admin/list?edit=${duplicateDrink.id}`}
+							className="underline hover:text-brass">
+							Edit existing instead →
+						</Link>
+					</p>
+				</div>
+			) : null}
 			<div className="admin-form-row">
 				<label htmlFor="admin-drink-glass">Glass</label>
 				<input

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { AnimatePresence } from 'motion/react'
 import { deleteDrinkFromFirestore } from '../../api/drinks'
 import { useDrinksQuery } from '../../hooks/useDrinksQuery'
@@ -18,6 +19,18 @@ export function DrinkAdminTable() {
   const { data: drinks = [], isLoading, isError, error } = useDrinksQuery()
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [drinkToEdit, setDrinkToEdit] = useState<Drink | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Auto-open the edit modal when `?edit=<id>` is present (used by the
+  // duplicate-name link in the add form). One-shot: the param is consumed.
+  useEffect(() => {
+    const editId = searchParams.get('edit')
+    if (!editId || !drinks.length) return
+    const drink = drinks.find((d) => d.id === editId)
+    if (drink) setDrinkToEdit(drink)
+    searchParams.delete('edit')
+    setSearchParams(searchParams, { replace: true })
+  }, [drinks, searchParams, setSearchParams])
 
   const sorted = useMemo(
     () =>

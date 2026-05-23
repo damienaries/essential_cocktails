@@ -28,7 +28,9 @@ export function DrinkImagePromptAndUpload({
 	const [copyDone, setCopyDone] = useState(false);
 	const [uploading, setUploading] = useState(false);
 	const [inlineError, setInlineError] = useState<string | null>(null);
+	const [isDragging, setIsDragging] = useState(false);
 	const fileRef = useRef<HTMLInputElement>(null);
+	const dragCounter = useRef(0);
 
 	useEffect(() => {
 		onUploadingChange?.(uploading);
@@ -65,16 +67,16 @@ export function DrinkImagePromptAndUpload({
 		);
 	};
 
-	const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		e.target.value = '';
-		if (!file) return;
-
+	const handleFile = async (file: File) => {
 		const name = fields.name.trim();
 		if (!name) {
 			setInlineError(
 				'Enter a drink name before uploading (used in the file path).',
 			);
+			return;
+		}
+		if (!file.type.startsWith('image/')) {
+			setInlineError('Please choose an image file.');
 			return;
 		}
 
@@ -103,6 +105,38 @@ export function DrinkImagePromptAndUpload({
 		} finally {
 			setUploading(false);
 		}
+	};
+
+	const onPickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		e.target.value = '';
+		if (file) void handleFile(file);
+	};
+
+	const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		if (uploading) return;
+		dragCounter.current += 1;
+		setIsDragging(true);
+	};
+
+	const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+	};
+
+	const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		dragCounter.current = Math.max(0, dragCounter.current - 1);
+		if (dragCounter.current === 0) setIsDragging(false);
+	};
+
+	const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		dragCounter.current = 0;
+		setIsDragging(false);
+		if (uploading) return;
+		const file = e.dataTransfer.files?.[0];
+		if (file) void handleFile(file);
 	};
 
 	return (
@@ -196,7 +230,18 @@ export function DrinkImagePromptAndUpload({
 					aria-label="Choose image file"
 					onChange={(ev) => void onPickFile(ev)}
 				/>
-				<div className="flex flex-wrap gap-2 items-center">
+				<div
+					onDragEnter={onDragEnter}
+					onDragOver={onDragOver}
+					onDragLeave={onDragLeave}
+					onDrop={onDrop}
+					className={[
+						'flex flex-wrap items-center gap-2 rounded-lg border-2 border-dashed p-3 transition-colors',
+						isDragging
+							? 'border-brass bg-brass/5'
+							: 'border-chalk dark:border-charcoal',
+					].join(' ')}
+				>
 					<Button
 						type="button"
 						color="secondary"
@@ -207,8 +252,11 @@ export function DrinkImagePromptAndUpload({
 						{uploading ? 'Uploading…' : 'Choose image file'}
 					</Button>
 					<span className="text-xs text-smoke dark:text-sand opacity-80">
-						Path <code className="text-[12px]">cocktail_images/…</code> —
-						replaces any previous saved image URL.
+						{isDragging
+							? 'Drop to upload'
+							: 'or drag and drop an image here'}{' '}
+						— path <code className="text-[12px]">cocktail_images/…</code>,
+						replaces any saved image URL.
 					</span>
 				</div>
 			</div>
