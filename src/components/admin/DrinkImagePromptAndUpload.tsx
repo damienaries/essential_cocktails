@@ -147,8 +147,7 @@ export function DrinkImagePromptAndUpload({
 			<p className="text-xs text-smoke dark:text-sand opacity-85 m-0">
 				Generate a scene with random style/surface/location. Edit the text, then
 				open ChatGPT (prefills the composer when supported) or copy. Upload an
-				image file below; it is stored in Firebase and the drink record keeps
-				the download URL (no manual URL field).
+				image file below.
 			</p>
 
 			<div className="flex flex-wrap gap-2 items-center">
@@ -157,8 +156,7 @@ export function DrinkImagePromptAndUpload({
 					color="secondary"
 					size="sm"
 					disabled={!hasDrinkName}
-					onClick={regenerate}
-				>
+					onClick={regenerate}>
 					Generate
 				</Button>
 				<Button
@@ -166,8 +164,7 @@ export function DrinkImagePromptAndUpload({
 					color="secondary"
 					size="sm"
 					onClick={() => void copyPrompt()}
-					disabled={!hasPrompt}
-				>
+					disabled={!hasPrompt}>
 					{copyDone ? 'Copied' : 'Copy'}
 				</Button>
 				<Button
@@ -175,8 +172,7 @@ export function DrinkImagePromptAndUpload({
 					color="secondary"
 					size="sm"
 					disabled={!hasPrompt}
-					onClick={openChatGpt}
-				>
+					onClick={openChatGpt}>
 					Open ChatGPT
 				</Button>
 			</div>
@@ -197,8 +193,7 @@ export function DrinkImagePromptAndUpload({
 				/>
 				<p
 					id="admin-ai-prompt-counter"
-					className="text-xs text-smoke dark:text-sand opacity-80 m-0 mt-1.5 text-right tabular-nums"
-				>
+					className="text-xs text-smoke dark:text-sand opacity-80 m-0 mt-1.5 text-right tabular-nums">
 					{charsLeft} character{charsLeft === 1 ? '' : 's'} left
 				</p>
 			</div>
@@ -215,7 +210,9 @@ export function DrinkImagePromptAndUpload({
 				</p>
 				{fields.imageUrl?.trim() ? (
 					<div className="flex flex-wrap items-center gap-3 mb-3">
-						<span className="text-xs text-smoke dark:text-sand">Saved image</span>
+						<span className="text-xs text-smoke dark:text-sand">
+							Saved image
+						</span>
 						<AdminDrinkThumbnail
 							imageUrl={fields.imageUrl}
 							glass={fields.glass}
@@ -236,28 +233,28 @@ export function DrinkImagePromptAndUpload({
 					onDragLeave={onDragLeave}
 					onDrop={onDrop}
 					className={[
-						'flex flex-wrap items-center gap-2 rounded-lg border-2 border-dashed p-3 transition-colors',
+						'flex flex-col gap-1.5 rounded-lg border-2 border-dashed p-3 transition-colors',
 						isDragging
 							? 'border-brass bg-brass/5'
 							: 'border-chalk dark:border-charcoal',
-					].join(' ')}
-				>
-					<Button
-						type="button"
-						color="secondary"
-						size="sm"
-						disabled={uploading}
-						onClick={() => fileRef.current?.click()}
-					>
-						{uploading ? 'Uploading…' : 'Choose image file'}
-					</Button>
-					<span className="text-xs text-smoke dark:text-sand opacity-80">
-						{isDragging
-							? 'Drop to upload'
-							: 'or drag and drop an image here'}{' '}
-						— path <code className="text-[12px]">cocktail_images/…</code>,
-						replaces any saved image URL.
-					</span>
+					].join(' ')}>
+					<div className="flex flex-wrap items-center gap-2">
+						<Button
+							type="button"
+							color="secondary"
+							size="sm"
+							disabled={uploading}
+							onClick={() => fileRef.current?.click()}>
+							{uploading ? 'Uploading…' : 'Choose image file'}
+						</Button>
+						<span className="text-xs text-smoke dark:text-sand opacity-80">
+							{isDragging ? 'Drop to upload' : 'or drag and drop an image here'}
+						</span>
+					</div>
+					<p className="m-0 text-xs text-smoke dark:text-sand opacity-60">
+						JPEG, PNG, or WebP up to 5 MB · we crop to a 1000 px square and
+						re-encode as WebP for storage
+					</p>
 				</div>
 			</div>
 		</div>

@@ -140,6 +140,18 @@
 	outline: 1px solid rgba(212, 168, 90, 0.5);
 }
 
+.admin-form-row input[aria-invalid='true']:not([type='checkbox']),
+.admin-form-row select[aria-invalid='true'],
+.admin-form-row textarea[aria-invalid='true'] {
+	border-color: rgb(220 38 38);
+}
+
+.dark .admin-form-row input[aria-invalid='true']:not([type='checkbox']),
+.dark .admin-form-row select[aria-invalid='true'],
+.dark .admin-form-row textarea[aria-invalid='true'] {
+	border-color: rgb(248 113 113);
+}
+
 @media screen and (max-width: 800px) {
 	.admin-form-row label,
 	.admin-form-row > span:first-child {

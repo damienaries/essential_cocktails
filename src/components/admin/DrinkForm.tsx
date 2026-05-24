@@ -118,7 +118,10 @@ export function DrinkForm(props: Props) {
 	};
 
 	const title = props.mode === 'add' ? 'Add cocktail' : 'Edit cocktail';
-	const submitLabel = props.mode === 'add' ? 'Add drink' : 'Save changes';
+	const submitLabel =
+		props.mode === 'add'
+			? `Add ${fields.name.trim() || 'drink'}`
+			: 'Save changes';
 
 	const requiredFieldsFilled =
 		fields.name.trim() !== '' && fields.glass.trim() !== '';
@@ -152,8 +155,7 @@ export function DrinkForm(props: Props) {
 				if (!canSubmit) return;
 				saveMutation.mutate();
 			}}
-			aria-busy={saveMutation.isPending}
-		>
+			aria-busy={saveMutation.isPending}>
 			<h4 className="text-lg text-ink dark:text-cream mt-0 mb-4">{title}</h4>
 
 			<div className="admin-form-row">
@@ -163,27 +165,27 @@ export function DrinkForm(props: Props) {
 					type="text"
 					required
 					aria-invalid={duplicateDrink != null}
-					aria-describedby={duplicateDrink ? 'admin-drink-name-error' : undefined}
+					aria-describedby={
+						duplicateDrink ? 'admin-drink-name-error' : undefined
+					}
 					value={fields.name}
 					onChange={(e) => setFields((f) => ({ ...f, name: e.target.value }))}
 				/>
-			</div>
-			{duplicateDrink ? (
-				<div className="admin-form-row -mt-3 mb-3 pt-0">
-					<span aria-hidden></span>
-					<p
+				{duplicateDrink ? (
+					<div
 						id="admin-drink-name-error"
 						role="alert"
-						className="m-0 max-w-[80%] flex-1 text-sm text-red-600 dark:text-red-400">
+						className="m-0 -mt-2 max-w-[80%] flex-1 text-xs text-red-600 dark:text-red-400">
 						A drink named &quot;{duplicateDrink.name}&quot; already exists.{' '}
 						<Link
 							to={`/admin/list?edit=${duplicateDrink.id}`}
 							className="underline hover:text-brass">
 							Edit existing instead →
 						</Link>
-					</p>
-				</div>
-			) : null}
+					</div>
+				) : null}
+			</div>
+
 			<div className="admin-form-row">
 				<label htmlFor="admin-drink-glass">Glass</label>
 				<input
@@ -200,8 +202,9 @@ export function DrinkForm(props: Props) {
 					id="admin-drink-method"
 					required
 					value={fields.method}
-					onChange={(e) => setFields((f) => ({ ...f, method: e.target.value }))}
-				>
+					onChange={(e) =>
+						setFields((f) => ({ ...f, method: e.target.value }))
+					}>
 					{METHOD_OPTIONS.map((m) => (
 						<option key={m} value={m}>
 							{m}
@@ -215,8 +218,7 @@ export function DrinkForm(props: Props) {
 					id="admin-drink-ice"
 					required
 					value={fields.ice}
-					onChange={(e) => setFields((f) => ({ ...f, ice: e.target.value }))}
-				>
+					onChange={(e) => setFields((f) => ({ ...f, ice: e.target.value }))}>
 					{ICE_OPTIONS.map((ice) => (
 						<option key={ice} value={ice}>
 							{ice}
@@ -241,8 +243,9 @@ export function DrinkForm(props: Props) {
 				<select
 					id="admin-drink-family"
 					value={fields.family}
-					onChange={(e) => setFields((f) => ({ ...f, family: e.target.value }))}
-				>
+					onChange={(e) =>
+						setFields((f) => ({ ...f, family: e.target.value }))
+					}>
 					<option value="">Select a family</option>
 					{COCKTAIL_FAMILIES.map((fam) => (
 						<option key={fam.slug} value={fam.label}>
@@ -277,16 +280,14 @@ export function DrinkForm(props: Props) {
 						type="button"
 						color="secondary"
 						size="sm"
-						onClick={removeIngredientRow}
-					>
+						onClick={removeIngredientRow}>
 						−
 					</Button>
 					<Button
 						type="button"
 						color="secondary"
 						size="sm"
-						onClick={addIngredientRow}
-					>
+						onClick={addIngredientRow}>
 						+
 					</Button>
 				</div>
@@ -307,8 +308,7 @@ export function DrinkForm(props: Props) {
 						<button
 							type="button"
 							className="text-sm text-brass underline bg-transparent border-0 cursor-pointer p-0 font-[inherit]"
-							onClick={() => setShowDescription(true)}
-						>
+							onClick={() => setShowDescription(true)}>
 							Add description
 						</button>
 					) : (
@@ -330,8 +330,7 @@ export function DrinkForm(props: Props) {
 				fill
 				color="primary"
 				size="sm"
-				disabled={!canSubmit}
-			>
+				disabled={!canSubmit}>
 				{submitButtonLabel}
 			</Button>
 		</form>
