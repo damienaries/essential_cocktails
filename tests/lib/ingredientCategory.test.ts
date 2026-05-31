@@ -15,6 +15,13 @@ describe('categorizeIngredient', () => {
 		expect(categorizeIngredient('orange bitters')).toBe('bitters')
 	})
 
+	it('recognizes tinctures and saline solutions', () => {
+		expect(categorizeIngredient('Capsicum tincture')).toBe('tincture')
+		expect(categorizeIngredient('Lavender tincture')).toBe('tincture')
+		expect(categorizeIngredient('Saline solution')).toBe('tincture')
+		expect(categorizeIngredient('20% saline')).toBe('tincture')
+	})
+
 	it('classifies common syrups and sweeteners', () => {
 		expect(categorizeIngredient('Simple syrup')).toBe('syrup')
 		expect(categorizeIngredient('demerara syrup')).toBe('syrup')
@@ -60,9 +67,10 @@ describe('categorizeIngredient', () => {
 })
 
 describe('isGlossaryIngredient', () => {
-	it('is true only for syrups and modifiers', () => {
+	it('is true for syrups, modifiers, and tinctures', () => {
 		expect(isGlossaryIngredient('Simple syrup')).toBe(true)
 		expect(isGlossaryIngredient('Sweet vermouth')).toBe(true)
+		expect(isGlossaryIngredient('Saline solution')).toBe(true)
 		expect(isGlossaryIngredient('Gin')).toBe(false)
 		expect(isGlossaryIngredient('Lime juice')).toBe(false)
 		expect(isGlossaryIngredient('Angostura bitters')).toBe(false)

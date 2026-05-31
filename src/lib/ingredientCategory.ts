@@ -2,11 +2,13 @@ export type IngredientCategory =
 	| 'syrup'
 	| 'modifier'
 	| 'bitters'
+	| 'tincture'
 	| 'spirit'
 	| 'juice'
 	| 'fruit'
 	| 'other';
 
+const TINCTURE_WORDS = /\b(tincture|saline)\b/i;
 const BITTERS_WORDS = /\bbitters?\b/i;
 const SPIRIT_WORDS =
 	/\b(vodka|gin|rum|tequila|mezcal|whiskey|whisky|bourbon|rye|scotch|cognac|brandy|pisco|cacha[cç]a|aquavit|grappa|calvados|armagnac|absinthe)\b/i;
@@ -25,6 +27,10 @@ export function categorizeIngredient(
 	const name = (rawName ?? '').trim();
 	if (!name) return 'other';
 
+	// Tincture before bitters so "ginger tincture" doesn't fall through; the two
+	// vocabularies don't overlap but ordering future-proofs against names like
+	// "tincture bitters" used by some producers.
+	if (TINCTURE_WORDS.test(name)) return 'tincture';
 	if (BITTERS_WORDS.test(name)) return 'bitters';
 	if (FRUIT_WORDS.test(name) && !/juice/i.test(name)) return 'fruit';
 	if (SPIRIT_WORDS.test(name)) return 'spirit';
@@ -37,6 +43,7 @@ export function categorizeIngredient(
 export const GLOSSARY_CATEGORIES: readonly IngredientCategory[] = [
 	'syrup',
 	'modifier',
+	'tincture',
 ] as const;
 
 const GLOSSARY_CATEGORY_SET = new Set<IngredientCategory>(GLOSSARY_CATEGORIES);
@@ -65,6 +72,8 @@ export function categoryLabel(cat: IngredientCategory): string {
 			return 'Modifier';
 		case 'bitters':
 			return 'Bitters';
+		case 'tincture':
+			return 'Tincture';
 		case 'spirit':
 			return 'Spirit';
 		case 'juice':

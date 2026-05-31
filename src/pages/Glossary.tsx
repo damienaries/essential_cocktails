@@ -7,13 +7,24 @@ import {
 	categoryLabel,
 	glossarySlug,
 } from '../lib/ingredientCategory';
+import { lookupGlossaryDefinition } from '../lib/glossaryDefinitions';
 import type { Drink } from '../types/drink';
 
 export function GlossaryPage() {
 	const { entries, isPending, isError, error } = useGlossaryQuery();
 	const [selected, setSelected] = useState<Drink | null>(null);
 	const [query, setQuery] = useState('');
+	const [openRecipes, setOpenRecipes] = useState<Set<string>>(new Set());
 	const { hash } = useLocation();
+
+	const toggleRecipe = (slug: string) => {
+		setOpenRecipes((prev) => {
+			const next = new Set(prev);
+			if (next.has(slug)) next.delete(slug);
+			else next.add(slug);
+			return next;
+		});
+	};
 
 	const filtered = useMemo(() => {
 		const q = query.trim().toLocaleLowerCase('en-US');
@@ -45,8 +56,8 @@ export function GlossaryPage() {
 			<div className="sticky top-0 z-10 -mx-5 mb-4 border-b border-chalk bg-paper/95 px-5 pt-4 pb-3 backdrop-blur dark:border-charcoal dark:bg-coal/95">
 				<h1 className="mt-0 mb-2 text-2xl md:text-3xl">Glossary</h1>
 				<p className="mb-3 text-sm text-smoke dark:text-sand">
-					Syrups and modifiers used across these recipes. Home-made versions
-					coming soon.
+					Syrups, modifiers, and tinctures used across these recipes — with
+					home-made recipes where they apply.
 				</p>
 				<input
 					type="search"
@@ -66,6 +77,8 @@ export function GlossaryPage() {
 				<ul className="m-0 list-none divide-y divide-chalk p-0 dark:divide-charcoal">
 					{filtered.map((e) => {
 						const slug = glossarySlug(e.name);
+						const meta = lookupGlossaryDefinition(slug);
+						const recipeOpen = openRecipes.has(slug);
 						return (
 							<li
 								key={slug}
@@ -79,6 +92,11 @@ export function GlossaryPage() {
 										{categoryLabel(e.category)}
 									</span>
 								</div>
+								{meta?.definition ? (
+									<p className="mt-1 text-sm text-smoke dark:text-sand">
+										{meta.definition}
+									</p>
+								) : null}
 								<ul className="mt-2 flex flex-wrap gap-1.5 list-none p-0">
 									{e.drinks.map((d) => (
 										<li key={d.id}>
@@ -91,6 +109,50 @@ export function GlossaryPage() {
 										</li>
 									))}
 								</ul>
+								{meta?.recipe ? (
+									<div className="mt-2">
+										<button
+											type="button"
+											onClick={() => toggleRecipe(slug)}
+											aria-expanded={recipeOpen}
+											aria-controls={`${slug}-recipe`}
+											className="link text-xs underline decoration-dotted underline-offset-2">
+											{recipeOpen ? 'Hide recipe' : 'Show recipe'}
+										</button>
+										{recipeOpen ? (
+											<div
+												id={`${slug}-recipe`}
+												className="mt-2 rounded-md border border-chalk bg-paper/60 p-3 text-sm text-smoke dark:border-charcoal dark:bg-coal/40 dark:text-sand">
+												{meta.recipe.yield ? (
+													<p className="m-0 text-xs italic opacity-80">
+														{meta.recipe.yield}
+													</p>
+												) : null}
+												<p className="mt-2 mb-1 text-xs font-medium uppercase tracking-wide">
+													Ingredients
+												</p>
+												<ul className="m-0 list-disc pl-5">
+													{meta.recipe.ingredients.map((ing, i) => (
+														<li key={i}>{ing}</li>
+													))}
+												</ul>
+												<p className="mt-3 mb-1 text-xs font-medium uppercase tracking-wide">
+													Method
+												</p>
+												<ol className="m-0 list-decimal pl-5">
+													{meta.recipe.steps.map((s, i) => (
+														<li key={i}>{s}</li>
+													))}
+												</ol>
+												{meta.recipe.notes ? (
+													<p className="mt-3 mb-0 text-xs italic opacity-85">
+														{meta.recipe.notes}
+													</p>
+												) : null}
+											</div>
+										) : null}
+									</div>
+								) : null}
 							</li>
 						);
 					})}
