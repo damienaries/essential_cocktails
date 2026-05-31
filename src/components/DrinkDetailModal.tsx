@@ -8,11 +8,7 @@ import { SvgIcon } from './atoms/SvgIcon';
 import { formatGarnish, formatIce, formatMethod } from '../lib/drinkDisplay';
 import { formatCl, formatOz, ozToCl } from '../lib/ingredientQuantity';
 import { glossarySlug, isGlossaryIngredient } from '../lib/ingredientCategory';
-import {
-	glassIconName,
-	iceIconName,
-	methodIconName,
-} from '../lib/metaIcons';
+import { glassIconName, iceIconName, methodIconName } from '../lib/metaIcons';
 
 type Props = {
 	drink: Drink;
@@ -37,7 +33,7 @@ function MetaCell({
 				{label}: {display}
 			</span>
 			{iconName ? (
-				<SvgIcon icon={iconName} size={28} />
+				<SvgIcon icon={iconName} size={40} />
 			) : (
 				<span className="capitalize">{display}</span>
 			)}
@@ -61,9 +57,9 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 				className={[
 					'relative min-w-0 overflow-hidden bg-[linear-gradient(145deg,#2a2438,#1a1720)]',
 					'w-full flex-[1_1_100%]',
-					'min-h-[120px] max-h-[min(48svh,380px)]',
-					'sm:min-h-[140px] sm:max-h-[min(52svh,440px)]',
-					'md:flex-[1_1_300px] md:max-h-none md:min-h-[280px]',
+					'min-h-30 max-h-[min(48svh,380px)]',
+					'sm:min-h-35 sm:max-h-[min(52svh,440px)]',
+					'md:flex-[1_1_300px] md:max-h-none md:min-h-70',
 					'lg:min-h-[min(52vh,420px)] lg:flex-[1_1_340px]',
 				].join(' ')}>
 				{imageUrl ? (
@@ -98,36 +94,36 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					×
 				</button>
 
-				<header className="px-10 text-center sm:px-11">
+				<header className="text-center">
 					<h2
 						id="drink-detail-title"
-						className="mb-2 text-lg font-medium uppercase tracking-wide text-ink dark:text-cream sm:text-xl md:text-2xl">
+						className="mb-6 px-11 text-lg font-medium uppercase tracking-wide text-ink dark:text-cream sm:text-xl md:text-2xl">
 						{drink.name}
 					</h2>
 					<div
 						className="mt-2 grid grid-cols-4 items-start gap-2 text-xs"
 						role="group"
 						aria-label="Preparation">
-						<MetaCell label="Garnish" textValue={garnishStr} />
 						<MetaCell
 							label="Method"
 							textValue={methodStr}
 							iconName={methodIconName(drink.method)}
 						/>
 						<MetaCell
-							label="Ice"
-							textValue={iceStr}
-							iconName={iceIconName(drink.ice)}
-						/>
-						<MetaCell
 							label="Glass"
 							textValue={drink.glass ?? ''}
 							iconName={glassIconName(drink.glass)}
 						/>
+						<MetaCell
+							label="Ice"
+							textValue={iceStr}
+							iconName={iceIconName(drink.ice)}
+						/>
+						<MetaCell label="Garnish" textValue={garnishStr} />
 					</div>
 				</header>
 
-				<div className="relative mt-4 md:mt-5">
+				<div className="relative mt-4">
 					<Button variant="modal-unit" onClick={() => setMetric((v) => !v)}>
 						{metric ? 'cl' : 'oz'}
 					</Button>

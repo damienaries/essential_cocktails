@@ -5,9 +5,13 @@ describe('methodIconName', () => {
 	it('maps closed-enum methods', () => {
 		expect(methodIconName('Shake')).toBe('method-shake')
 		expect(methodIconName('Stir')).toBe('method-stir')
-		expect(methodIconName('Build')).toBe('method-build')
 		expect(methodIconName('Muddle')).toBe('method-muddle')
 		expect(methodIconName('Swizzle')).toBe('method-swizzle')
+	})
+
+	it('routes Build to the swizzle glyph (no dedicated build icon yet)', () => {
+		expect(methodIconName('Build')).toBe('method-swizzle')
+		expect(methodIconName('build')).toBe('method-swizzle')
 	})
 
 	it('recognizes Dry Shake before Shake', () => {
@@ -64,12 +68,26 @@ describe('glassIconName', () => {
 		expect(glassIconName('Highball')).toBe('glass-highball')
 		expect(glassIconName('Collins')).toBe('glass-highball')
 
-		expect(glassIconName('Rocks')).toBe('glass-rocks')
-		expect(glassIconName('Old Fashioned')).toBe('glass-rocks')
-		expect(glassIconName('Tumbler')).toBe('glass-rocks')
+		expect(glassIconName('Rocks')).toBe('glass-rocks-sm')
+		expect(glassIconName('Old Fashioned')).toBe('glass-rocks-sm')
+		expect(glassIconName('Tumbler')).toBe('glass-rocks-sm')
 
 		expect(glassIconName('Champagne flute')).toBe('glass-champagne')
 		expect(glassIconName('Tulip')).toBe('glass-champagne')
+	})
+
+	it('disambiguates DOF before plain old fashioned', () => {
+		expect(glassIconName('Double Old Fashioned')).toBe('glass-dof')
+		expect(glassIconName('double old-fashioned')).toBe('glass-dof')
+		expect(glassIconName('Double Rocks')).toBe('glass-dof')
+		expect(glassIconName('DOF')).toBe('glass-dof')
+		expect(glassIconName('D.O.F.')).toBe('glass-dof')
+	})
+
+	it('matches tiki and vintage shapes', () => {
+		expect(glassIconName('Tiki Mug')).toBe('glass-tiki')
+		expect(glassIconName('tiki')).toBe('glass-tiki')
+		expect(glassIconName('Vintage')).toBe('glass-vintage')
 	})
 
 	it('returns null for unknown / empty', () => {

@@ -12,9 +12,9 @@ export function methodIconName(method: Drink['method']): string | null {
   if (/dry\s*shake/.test(v)) return 'method-dry-shake'
   if (v.startsWith('shake')) return 'method-shake'
   if (v.startsWith('stir')) return 'method-stir'
-  if (v.startsWith('build')) return 'method-build'
+  // No dedicated build glyph yet — swizzle conveys "stir in the glass" closely enough.
+  if (v.startsWith('build') || v.startsWith('swizzle')) return 'method-swizzle'
   if (v.startsWith('muddle')) return 'method-muddle'
-  if (v.startsWith('swizzle')) return 'method-swizzle'
   return null
 }
 
@@ -27,11 +27,16 @@ export function iceIconName(ice: Drink['ice']): string | null {
   return null
 }
 
+// Order matters — patterns are tested top→bottom, first match wins.
+// "double old fashioned" / "DOF" must come before plain "old fashioned".
 const GLASS_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/double\s*(old.?fashioned|rocks)|d\.?o\.?f\.?\b/i, 'glass-dof'],
   [/coupe|martini|nick.{0,3}nora|cocktail/i, 'glass-coupe'],
-  [/highball|collins|tall/i, 'glass-highball'],
-  [/rocks|old.?fashioned|tumbler|lowball|double rocks/i, 'glass-rocks'],
+  [/tiki/i, 'glass-tiki'],
+  [/vintage/i, 'glass-vintage'],
   [/flute|champagne|tulip|sparkling/i, 'glass-champagne'],
+  [/highball|collins|tall/i, 'glass-highball'],
+  [/rocks|old.?fashioned|tumbler|lowball/i, 'glass-rocks-sm'],
 ]
 
 export function glassIconName(glass: Drink['glass']): string | null {
