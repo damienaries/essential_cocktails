@@ -33,7 +33,7 @@ export function Header() {
 				to="/"
 				end
 				aria-label="Swizzle home"
-				className="brand-logo inline-flex h-12.5 items-center text-ink dark:text-cream"
+				className="brand-logo inline-flex h-14 items-center text-ink dark:text-cream"
 				dangerouslySetInnerHTML={{ __html: logoSvg }}
 			/>
 
