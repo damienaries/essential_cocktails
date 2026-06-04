@@ -7,6 +7,7 @@ import {
 	drinkNameExists,
 	updateDrinkInFirestore,
 } from '../../api/drinks';
+import { useDraft } from '../../hooks/useDraft';
 import { useDrinksQuery } from '../../hooks/useDrinksQuery';
 import {
 	drinkToFormFields,
@@ -39,16 +40,24 @@ function normalizeDrinkName(name: string): string {
 		.replace(/[̀-ͯ]/g, '');
 }
 
+/** Single localStorage slot for the in-progress add-drink form. */
+const DRAFT_KEY = 'swizzle:admin:drink-draft';
+
 export function DrinkForm(props: Props) {
 	const queryClient = useQueryClient();
 	const { showBanner } = useAdminBanner();
 	const { data: allDrinks } = useDrinksQuery();
-	const [fields, setFields] = useState<DrinkFormFields>(() =>
+	// Form state: in add mode, persisted to localStorage via `useDraft` so a page refresh / browser restart doesn't lose typing. In edit mode the drink record is the source of truth, so persistence is disabled.
+	const [fields, setFields, clearDraft] = useDraft<DrinkFormFields>(
+		DRAFT_KEY,
 		props.mode === 'edit' ? drinkToFormFields(props.drink) : emptyDrinkForm(),
+		{ enabled: props.mode === 'add' },
 	);
-	const [showDescription, setShowDescription] = useState(
-		() => props.mode === 'edit' && Boolean(props.drink.description?.trim()),
-	);
+	const [showDescription, setShowDescription] = useState(() => {
+		if (props.mode === 'edit') return Boolean(props.drink.description?.trim());
+		// Open the description area on mount if a restored draft already has text.
+		return fields.description.trim() !== '';
+	});
 	const [imageToolsKey, setImageToolsKey] = useState(0);
 	const [imageUploading, setImageUploading] = useState(false);
 
@@ -79,6 +88,7 @@ export function DrinkForm(props: Props) {
 				props.mode === 'add' ? 'Drink added' : 'Drink updated',
 			);
 			if (props.mode === 'add') {
+				clearDraft();
 				setFields(emptyDrinkForm());
 				setShowDescription(false);
 				setImageToolsKey((k) => k + 1);
