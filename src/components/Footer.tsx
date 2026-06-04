@@ -11,8 +11,7 @@ export function Footer() {
 					rel="noopener noreferrer"
 					className="inline-flex items-center text-cream transition-opacity hover:opacity-80"
 					aria-label="Made by DA — visit damienaries.com"
-					title="made with crushed ice by DA"
-				>
+					title="Visit damienaries.com">
 					<DaIceGlyph />
 				</a>
 			</div>
