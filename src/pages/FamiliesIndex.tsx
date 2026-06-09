@@ -32,6 +32,14 @@ export function FamiliesIndexPage() {
 		});
 	}, [data]);
 
+	const flatDrinks = useMemo(
+		() =>
+			families.flatMap(({ namesake, variations, total }) =>
+				total === 0 ? [] : [...(namesake ? [namesake] : []), ...variations],
+			),
+		[families],
+	);
+
 	if (isPending) {
 		return <p className="text-center">Loading drinks…</p>;
 	}
@@ -97,6 +105,8 @@ export function FamiliesIndexPage() {
 				{selected ? (
 					<DrinkDetailModal
 						drink={selected}
+						drinks={flatDrinks}
+						onNavigate={setSelected}
 						onClose={() => setSelected(null)}
 					/>
 				) : null}

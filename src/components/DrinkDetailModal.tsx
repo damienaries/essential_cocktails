@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './atoms/Button';
 import { Modal } from './atoms/Modal';
@@ -9,10 +9,13 @@ import { formatGarnish, formatIce, formatMethod } from '../lib/drinkDisplay';
 import { formatCl, formatOz, ozToCl } from '../lib/ingredientQuantity';
 import { glossarySlug, isGlossaryIngredient } from '../lib/ingredientCategory';
 import { glassIconName, iceIconName, methodIconName } from '../lib/metaIcons';
+import { useSwipe } from '../hooks/useSwipe';
 
 type Props = {
 	drink: Drink;
 	onClose: () => void;
+	drinks?: Drink[]; // Ordered list the drink belongs to, enabling prev/next navigation.
+	onNavigate?: (drink: Drink) => void; // Called with the neighbouring drink when navigating.
 };
 
 function MetaCell({
@@ -41,8 +44,41 @@ function MetaCell({
 	);
 }
 
-export function DrinkDetailModal({ drink, onClose }: Props) {
+export function DrinkDetailModal({
+	drink,
+	onClose,
+	drinks,
+	onNavigate,
+}: Props) {
 	const [metric, setMetric] = useState(false);
+
+	const list = useMemo(() => drinks ?? [], [drinks]);
+	const index = list.findIndex((d) => d.id === drink.id);
+	const canNavigate = !!onNavigate && index >= 0 && list.length > 1;
+
+	const navigate = useCallback(
+		(direction: 1 | -1) => {
+			if (!canNavigate) return;
+			const next = list[(index + direction + list.length) % list.length];
+			if (next) onNavigate?.(next);
+		},
+		[canNavigate, index, list, onNavigate],
+	);
+
+	const swipeHandlers = useSwipe(
+		() => navigate(1),
+		() => navigate(-1),
+	);
+
+	useEffect(() => {
+		if (!canNavigate) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowRight') navigate(1);
+			else if (e.key === 'ArrowLeft') navigate(-1);
+		};
+		window.addEventListener('keydown', onKey);
+		return () => window.removeEventListener('keydown', onKey);
+	}, [canNavigate, navigate]);
 
 	const unit = metric ? 'cl' : 'oz';
 	const ingredients = drink.ingredients ?? [];
@@ -54,6 +90,7 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 	return (
 		<Modal onClose={onClose} ariaLabelledBy="drink-detail-title">
 			<div
+				{...swipeHandlers}
 				className={[
 					'relative min-w-0 overflow-hidden bg-[linear-gradient(145deg,#2a2438,#1a1720)]',
 					'w-full flex-[1_1_100%]',
@@ -73,8 +110,10 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 						fetchPriority="high"
 					/>
 				) : null}
+				{/* todo set fallback drink image here instead of null */}
 			</div>
 			<div
+				{...swipeHandlers}
 				className={[
 					'relative box-border flex-[1_1_300px] text-smoke dark:text-sand',
 					'border-t border-chalk dark:border-charcoal px-4 py-3',
@@ -87,11 +126,11 @@ export function DrinkDetailModal({ drink, onClose }: Props) {
 					onClick={onClose}
 					className={[
 						'absolute right-2 top-2 z-10 flex h-9 w-9 cursor-pointer items-center justify-center',
-						'rounded-md border border-transparent bg-transparent text-xl leading-none text-ink dark:text-cream',
+						'rounded-md border border-transparent bg-transparent leading-none text-ink dark:text-cream',
 						'transition-colors hover:bg-chalk dark:hover:bg-carbon focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50',
 					].join(' ')}
 					aria-label="Close dialog">
-					×
+					<SvgIcon icon="close" size={20} />
 				</button>
 
 				<header className="text-center">

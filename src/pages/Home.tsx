@@ -106,6 +106,8 @@ export function HomePage() {
 				{selected ? (
 					<DrinkDetailModal
 						drink={selected}
+						drinks={filteredByLetter}
+						onNavigate={setSelected}
 						onClose={() => setSelected(null)}
 					/>
 				) : null}

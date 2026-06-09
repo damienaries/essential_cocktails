@@ -76,6 +76,8 @@ export function FamilyDrinksPage() {
 				{selected ? (
 					<DrinkDetailModal
 						drink={selected}
+						drinks={filtered}
+						onNavigate={setSelected}
 						onClose={() => setSelected(null)}
 					/>
 				) : null}
