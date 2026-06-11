@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Button } from "./atoms/Button";
+import { UnitToggle } from "./atoms/UnitToggle";
 import { Modal } from "./atoms/Modal";
 import { IngredientList } from "./IngredientList";
 import { MetaCell } from "./atoms/MetaCell";
@@ -128,9 +128,11 @@ export function DrinkDetailModal({
             </header>
 
             <div className="relative mt-4">
-              <Button variant="modal-unit" onClick={() => setMetric((v) => !v)}>
-                {metric ? "cl" : "oz"}
-              </Button>
+              <UnitToggle
+                metric={metric}
+                onChange={setMetric}
+                className="absolute -top-10 -right-1"
+              />
               <IngredientList
                 ingredients={ingredients}
                 metric={metric}

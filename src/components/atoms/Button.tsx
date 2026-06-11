@@ -3,7 +3,7 @@ import * as React from 'react';
 type ButtonColor = 'primary' | 'secondary' | 'danger';
 
 /** `default` uses `color` + `fill`. Modal variants are self-contained (temporary until redesign). */
-type ButtonVariant = 'default' | 'modal-unit' | 'modal-close';
+type ButtonVariant = 'default' | 'modal-close';
 
 type ButtonSize = 'default' | 'sm';
 
@@ -32,15 +32,6 @@ function buildClassName(
 	fill: boolean,
 	size: ButtonSize,
 ): string {
-	if (variant === 'modal-unit') {
-		return [
-			'absolute -top-10 -right-1 max-h-none min-h-0 cursor-pointer',
-			'px-2.5 py-1 text-xs rounded-full w-fit',
-			'border border-chalk bg-chalk text-ink dark:border-charcoal dark:bg-carbon dark:text-cream',
-			'hover:bg-chalk dark:hover:bg-carbon transition-all duration-300',
-		].join(' ');
-	}
-
 	if (variant === 'modal-close') {
 		return [
 			'mt-6 px-6 py-1 rounded text-center w-fit cursor-pointer',
