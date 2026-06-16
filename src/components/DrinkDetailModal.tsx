@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { UnitToggle } from "./atoms/UnitToggle";
 import { Modal } from "./atoms/Modal";
 import { IngredientList } from "./IngredientList";
 import { MetaCell } from "./atoms/MetaCell";
+import { NavHint } from "./atoms/NavHint";
 import type { Drink } from "../types/drink";
 import { drinkPhotoImgProps } from "../lib/drinkImageAttrs";
 import { SvgIcon } from "./atoms/SvgIcon";
@@ -25,11 +26,19 @@ export function DrinkDetailModal({
   onNavigate,
 }: Props) {
   const [metric, setMetric] = useState(false);
-  const { direction, swipeHandlers } = useDrinkNavigation(
+  const { direction, swipeHandlers, canNavigate } = useDrinkNavigation(
     drink,
     drinks,
     onNavigate,
   );
+
+  // Briefly pulse swipe-hint chevrons so users discover prev/next navigation,
+  // then let them fade for good — they shouldn't linger over the photo.
+  const [showHints, setShowHints] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setShowHints(false), 10000);
+    return () => clearTimeout(t);
+  }, []);
 
   const ingredients = drink.ingredients ?? [];
   const imageUrl = drink.imageUrl?.trim();
@@ -73,6 +82,26 @@ export function DrinkDetailModal({
               />
             ) : null}
             {/* todo set fallback drink image here instead of null */}
+
+            <button
+              type="button"
+              onClick={onClose}
+              className={[
+                "absolute right-3 top-3 z-20 flex h-11 w-11 cursor-pointer items-center justify-center",
+                "rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors",
+                "hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/60",
+              ].join(" ")}
+              aria-label="Close dialog"
+            >
+              <SvgIcon icon="close" size={24} />
+            </button>
+
+            {canNavigate && showHints ? (
+              <>
+                <NavHint side="left" />
+                <NavHint side="right" />
+              </>
+            ) : null}
           </div>
           <div
             className={[
@@ -83,23 +112,10 @@ export function DrinkDetailModal({
               "lg:px-6 lg:py-5 lg:text-base",
             ].join(" ")}
           >
-            <button
-              type="button"
-              onClick={onClose}
-              className={[
-                "absolute right-2 top-2 z-10 flex h-9 w-9 cursor-pointer items-center justify-center",
-                "rounded-md border border-transparent bg-transparent leading-none text-ink dark:text-cream",
-                "transition-colors hover:bg-chalk dark:hover:bg-carbon focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/50",
-              ].join(" ")}
-              aria-label="Close dialog"
-            >
-              <SvgIcon icon="close" size={20} />
-            </button>
-
             <header className="text-center">
               <h2
                 id="drink-detail-title"
-                className="mb-6 px-11 text-lg font-medium uppercase tracking-wide text-ink dark:text-cream sm:text-xl md:text-2xl"
+                className="mb-6 text-lg font-medium uppercase tracking-wide text-ink dark:text-cream sm:text-xl md:text-2xl"
               >
                 {drink.name}
               </h2>

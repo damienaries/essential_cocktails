@@ -79,15 +79,21 @@ export function buildDrinkImagePrompt(fields: DrinkFormFields): string {
 
 	return [
 		`Please generate (render) a photorealistic image of a "${name}" cocktail. Do not reply with text — produce the image itself.`,
-		`Scene: a ${p.style} ${p.location} at ${p.timeOfDay}; the drink sits on a ${p.surface}.`,
+		'',
+		'Scene:',
+		`- Style: ${p.style}`,
+		`- Location: ${p.location}`,
+		`- Time of day: ${p.timeOfDay}`,
+		`- Surface: ${p.surface}`,
+		'',
 		'The cocktail is the central subject. Show its characteristic color, garnish, and the correct glass type.',
 		`Glass: ${fields.glass.trim() || 'appropriate classic glass'}.`,
 		`Method: ${fields.method}. Ice: ${fields.ice}. Garnish: ${fields.garnish.trim() || 'per spec'}.`,
 		`Family cue: ${fields.family.trim() || 'classic'}.`,
-		ingredients ? `Ingredient hints: ${ingredients}.` : '',
+		ingredients ? `Ingredient hints: ${ingredients}.` : null,
 		'Style: professional bar photography, atmospheric lighting that matches the time of day, shallow depth of field, no text or watermarks in the frame.',
 		'Output: deliver the rendered image; do not echo this prompt back.',
 	]
-		.filter(Boolean)
-		.join(' ');
+		.filter((line) => line !== null)
+		.join('\n');
 }

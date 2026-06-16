@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 type Props = {
 	/** When true, the metric (cl) unit is active; otherwise oz is active. */
 	metric: boolean;

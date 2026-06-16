@@ -75,5 +75,5 @@ export function useDrinkNavigation(
     }
   }, [canNavigate, index, list]);
 
-  return { direction, swipeHandlers };
+  return { direction, swipeHandlers, canNavigate };
 }
