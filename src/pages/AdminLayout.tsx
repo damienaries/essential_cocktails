@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { AdminBannerProvider } from '../components/admin/AdminBanner';
+import { AdminEnvBanner } from '../components/admin/AdminEnvBanner';
 
 function navClass(isActive: boolean): string {
 	return [
@@ -33,6 +34,8 @@ export function AdminLayout() {
 			<AdminBannerProvider>
 				<Outlet />
 			</AdminBannerProvider>
+
+			<AdminEnvBanner />
 		</section>
 	);
 }

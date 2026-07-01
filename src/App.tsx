@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { RequireAdmin } from './components/RequireAdmin'
+import { RequireAuth } from './components/RequireAuth'
 import { HomePage } from './pages/Home'
 import { AdminLayout } from './pages/AdminLayout'
 import { AdminAddPage } from './pages/AdminAddPage'
@@ -11,6 +12,7 @@ import { FamilyDrinksPage } from './pages/FamilyDrinks'
 import { GlossaryPage } from './pages/Glossary'
 import { AboutPage } from './pages/About'
 import { SignInPage } from './pages/SignIn'
+import { AccountPage } from './pages/Account'
 
 function App() {
   return (
@@ -22,6 +24,14 @@ function App() {
         <Route path="glossary" element={<GlossaryPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="signin" element={<SignInPage />} />
+        <Route
+          path="account"
+          element={
+            <RequireAuth>
+              <AccountPage />
+            </RequireAuth>
+          }
+        />
         <Route
           path="admin"
           element={

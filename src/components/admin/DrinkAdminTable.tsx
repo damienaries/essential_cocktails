@@ -100,63 +100,71 @@ export function DrinkAdminTable() {
                 {expandedId === drink.id ? '▼' : '▶'}
               </button>
               <AdminDrinkThumbnail imageUrl={drink.imageUrl} glass={drink.glass} />
-              <h5 className="flex-1 m-0 text-ink dark:text-cream text-base font-medium text-left min-w-0">
+              <h5 className="flex-1 m-0 text-ink dark:text-cream text-base font-medium text-left min-w-0 capitalize">
                 {drink.name}
               </h5>
-              <div className="flex gap-2 shrink-0">
-                <Button type="button" color="primary" onClick={() => setDrinkToEdit(drink)}>
-                  <SvgIcon icon="edit" color="currentColor" size={18} />
-                </Button>
-                <Button
-                  type="button"
-                  color="danger"
-                  onClick={() => confirmDelete(drink.id)}
-                  disabled={deleteMutation.isPending}
-                >
-                  <SvgIcon icon="delete" color="#fff" size={18} />
-                </Button>
-              </div>
             </div>
 
             {expandedId === drink.id ? (
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="bg-chalk dark:bg-carbon">
-                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Ingredients</th>
-                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Method</th>
-                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Glass</th>
-                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Garnish</th>
-                    <th className="admin-table-cell font-medium text-ink dark:text-cream">Ice</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="admin-table-cell align-top p-0">
-                      <table className="w-full border-collapse">
-                        <tbody>
-                          {(drink.ingredients ?? []).map((ing, idx) => (
-                            <tr
-                              key={`${ing.name ?? 'i'}-${idx}`}
-                              className={idx % 2 === 1 ? 'bg-chalk/50 dark:bg-carbon/50' : ''}
-                            >
-                              <td className="p-2 border-b border-chalk dark:border-charcoal w-2/3">
-                                {ing.name ?? '—'}
-                              </td>
-                              <td className="p-2 border-b border-chalk dark:border-charcoal w-1/3">
-                                {formatIngredientQuantityCell(ing)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </td>
-                    <td className="admin-table-cell align-top">{formatMethod(drink)}</td>
-                    <td className="admin-table-cell align-top">{drink.glass ?? '—'}</td>
-                    <td className="admin-table-cell align-top">{formatGarnish(drink)}</td>
-                    <td className="admin-table-cell align-top">{drink.ice ?? '—'}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="space-y-5 p-4">
+                <div className="flex gap-2">
+                  <Button type="button" color="primary" size="sm" onClick={() => setDrinkToEdit(drink)}>
+                    <SvgIcon icon="edit" color="currentColor" size={14} />
+                  </Button>
+                  <Button
+                    type="button"
+                    color="danger"
+                    size="sm"
+                    onClick={() => confirmDelete(drink.id)}
+                    disabled={deleteMutation.isPending}
+                  >
+                    <SvgIcon icon="delete" color="#fff" size={14} />
+                  </Button>
+                </div>
+
+                <div>
+                  <p className="m-0 mb-1.5 text-xs font-medium uppercase tracking-wide text-smoke dark:text-sand">
+                    Ingredients
+                  </p>
+                  {(drink.ingredients ?? []).length ? (
+                    <ul className="m-0 list-none divide-y divide-chalk p-0 dark:divide-charcoal">
+                      {(drink.ingredients ?? []).map((ing, idx) => (
+                        <li
+                          key={`${ing.name ?? 'i'}-${idx}`}
+                          className="flex justify-between gap-3 py-1.5 text-sm"
+                        >
+                          <span className="text-ink dark:text-cream">{ing.name ?? '—'}</span>
+                          <span className="shrink-0 text-smoke dark:text-sand tabular-nums">
+                            {formatIngredientQuantityCell(ing)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="m-0 text-sm text-smoke dark:text-sand">—</p>
+                  )}
+                </div>
+
+                <dl className="m-0 grid grid-cols-2 gap-x-4 gap-y-3">
+                  {(
+                    [
+                      ['Method', formatMethod(drink)],
+                      ['Glass', drink.glass ?? '—'],
+                      ['Garnish', formatGarnish(drink)],
+                      ['Ice', drink.ice ?? '—'],
+                    ] as const
+                  ).map(([label, value]) => (
+                    <div key={label}>
+                      <dt className="text-xs font-medium uppercase tracking-wide text-smoke dark:text-sand">
+                        {label}
+                      </dt>
+                      <dd className="m-0 mt-0.5 text-sm text-ink dark:text-cream">
+                        {value || '—'}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             ) : null}
           </div>
         ))}

@@ -34,30 +34,25 @@ export function AdminBannerProvider({ children }: { children: ReactNode }) {
 	const hideTimerRef = useRef<number | null>(null);
 	const removeTimerRef = useRef<number | null>(null);
 
-	const showBanner = useCallback(
-		(kind: BannerKind, message: string) => {
-			if (hideTimerRef.current != null) {
-				window.clearTimeout(hideTimerRef.current);
-			}
-			if (removeTimerRef.current != null) {
-				window.clearTimeout(removeTimerRef.current);
-			}
-			setEntry({ id: Date.now(), kind, message });
-			setVisible(true);
-			hideTimerRef.current = window.setTimeout(() => {
-				setVisible(false);
-				removeTimerRef.current = window.setTimeout(
-					() => setEntry(null),
-					FADE_MS,
-				);
-			}, VISIBLE_MS);
-		},
-		[],
-	);
+	const showBanner = useCallback((kind: BannerKind, message: string) => {
+		if (hideTimerRef.current != null) {
+			window.clearTimeout(hideTimerRef.current);
+		}
+		if (removeTimerRef.current != null) {
+			window.clearTimeout(removeTimerRef.current);
+		}
+		setEntry({ id: Date.now(), kind, message });
+		setVisible(true);
+		hideTimerRef.current = window.setTimeout(() => {
+			setVisible(false);
+			removeTimerRef.current = window.setTimeout(() => setEntry(null), FADE_MS);
+		}, VISIBLE_MS);
+	}, []);
 
 	useEffect(
 		() => () => {
-			if (hideTimerRef.current != null) window.clearTimeout(hideTimerRef.current);
+			if (hideTimerRef.current != null)
+				window.clearTimeout(hideTimerRef.current);
 			if (removeTimerRef.current != null)
 				window.clearTimeout(removeTimerRef.current);
 		},
@@ -67,7 +62,7 @@ export function AdminBannerProvider({ children }: { children: ReactNode }) {
 	return (
 		<AdminBannerContext.Provider value={{ showBanner }}>
 			{entry ? (
-				<div className="fixed top-3 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
+				<div className="fixed top-3 left-0 right-0 z-60 flex justify-center px-4 pointer-events-none">
 					<div
 						role="status"
 						aria-live="polite"
@@ -78,8 +73,7 @@ export function AdminBannerProvider({ children }: { children: ReactNode }) {
 							entry.kind === 'success'
 								? 'border-brass/40 bg-brass/10 text-ink dark:text-cream'
 								: 'border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300',
-						].join(' ')}
-					>
+						].join(' ')}>
 						{entry.message}
 					</div>
 				</div>

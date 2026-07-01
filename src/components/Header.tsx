@@ -3,7 +3,10 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import logoSvg from '../assets/icons/swizzle-logo.svg?raw';
 import { SvgIcon } from './atoms/SvgIcon';
+import { Avatar } from './atoms/Avatar';
+import { UserMenu } from './UserMenu';
 import { useAuthUser } from '../hooks/useAuthUser';
+import { useLogout } from '../hooks/useLogout';
 
 function navLinkClass({ isActive }: { isActive: boolean }) {
 	return isActive ? 'link current active' : 'link';
@@ -12,7 +15,8 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 export function Header() {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const { pathname } = useLocation();
-	const { isAdmin } = useAuthUser();
+	const { user, isPending, isAdmin } = useAuthUser();
+	const logout = useLogout();
 
 	useEffect(() => {
 		setDrawerOpen(false);
@@ -37,7 +41,7 @@ export function Header() {
 				dangerouslySetInnerHTML={{ __html: logoSvg }}
 			/>
 
-			<nav className="hidden flex-wrap gap-3 md:flex">
+			<nav className="hidden flex-wrap items-center gap-3 md:flex">
 				<NavLink to="/families" className={navLinkClass}>
 					Families
 				</NavLink>
@@ -49,6 +53,7 @@ export function Header() {
 						Admin
 					</NavLink>
 				) : null}
+				<UserMenu />
 			</nav>
 
 			<button
@@ -58,7 +63,7 @@ export function Header() {
 				aria-expanded={drawerOpen}
 				aria-controls="mobile-nav-drawer"
 				onClick={() => setDrawerOpen(true)}>
-				<SvgIcon icon="menu" size={24} />
+				<SvgIcon icon="menu" size={32} />
 			</button>
 
 			<AnimatePresence>
@@ -113,6 +118,37 @@ export function Header() {
 									</NavLink>
 								) : null}
 							</nav>
+
+							<div className="mt-auto border-t border-chalk pt-5 text-lg dark:border-charcoal">
+								{isPending ? null : user ? (
+									<div className="flex flex-col gap-4">
+										<div className="flex items-center gap-3">
+											<Avatar
+												name={user.displayName}
+												email={user.email}
+												photoURL={user.photoURL}
+												size={36}
+											/>
+											<span className="min-w-0 truncate text-sm text-smoke dark:text-sand">
+												{user.displayName?.trim() || user.email}
+											</span>
+										</div>
+										<NavLink to="/account" className={navLinkClass}>
+											Account
+										</NavLink>
+										<button
+											type="button"
+											className="link cursor-pointer text-left"
+											onClick={() => void logout()}>
+											Logout
+										</button>
+									</div>
+								) : (
+									<NavLink to="/signin" className={navLinkClass}>
+										Login
+									</NavLink>
+								)}
+							</div>
 						</motion.aside>
 					</>
 				) : null}

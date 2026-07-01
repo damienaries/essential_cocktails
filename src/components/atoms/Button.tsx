@@ -43,7 +43,7 @@ function buildClassName(
 
 	let classes =
 		size === 'sm'
-			? 'px-3 py-1 text-sm rounded text-center border cursor-pointer transition-colors duration-200 min-h-7 max-h-7 leading-tight'
+			? 'px-3 py-1 text-sm rounded inline-flex items-center justify-center border cursor-pointer transition-colors duration-200 min-h-7 max-h-7 leading-tight'
 			: 'px-6 py-1.5 rounded text-center border cursor-pointer transition-colors duration-200';
 
 	if (color === 'primary') {
