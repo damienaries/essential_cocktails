@@ -11,10 +11,35 @@ service cloud.firestore {
 				&& request.auth.uid in ['2sWAHCy0BzUweYN9HBlUZNRnS543'];
 		}
 
+		function isOwner(uid) {
+			return request.auth != null && request.auth.uid == uid;
+		}
+
 		// Public drinks library — read-only for everyone, admin-only writes.
 		match /drinks/{drinkId} {
 			allow read: if true;
 			allow create, update, delete: if isAdmin();
+		}
+
+		// Per-user private data (Phase B). Each user owns everything under their
+		// own uid; no one else — not even admins — can read or write it.
+		match /users/{uid} {
+			allow read, write: if isOwner(uid);
+
+			// One doc per saved drink; document id is the drinkId.
+			match /saved/{drinkId} {
+				allow read, write: if isOwner(uid);
+			}
+
+			// User-curated menus of existing drinks.
+			match /menus/{menuId} {
+				allow read: if isOwner(uid);
+				allow create, update: if isOwner(uid)
+					&& request.resource.data.name is string
+					&& request.resource.data.name.size() > 0
+					&& request.resource.data.drinkIds is list;
+				allow delete: if isOwner(uid);
+			}
 		}
 
 		// Catch-all: deny everything we haven't explicitly allowed.

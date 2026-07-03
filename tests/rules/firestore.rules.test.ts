@@ -12,6 +12,8 @@ import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest'
 // Must match the UID literal in firestore.rules. Not a secret.
 const ADMIN_UID = '2sWAHCy0BzUweYN9HBlUZNRnS543'
 const NON_ADMIN_UID = 'some-random-user-uid'
+const USER_A = 'user-a-uid'
+const USER_B = 'user-b-uid'
 
 let testEnv: RulesTestEnvironment
 
@@ -105,6 +107,106 @@ describe('any other collection (catch-all deny)', () => {
 
 	it('denies even admin from writing to unspecified paths', async () => {
 		const admin = testEnv.authenticatedContext(ADMIN_UID).firestore()
-		await assertFails(setDoc(doc(admin, 'users/me'), { displayName: 'me' }))
+		await assertFails(setDoc(doc(admin, 'unspecified/doc'), { value: 'x' }))
+	})
+})
+
+describe('users/{uid}/saved/{drinkId}', () => {
+	it('allows the owner to save a drink', async () => {
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertSucceeds(
+			setDoc(doc(a, `users/${USER_A}/saved/old-fashioned`), {
+				drinkId: 'old-fashioned',
+				savedAt: Date.now(),
+			}),
+		)
+	})
+
+	it('allows the owner to read and delete their saved drink', async () => {
+		await testEnv.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), `users/${USER_A}/saved/negroni`), {
+				drinkId: 'negroni',
+			})
+		})
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertSucceeds(getDoc(doc(a, `users/${USER_A}/saved/negroni`)))
+		await assertSucceeds(deleteDoc(doc(a, `users/${USER_A}/saved/negroni`)))
+	})
+
+	it("denies reading another user's saved drinks", async () => {
+		await testEnv.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), `users/${USER_A}/saved/negroni`), {
+				drinkId: 'negroni',
+			})
+		})
+		const b = testEnv.authenticatedContext(USER_B).firestore()
+		await assertFails(getDoc(doc(b, `users/${USER_A}/saved/negroni`)))
+	})
+
+	it("denies writing to another user's saved drinks", async () => {
+		const b = testEnv.authenticatedContext(USER_B).firestore()
+		await assertFails(
+			setDoc(doc(b, `users/${USER_A}/saved/negroni`), { drinkId: 'negroni' }),
+		)
+	})
+
+	it('denies unauthenticated access', async () => {
+		const anon = testEnv.unauthenticatedContext().firestore()
+		await assertFails(getDoc(doc(anon, `users/${USER_A}/saved/negroni`)))
+	})
+})
+
+describe('users/{uid}/menus/{menuId}', () => {
+	const validMenu = {
+		name: 'Summer',
+		drinkIds: ['daiquiri', 'mojito'],
+		createdAt: Date.now(),
+		updatedAt: Date.now(),
+	}
+
+	it('allows the owner to create a valid menu', async () => {
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertSucceeds(setDoc(doc(a, `users/${USER_A}/menus/m1`), validMenu))
+	})
+
+	it('rejects a menu with an empty name', async () => {
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertFails(
+			setDoc(doc(a, `users/${USER_A}/menus/m1`), { ...validMenu, name: '' }),
+		)
+	})
+
+	it('rejects a menu whose drinkIds is not a list', async () => {
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertFails(
+			setDoc(doc(a, `users/${USER_A}/menus/m1`), {
+				...validMenu,
+				drinkIds: 'nope',
+			}),
+		)
+	})
+
+	it('allows the owner to update and delete their menu', async () => {
+		await testEnv.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), `users/${USER_A}/menus/m1`), validMenu)
+		})
+		const a = testEnv.authenticatedContext(USER_A).firestore()
+		await assertSucceeds(
+			updateDoc(doc(a, `users/${USER_A}/menus/m1`), { name: 'Winter' }),
+		)
+		await assertSucceeds(deleteDoc(doc(a, `users/${USER_A}/menus/m1`)))
+	})
+
+	it("denies reading another user's menus", async () => {
+		await testEnv.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), `users/${USER_A}/menus/m1`), validMenu)
+		})
+		const b = testEnv.authenticatedContext(USER_B).firestore()
+		await assertFails(getDoc(doc(b, `users/${USER_A}/menus/m1`)))
+	})
+
+	it("denies creating a menu in another user's space", async () => {
+		const b = testEnv.authenticatedContext(USER_B).firestore()
+		await assertFails(setDoc(doc(b, `users/${USER_A}/menus/m1`), validMenu))
 	})
 })
