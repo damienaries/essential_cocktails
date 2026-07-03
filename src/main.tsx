@@ -6,6 +6,7 @@ import { MotionConfig } from 'motion/react'
 import './index.css'
 import App from './App.tsx'
 import { ThemeProvider } from './hooks/useTheme'
+import { AuthProvider } from './hooks/useAuthUser'
 import { createAppQueryClient } from './lib/queryClient'
 
 const queryClient = createAppQueryClient()
@@ -13,13 +14,15 @@ const queryClient = createAppQueryClient()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
-      <MotionConfig reducedMotion="user">
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </QueryClientProvider>
-      </MotionConfig>
+      <AuthProvider>
+        <MotionConfig reducedMotion="user">
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </QueryClientProvider>
+        </MotionConfig>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )

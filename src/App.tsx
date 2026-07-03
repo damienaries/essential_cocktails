@@ -12,7 +12,10 @@ import { FamilyDrinksPage } from './pages/FamilyDrinks'
 import { GlossaryPage } from './pages/Glossary'
 import { AboutPage } from './pages/About'
 import { SignInPage } from './pages/SignIn'
-import { AccountPage } from './pages/Account'
+import { AccountLayout } from './pages/AccountLayout'
+import { AccountProfilePage } from './pages/AccountProfile'
+import { AccountSavedPage } from './pages/AccountSaved'
+import { AccountMenusPage } from './pages/AccountMenus'
 
 function App() {
   return (
@@ -28,10 +31,14 @@ function App() {
           path="account"
           element={
             <RequireAuth>
-              <AccountPage />
+              <AccountLayout />
             </RequireAuth>
-          }
-        />
+          }>
+          <Route index element={<Navigate to="profile" replace />} />
+          <Route path="profile" element={<AccountProfilePage />} />
+          <Route path="saved" element={<AccountSavedPage />} />
+          <Route path="menus" element={<AccountMenusPage />} />
+        </Route>
         <Route
           path="admin"
           element={

@@ -14,6 +14,15 @@ const mocked = vi.mocked(useAuthUser)
 
 const fakeUser = { uid: 'fake-uid' } as User
 
+// Build a full AuthState from the fields each test cares about.
+function authState(partial: {
+	user: User | null
+	isPending: boolean
+	isAdmin: boolean
+}) {
+	return { ...partial, refreshUser: vi.fn() }
+}
+
 function renderAt(path: string) {
 	return render(
 		<MemoryRouter initialEntries={[path]}>
@@ -39,28 +48,28 @@ beforeEach(() => {
 
 describe('RequireAdmin', () => {
 	it('shows loading state while auth is pending', () => {
-		mocked.mockReturnValue({ user: null, isPending: true, isAdmin: false })
+		mocked.mockReturnValue(authState({ user: null, isPending: true, isAdmin: false }))
 		renderAt('/admin')
 		expect(screen.getByText(/checking access/i)).toBeInTheDocument()
 		expect(screen.queryByText('Admin Page Body')).not.toBeInTheDocument()
 	})
 
 	it('redirects unauthenticated users to /signin', () => {
-		mocked.mockReturnValue({ user: null, isPending: false, isAdmin: false })
+		mocked.mockReturnValue(authState({ user: null, isPending: false, isAdmin: false }))
 		renderAt('/admin')
 		expect(screen.getByText('Sign In Body')).toBeInTheDocument()
 		expect(screen.queryByText('Admin Page Body')).not.toBeInTheDocument()
 	})
 
 	it('redirects signed-in non-admins to home', () => {
-		mocked.mockReturnValue({ user: fakeUser, isPending: false, isAdmin: false })
+		mocked.mockReturnValue(authState({ user: fakeUser, isPending: false, isAdmin: false }))
 		renderAt('/admin')
 		expect(screen.getByText('Home Body')).toBeInTheDocument()
 		expect(screen.queryByText('Admin Page Body')).not.toBeInTheDocument()
 	})
 
 	it('renders children for admin users', () => {
-		mocked.mockReturnValue({ user: fakeUser, isPending: false, isAdmin: true })
+		mocked.mockReturnValue(authState({ user: fakeUser, isPending: false, isAdmin: true }))
 		renderAt('/admin')
 		expect(screen.getByText('Admin Page Body')).toBeInTheDocument()
 	})
