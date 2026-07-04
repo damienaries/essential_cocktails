@@ -12,6 +12,7 @@ import { FamilyDrinksPage } from './pages/FamilyDrinks'
 import { GlossaryPage } from './pages/Glossary'
 import { AboutPage } from './pages/About'
 import { SignInPage } from './pages/SignIn'
+import { SignUpPage } from './pages/SignUp'
 import { AccountLayout } from './pages/AccountLayout'
 import { AccountProfilePage } from './pages/AccountProfile'
 import { AccountSavedPage } from './pages/AccountSaved'
@@ -27,6 +28,7 @@ function App() {
         <Route path="glossary" element={<GlossaryPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="signin" element={<SignInPage />} />
+        <Route path="signup" element={<SignUpPage />} />
         <Route
           path="account"
           element={
