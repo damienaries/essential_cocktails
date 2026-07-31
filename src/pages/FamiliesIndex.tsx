@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { CocktailCard } from '../components/CocktailCard';
 import { DrinkDetailModal } from '../components/DrinkDetailModal';
-import { COCKTAIL_FAMILIES, normalizeFamilyName } from '../constants/families';
+import {
+	COCKTAIL_FAMILIES,
+	drinkInFamily,
+	normalizeFamilyName,
+} from '../constants/families';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
 import type { Drink } from '../types/drink';
 
@@ -16,7 +20,7 @@ export function FamiliesIndexPage() {
 		return COCKTAIL_FAMILIES.map((fam) => {
 			const familyKey = normalizeFamilyName(fam.label);
 			const inFamily = drinks
-				.filter((d) => normalizeFamilyName(d.family) === familyKey)
+				.filter((d) => drinkInFamily(d, familyKey))
 				.sort((a, b) =>
 					(a.name ?? '').localeCompare(b.name ?? '', undefined, {
 						sensitivity: 'base',
@@ -32,13 +36,18 @@ export function FamiliesIndexPage() {
 		});
 	}, [data]);
 
-	const flatDrinks = useMemo(
-		() =>
-			families.flatMap(({ namesake, variations, total }) =>
+	const flatDrinks = useMemo(() => {
+		const seen = new Set<string>();
+		return families
+			.flatMap(({ namesake, variations, total }) =>
 				total === 0 ? [] : [...(namesake ? [namesake] : []), ...variations],
-			),
-		[families],
-	);
+			)
+			.filter((d) => {
+				if (seen.has(d.id)) return false;
+				seen.add(d.id);
+				return true;
+			});
+	}, [families]);
 
 	if (isPending) {
 		return <p className="text-center">Loading drinks…</p>;

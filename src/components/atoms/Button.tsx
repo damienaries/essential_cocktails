@@ -58,6 +58,7 @@ function buildClassName(
 	}
 
 	classes += fill ? ' w-full' : ' w-fit';
+	classes += ' disabled:cursor-not-allowed disabled:opacity-50';
 	return classes;
 }
 

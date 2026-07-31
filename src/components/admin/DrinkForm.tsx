@@ -127,6 +127,16 @@ export function DrinkForm(props: Props) {
 		});
 	};
 
+	/** Appends on select so the first family picked stays the primary one. */
+	const toggleFamily = (label: string) => {
+		setFields((f) => ({
+			...f,
+			families: f.families.includes(label)
+				? f.families.filter((l) => l !== label)
+				: [...f.families, label],
+		}));
+	};
+
 	const title = props.mode === 'add' ? 'Add cocktail' : 'Edit cocktail';
 	const submitLabel =
 		props.mode === 'add'
@@ -249,21 +259,31 @@ export function DrinkForm(props: Props) {
 			</div>
 
 			<div className="admin-form-row">
-				<label htmlFor="admin-drink-family">Family</label>
-				<select
-					id="admin-drink-family"
-					value={fields.family}
-					onChange={(e) =>
-						setFields((f) => ({ ...f, family: e.target.value }))
-					}>
-					<option value="">Select a family</option>
-					{COCKTAIL_FAMILIES.map((fam) => (
-						<option key={fam.slug} value={fam.label}>
-							{fam.label}
-						</option>
-					))}
-				</select>
+				<span>Families</span>
+				<div className="flex flex-1 flex-wrap gap-2">
+					{COCKTAIL_FAMILIES.map((fam) => {
+						const selected = fields.families.includes(fam.label);
+						return (
+							<button
+								key={fam.slug}
+								type="button"
+								aria-pressed={selected}
+								onClick={() => toggleFamily(fam.label)}
+								className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+									selected
+										? 'border-brass bg-brass/20 text-ink dark:text-cream'
+										: 'border-chalk text-smoke hover:border-brass dark:border-charcoal dark:text-sand'
+								}`}>
+								{fam.label}
+							</button>
+						);
+					})}
+				</div>
 			</div>
+			<p className="mb-5 text-sm text-smoke dark:text-sand">
+				A drink can sit in more than one family — the first one picked is the
+				primary.
+			</p>
 
 			<div className="flex flex-col gap-2 relative mb-10">
 				<span className="w-full lg:w-1/5 text-ink dark:text-cream text-sm font-medium lg:pt-2">

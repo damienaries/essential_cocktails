@@ -89,7 +89,7 @@ export function buildDrinkImagePrompt(fields: DrinkFormFields): string {
 		'The cocktail is the central subject. Show its characteristic color, garnish, and the correct glass type.',
 		`Glass: ${fields.glass.trim() || 'appropriate classic glass'}.`,
 		`Method: ${fields.method}. Ice: ${fields.ice}. Garnish: ${fields.garnish.trim() || 'per spec'}.`,
-		`Family cue: ${fields.family.trim() || 'classic'}.`,
+		`Family cue: ${fields.families.join(', ').trim() || 'classic'}.`,
 		ingredients ? `Ingredient hints: ${ingredients}.` : null,
 		'Style: professional bar photography, atmospheric lighting that matches the time of day, shallow depth of field, no text or watermarks in the frame.',
 		'Output: deliver the rendered image; do not echo this prompt back.',

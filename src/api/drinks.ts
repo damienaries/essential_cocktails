@@ -12,16 +12,32 @@ import {
 import { getFirebaseDb } from '../lib/firebase';
 import type { Drink } from '../types/drink';
 
-/** Drop empty `family` so setDoc removes the field (clears legacy / bad values reliably). */
+/**
+ * Drop empty `family` / `families` so setDoc removes the fields (clears legacy / bad
+ * values reliably). `family` mirrors the first entry of `families` so single-value
+ * readers keep working.
+ */
 function prepareDrinkFirestoreData(
 	fields: Record<string, unknown>,
 ): Record<string, unknown> {
-	const { family: famRaw, ...rest } = fields
+	const { family: famRaw, families: famsRaw, ...rest } = fields
 	const out: Record<string, unknown> = { ...rest }
-	const fam =
-		famRaw != null && typeof famRaw === 'string' ? famRaw.trim() : ''
-	if (fam !== '') {
-		out.family = fam
+	const fams = Array.isArray(famsRaw)
+		? [
+				...new Set(
+					famsRaw
+						.map((f) => (typeof f === 'string' ? f.trim() : ''))
+						.filter(Boolean),
+				),
+			]
+		: []
+	const fam = typeof famRaw === 'string' ? famRaw.trim() : ''
+	const primary = fam || fams[0] || ''
+	if (primary !== '') {
+		out.family = primary
+	}
+	if (fams.length > 0) {
+		out.families = fams
 	}
 	return out
 }

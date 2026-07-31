@@ -1,5 +1,5 @@
 import type { DrinkWritePayload } from '../api/drinks';
-import { canonicalFamilyLabelForForm } from '../constants/families';
+import { canonicalFamilyLabelsForForm } from '../constants/families';
 import type { Drink, DrinkIngredient } from '../types/drink';
 import {
 	ingredientQuantityToFormString,
@@ -33,7 +33,8 @@ export type DrinkFormFields = {
 	ice: string;
 	garnish: string;
 	imageUrl: string;
-	family: string;
+	/** Family labels, primary first. */
+	families: string[];
 	ingredients: IngredientFieldRow[];
 	description: string;
 };
@@ -50,7 +51,7 @@ export function emptyDrinkForm(): DrinkFormFields {
 		ice: ICE_OPTIONS[0],
 		garnish: '',
 		imageUrl: '',
-		family: '',
+		families: [],
 		ingredients: Array.from(
 			{ length: DEFAULT_INGREDIENT_ROWS },
 			emptyIngredientRow,
@@ -88,7 +89,7 @@ export function drinkToFormFields(drink: Drink): DrinkFormFields {
 		ice: iceNorm,
 		garnish,
 		imageUrl: drink.imageUrl ?? '',
-		family: canonicalFamilyLabelForForm(drink.family),
+		families: canonicalFamilyLabelsForForm(drink),
 		ingredients: ing,
 		description: drink.description ?? '',
 	};
@@ -106,6 +107,10 @@ export function formFieldsToWritePayload(
 		ingredients.push({ name, quantity, unit: row.unit || 'oz' });
 	}
 
+	const families = [
+		...new Set(fields.families.map((f) => f.trim()).filter(Boolean)),
+	];
+
 	return {
 		name: fields.name.trim(),
 		glass: fields.glass.trim() || null,
@@ -113,7 +118,8 @@ export function formFieldsToWritePayload(
 		ice: fields.ice.trim() || null,
 		garnish: fields.garnish.trim() || null,
 		imageUrl: fields.imageUrl.trim() || null,
-		family: fields.family.trim() || null,
+		family: families[0] ?? null,
+		families: families.length ? families : null,
 		ingredients: ingredients.length ? ingredients : null,
 		description: fields.description.trim() || null,
 	};

@@ -13,7 +13,10 @@ export type Drink = {
   ice?: string | null
   garnish?: string | string[] | null
   imageUrl?: string | null
+  /** Primary family (first entry of `families`); kept flat for search and legacy docs. */
   family?: string | null
+  /** Every family the drink belongs to, primary first. */
+  families?: string[] | null
   ingredients?: DrinkIngredient[] | null
   description?: string | null
 }

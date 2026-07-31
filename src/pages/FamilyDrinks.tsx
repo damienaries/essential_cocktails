@@ -5,8 +5,8 @@ import { CocktailCard } from '../components/CocktailCard';
 import { DrinkDetailModal } from '../components/DrinkDetailModal';
 import {
 	COCKTAIL_FAMILIES,
+	drinkInFamily,
 	isFamilySlug,
-	normalizeFamilyName,
 	slugToFamilyFilter,
 } from '../constants/families';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
@@ -25,7 +25,7 @@ export function FamilyDrinksPage() {
 	const filtered = useMemo(() => {
 		if (!slug || !isFamilySlug(slug) || !data) return [];
 		const key = slugToFamilyFilter(slug);
-		return data.filter((d) => normalizeFamilyName(d.family) === key);
+		return data.filter((d) => drinkInFamily(d, key));
 	}, [data, slug]);
 
 	if (!slug || !isFamilySlug(slug)) {

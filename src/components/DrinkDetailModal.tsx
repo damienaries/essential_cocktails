@@ -11,6 +11,8 @@ import { SvgIcon } from "./atoms/SvgIcon";
 import { formatGarnish, formatIce, formatMethod } from "../lib/drinkDisplay";
 import { glassIconName, iceIconName, methodIconName } from "../lib/metaIcons";
 import { slideVariants, useDrinkNavigation } from "../hooks/useDrinkNavigation";
+import { SaveDrinkButton } from "./SaveDrinkButton";
+import { AddToMenuPicker } from "./menus/AddToMenuPicker";
 
 type Props = {
   drink: Drink;
@@ -96,6 +98,14 @@ export function DrinkDetailModal({
               <SvgIcon icon="close" size={24} />
             </button>
 
+            <SaveDrinkButton
+              drinkId={drink.id}
+              drinkName={drink.name}
+              size="md"
+              tooltipSide="bottom"
+              className="absolute left-3 top-3 z-20"
+            />
+
             {canNavigate && showHints ? (
               <>
                 <NavHint side="left" />
@@ -161,6 +171,8 @@ export function DrinkDetailModal({
                 {drink.description}
               </small>
             ) : null}
+
+            <AddToMenuPicker drinkId={drink.id} />
           </div>
         </motion.div>
       </AnimatePresence>

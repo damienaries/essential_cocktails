@@ -1,0 +1,152 @@
+/* Printed menu: one US Letter sheet in landscape, folded down the middle, with both
+ * halves identical. Sized in real inches so print output is true to scale; on screen
+ * the sheet shrinks to its container and every type size is expressed in `cqw`
+ * (percent of sheet width) so the layout stays proportional at any size.
+ *
+ * Serif here is deliberate — this is a printed artifact, not app chrome, so it does
+ * not use --font-sans. */
+
+.menu-sheet {
+	container-type: inline-size;
+	position: relative;
+	display: flex;
+	width: 100%;
+	max-width: 11in;
+	aspect-ratio: 11 / 8.5;
+	margin-inline: auto;
+	background: #fffdf8;
+	color: #14110c;
+	font-family: Georgia, 'Times New Roman', serif;
+	border: 1px solid var(--color-chalk);
+	box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+	overflow: hidden;
+}
+
+/* The fold. Sits above both halves, drawn as a hairline so it survives printing. */
+.menu-sheet-fold {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	border-left: 1px dashed rgb(0 0 0 / 0.22);
+	pointer-events: none;
+}
+
+.menu-sheet-half {
+	display: flex;
+	min-width: 0;
+	flex: 1 1 50%;
+	flex-direction: column;
+	padding: 3.2cqw 2.4cqw;
+}
+
+/* Double rule border, echoing the reference menu's frame. */
+.menu-sheet-frame {
+	display: flex;
+	height: 100%;
+	min-height: 0;
+	flex-direction: column;
+	padding: 1.6cqw 1.4cqw;
+	border: 0.12cqw double rgb(0 0 0 / 0.55);
+	outline: 0.06cqw solid rgb(0 0 0 / 0.35);
+	outline-offset: 0.5cqw;
+}
+
+.menu-sheet-title {
+	margin: 0 0 0.4cqw;
+	font-size: 2.4cqw;
+	font-weight: 400;
+	letter-spacing: 0.18em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.menu-sheet-rule {
+	width: 22%;
+	margin: 0 auto 1.6cqw;
+	border: 0;
+	border-top: 0.06cqw solid rgb(0 0 0 / 0.5);
+}
+
+/* Drinks share the remaining height; 8–10 entries fill a half comfortably. */
+.menu-sheet-drinks {
+	display: flex;
+	min-height: 0;
+	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1.5cqw;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.menu-sheet-drink {
+	text-align: center;
+}
+
+.menu-sheet-drink-name {
+	font-size: 1.4cqw;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.menu-sheet-drink-icons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6cqw;
+	margin: 0.35cqw 0;
+	color: rgb(0 0 0 / 0.68);
+}
+
+/* SvgIcon writes width/height attributes; CSS overrides them so icons scale too. */
+.menu-sheet-drink-icons svg {
+	width: 1.9cqw;
+	height: 1.9cqw;
+}
+
+.menu-sheet-drink-ingredients {
+	margin: 0;
+	font-size: 1.1cqw;
+	line-height: 1.35;
+}
+
+.menu-sheet-empty {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2cqw;
+	font-style: italic;
+	color: rgb(0 0 0 / 0.45);
+}
+
+/* Print: the sheet becomes the whole page, everything else drops out. */
+@media print {
+	@page {
+		size: letter landscape;
+		margin: 0;
+	}
+
+	body {
+		visibility: hidden;
+		background: #fff;
+	}
+
+	.menu-sheet,
+	.menu-sheet * {
+		visibility: visible;
+	}
+
+	.menu-sheet {
+		position: fixed;
+		inset: 0;
+		width: 100vw;
+		height: 100vh;
+		max-width: none;
+		aspect-ratio: auto;
+		border: 0;
+		box-shadow: none;
+	}
+}

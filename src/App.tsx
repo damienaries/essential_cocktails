@@ -14,9 +14,11 @@ import { AboutPage } from './pages/About'
 import { SignInPage } from './pages/SignIn'
 import { SignUpPage } from './pages/SignUp'
 import { AccountLayout } from './pages/AccountLayout'
+import { AccountIndexPage } from './pages/AccountIndex'
 import { AccountProfilePage } from './pages/AccountProfile'
 import { AccountSavedPage } from './pages/AccountSaved'
 import { AccountMenusPage } from './pages/AccountMenus'
+import { AccountMenuDetailPage } from './pages/AccountMenuDetail'
 
 function App() {
   return (
@@ -36,10 +38,11 @@ function App() {
               <AccountLayout />
             </RequireAuth>
           }>
-          <Route index element={<Navigate to="profile" replace />} />
+          <Route index element={<AccountIndexPage />} />
           <Route path="profile" element={<AccountProfilePage />} />
           <Route path="saved" element={<AccountSavedPage />} />
           <Route path="menus" element={<AccountMenusPage />} />
+          <Route path="menus/:menuId" element={<AccountMenuDetailPage />} />
         </Route>
         <Route
           path="admin"

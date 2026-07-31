@@ -1,7 +1,20 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import aboutBg from '../assets/images/about-bg.webp';
 import { ContactForm } from '../components/ContactForm';
 
 export function AboutPage() {
+	const { hash } = useLocation();
+
+	// React Router doesn't scroll to hash targets on its own, so the "get in touch"
+	// link above the footer lands on the page top without this.
+	useEffect(() => {
+		if (hash !== '#contact') return;
+		document
+			.getElementById('contact')
+			?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	}, [hash]);
+
 	return (
 		<div className="mx-auto max-w-180 pb-15">
 			<div className="relative mb-10 overflow-hidden rounded-lg">
@@ -52,7 +65,7 @@ export function AboutPage() {
 				</p>
 			</section>
 
-			<section>
+			<section id="contact" className="scroll-mt-24">
 				<h2 className="mb-4">Get in touch</h2>
 				<p className="mb-6 text-smoke dark:text-sand">
 					Have a drink to suggest, a correction to a recipe, or want to

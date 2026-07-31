@@ -12,6 +12,14 @@ export function formatGarnish(drink: Drink): string {
   return Array.isArray(g) ? g.join(', ') : g
 }
 
+/** Ingredient names only, comma separated — printed menus list no quantities. */
+export function formatIngredientNames(drink: Drink): string {
+  return (drink.ingredients ?? [])
+    .map((i) => i.name?.trim())
+    .filter((name): name is string => Boolean(name))
+    .join(', ')
+}
+
 export function formatIce(drink: Drink): string {
   const ice = drink.ice
   if (ice == null || (typeof ice === 'string' && ice.trim() === '')) return ''
