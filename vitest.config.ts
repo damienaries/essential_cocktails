@@ -5,6 +5,8 @@ export default defineConfig({
 		include: [
 			'tests/lib/**/*.test.{ts,tsx}',
 			'tests/components/**/*.test.{ts,tsx}',
+			'tests/hooks/**/*.test.{ts,tsx}',
+			'tests/pages/**/*.test.{ts,tsx}',
 		],
 		environment: 'jsdom',
 		globals: true,
