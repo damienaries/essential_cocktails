@@ -82,7 +82,7 @@
 .dark .admin-form-row input:not([type='checkbox']),
 .dark .admin-form-row select,
 .dark .admin-form-row textarea {
-	@apply border-field-edge-dark bg-coal text-sand;
+	@apply border-brass/40 bg-coal text-sand;
 }
 
 .admin-form-row input:focus,
