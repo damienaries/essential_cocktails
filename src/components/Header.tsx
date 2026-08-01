@@ -12,6 +12,10 @@ function navLinkClass({ isActive }: { isActive: boolean }) {
 	return isActive ? 'link current active' : 'link';
 }
 
+/** Section heading inside the mobile drawer. */
+const drawerSectionClass =
+	'mb-4 text-xs font-normal uppercase tracking-wide text-smoke dark:text-sand';
+
 export function Header() {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const { pathname } = useLocation();
@@ -91,10 +95,7 @@ export function Header() {
 							role="dialog"
 							aria-modal="true"
 							aria-label="Site navigation">
-							<div className="mb-6 flex items-center justify-between">
-								<span className="text-xs uppercase tracking-wide text-smoke dark:text-sand">
-									Menu
-								</span>
+							<div className="mb-6 flex items-center justify-end">
 								<button
 									type="button"
 									className="link inline-flex h-9 w-9 cursor-pointer items-center justify-center"
@@ -105,20 +106,40 @@ export function Header() {
 									</span>
 								</button>
 							</div>
-							<nav className="flex flex-col gap-5 text-lg">
-								<NavLink to="/" end className={navLinkClass}>
-									Home
-								</NavLink>
-								<NavLink to="/families" className={navLinkClass}>
-									Families
-								</NavLink>
-								<NavLink to="/about" className={navLinkClass}>
-									About
-								</NavLink>
-								{isAdmin ? (
-									<NavLink to="/admin" className={navLinkClass}>
-										Admin
-									</NavLink>
+
+							<nav className="flex flex-col gap-8" aria-label="Site sections">
+								<section>
+									<h2 className={drawerSectionClass}>Pages</h2>
+									<div className="flex flex-col gap-5 text-lg">
+										<NavLink to="/" end className={navLinkClass}>
+											Home
+										</NavLink>
+										<NavLink to="/families" className={navLinkClass}>
+											Families
+										</NavLink>
+										<NavLink to="/about" className={navLinkClass}>
+											About
+										</NavLink>
+									</div>
+								</section>
+
+								{/* The account tabs are surfaced directly — reaching a menu shouldn't
+								    cost two taps. Hidden when signed out, since each one gates. */}
+								{user ? (
+									<section>
+										<h2 className={drawerSectionClass}>My Swizzle</h2>
+										<div className="flex flex-col gap-5 text-lg">
+											<NavLink to="/account/menus" className={navLinkClass}>
+												Menus
+											</NavLink>
+											<NavLink to="/account/saved" className={navLinkClass}>
+												Saved
+											</NavLink>
+											<NavLink to="/account/profile" className={navLinkClass}>
+												Profile
+											</NavLink>
+										</div>
+									</section>
 								) : null}
 							</nav>
 
@@ -136,9 +157,11 @@ export function Header() {
 												{user.displayName?.trim() || user.email}
 											</span>
 										</div>
-										<NavLink to="/account" className={navLinkClass}>
-											Account
-										</NavLink>
+										{isAdmin ? (
+											<NavLink to="/admin" className={navLinkClass}>
+												Admin
+											</NavLink>
+										) : null}
 										<button
 											type="button"
 											className="link cursor-pointer text-left"
