@@ -1,69 +1,43 @@
-/* Global classes that don't translate cleanly to Tailwind utilities yet. */
-
 .app-container {
-	width: 100%;
-	max-width: 1200px;
-	margin-inline: auto;
-	padding-inline: 1.25rem;
+	@apply mx-auto w-full max-w-300 px-5;
 }
 
 .link {
-	color: inherit;
-	text-decoration: none;
-	transition: color 0.18s ease;
+	@apply text-inherit no-underline transition-colors duration-200;
 }
 
 .link:hover,
 .link.active,
 .link.current {
-	color: var(--color-brass);
+	@apply text-brass;
 }
 
 .link:focus-visible {
-	outline: 2px solid rgb(212 168 90 / 0.5);
-	outline-offset: 2px;
-	border-radius: 2px;
+	@apply rounded-xs outline-2 outline-offset-2 outline-brass/50;
 }
 
 .text-input {
-	width: 100%;
-	border-radius: 0.375rem;
-	border: 1px solid var(--color-chalk);
-	background: var(--color-paper);
-	color: var(--color-ink);
-	font-size: 0.875rem;
-	padding: 0.5rem 0.75rem;
+	@apply w-full rounded-md border border-chalk bg-paper px-3 py-2 text-sm text-ink;
 }
 
 .text-input::placeholder {
-	color: var(--color-smoke);
+	@apply text-smoke;
 }
 
 .text-input:focus {
-	outline: 2px solid rgb(212 168 90 / 0.5);
-	outline-offset: 2px;
+	@apply outline-2 outline-offset-2 outline-brass/50;
 }
 
 .dark .text-input {
-	border-color: var(--color-charcoal);
-	background: var(--color-coal);
-	color: var(--color-cream);
+	@apply border-brass/40 bg-coal text-cream;
 }
 
 .dark .text-input::placeholder {
-	color: var(--color-sand);
+	@apply text-sand;
 }
 
-
 .modal-backdrop {
-	position: fixed;
-	inset: 0;
-	z-index: 50;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 16px;
-	box-sizing: border-box;
+	@apply fixed inset-0 z-50 box-border flex items-center justify-center p-4;
 	background:
 		linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
 		rgba(6, 5, 12, 0.48);
@@ -79,100 +53,64 @@
 	-webkit-backdrop-filter: blur(14px);
 }
 
-/* Admin drink form (legacy Vue parity) */
 .admin-form-row {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-	align-items: center;
-	justify-content: center;
-	gap: 1rem;
-	margin: 1.25rem auto;
+	@apply mx-auto my-5 flex w-full flex-row items-center justify-center gap-4;
 }
 
 @media screen and (max-width: 800px) {
 	.admin-form-row {
-		flex-direction: column;
-		align-items: flex-start;
+		@apply flex-col items-start;
 	}
 }
 
 .admin-form-row label,
 .admin-form-row > span:first-child {
-	flex: 0 0 20%;
-	max-width: 20%;
-	text-align: left;
-	font-size: 0.875rem;
-	font-weight: 500;
-	color: var(--color-ink);
+	@apply max-w-1/5 shrink-0 grow-0 basis-1/5 text-left text-sm font-medium text-ink;
 }
 
 .dark .admin-form-row label,
 .dark .admin-form-row > span:first-child {
-	color: var(--color-cream);
+	@apply text-cream;
 }
 
 .admin-form-row input:not([type='checkbox']),
 .admin-form-row select,
 .admin-form-row textarea {
-	flex: 1 1 auto;
-	width: 100%;
-	max-width: 80%;
-	border-radius: 8px;
-	padding: 12px 20px;
-	background: var(--color-paper);
-	color: var(--color-smoke);
-	border: 1px solid var(--color-chalk);
-	box-sizing: border-box;
+	@apply box-border w-full max-w-4/5 grow basis-auto rounded-lg border border-chalk bg-paper px-5 py-3 text-smoke;
 }
 
 .dark .admin-form-row input:not([type='checkbox']),
 .dark .admin-form-row select,
 .dark .admin-form-row textarea {
-	background: var(--color-coal);
-	color: var(--color-sand);
-	border-color: var(--color-charcoal);
+	@apply border-field-edge-dark bg-coal text-sand;
 }
 
 .admin-form-row input:focus,
 .admin-form-row select:focus,
 .admin-form-row textarea:focus {
-	outline: 1px solid rgba(212, 168, 90, 0.5);
+	@apply outline-2 outline-offset-1 outline-brass;
 }
 
 .admin-form-row input[aria-invalid='true']:not([type='checkbox']),
 .admin-form-row select[aria-invalid='true'],
 .admin-form-row textarea[aria-invalid='true'] {
-	border-color: rgb(220 38 38);
+	@apply border-red-600;
 }
 
 .dark .admin-form-row input[aria-invalid='true']:not([type='checkbox']),
 .dark .admin-form-row select[aria-invalid='true'],
 .dark .admin-form-row textarea[aria-invalid='true'] {
-	border-color: rgb(248 113 113);
+	@apply border-red-400;
 }
 
 @media screen and (max-width: 800px) {
 	.admin-form-row label,
 	.admin-form-row > span:first-child {
-		max-width: 100%;
+		@apply max-w-full;
 	}
 	.admin-form-row input:not([type='checkbox']),
 	.admin-form-row select,
 	.admin-form-row textarea {
-		max-width: 100%;
+		@apply max-w-full;
 	}
-}
-
-.admin-table-cell {
-	border: 1px solid var(--color-chalk);
-	padding: 0.5rem 1rem;
-	background: var(--color-paper);
-	text-align: left;
-	vertical-align: top;
-}
-
-.dark .admin-table-cell {
-	border-color: var(--color-charcoal);
-	background: var(--color-coal);
 }
