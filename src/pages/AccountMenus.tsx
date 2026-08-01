@@ -5,11 +5,7 @@ import { SvgIcon } from '../components/atoms/SvgIcon';
 import { MenuSheet } from '../components/menus/MenuSheet';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
 import { useCreateMenu, useDeleteMenu, useMenus } from '../hooks/useMenus';
-import {
-	MENU_NAME_MAX_LENGTH,
-	menuNameTaken,
-	menuSlug,
-} from '../lib/menuName';
+import { MENU_NAME_MAX_LENGTH, menuNameTaken, menuSlug } from '../lib/menuName';
 import type { Drink } from '../types/drink';
 
 export function AccountMenusPage() {
@@ -62,13 +58,13 @@ export function AccountMenusPage() {
 						onClick={() => setCreating((v) => !v)}
 						aria-expanded={creating}
 						aria-label="Create menu"
-						className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-palm text-white transition-colors hover:bg-palm/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/60">
-						<SvgIcon icon="plus" size={22} />
+						className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-palm text-cream shadow-md transition-colors hover:bg-palm/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/60 dark:bg-brass dark:text-ink dark:hover:bg-brass/90">
+						<SvgIcon icon="plus" size={20} />
 					</button>
 					<span
 						role="tooltip"
 						aria-hidden
-						className="pointer-events-none absolute top-full right-0 z-20 mt-2 w-56 rounded bg-ink/90 px-2 py-1 text-xs text-cream opacity-0 transition-opacity group-hover/create:opacity-100 group-focus-within/create:opacity-100">
+						className="pointer-events-none absolute top-full right-0 z-20 mt-2 w-56 rounded bg-ink/90 px-2 py-1 text-xs text-cream opacity-0 transition-opacity group-hover/create:opacity-100 group-focus-within/create:opacity-100 dark:bg-cream/90 dark:text-ink">
 						Build a printable menu from drinks in the library.
 					</span>
 				</span>

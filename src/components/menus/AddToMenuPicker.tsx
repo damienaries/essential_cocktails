@@ -4,6 +4,7 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { useCreateMenu, useMenus, useUpdateMenu } from '../../hooks/useMenus';
 import { MENU_NAME_MAX_LENGTH } from '../../lib/menuName';
 import { Button } from '../atoms/Button';
+import { SvgIcon } from '../atoms/SvgIcon';
 
 type Props = {
 	drinkId: string;
@@ -82,15 +83,26 @@ export function AddToMenuPicker({ drinkId }: Props) {
 
 	return (
 		<div className="mt-4 border-t border-chalk pt-3 dark:border-charcoal">
-			<div ref={wrapRef} className="relative inline-block">
+			<div ref={wrapRef} className="group/menu relative inline-block">
 				<button
 					type="button"
 					onClick={handleToggleOpen}
 					aria-expanded={open}
 					aria-haspopup="true"
-					className="cursor-pointer text-sm text-smoke underline-offset-2 hover:text-brass hover:underline dark:text-sand">
-					+ Add to menu
+					aria-label="Add to menu"
+					className="flex cursor-pointer items-center text-smoke transition-colors hover:text-brass dark:text-sand">
+					<SvgIcon icon="menu-add" size={28} />
 				</button>
+
+				{/* Hidden while the dropdown is open — the panel already says what this is. */}
+				{!open ? (
+					<span
+						role="tooltip"
+						aria-hidden
+						className="pointer-events-none absolute bottom-full left-0 z-20 mb-2 whitespace-nowrap rounded bg-ink/90 px-2 py-1 text-xs text-cream opacity-0 transition-opacity group-hover/menu:opacity-100 group-focus-within/menu:opacity-100 dark:bg-cream/90 dark:text-ink">
+						Add to menu
+					</span>
+				) : null}
 
 				{open ? (
 					// Opens upward: this control sits at the bottom of the modal panel,
@@ -98,7 +110,7 @@ export function AddToMenuPicker({ drinkId }: Props) {
 					<div
 						role="dialog"
 						aria-label="Add to menu"
-						className="absolute bottom-full left-0 z-30 mb-2 flex w-64 flex-col gap-2 rounded-md border border-chalk bg-paper p-3 shadow-lg dark:border-charcoal dark:bg-coal">
+						className="absolute bottom-full left-0 z-30 mb-2 flex w-64 flex-col gap-2 rounded-md border border-cream/40 bg-paper p-3 shadow-lg dark:bg-coal">
 						{isLoading ? <p className="m-0 text-xs">Loading menus…</p> : null}
 
 						{!isLoading && !menus.length ? (

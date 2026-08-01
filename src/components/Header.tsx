@@ -32,7 +32,10 @@ export function Header() {
 	}, [drawerOpen]);
 
 	return (
-		<header className="app-container flex items-center justify-between pt-4">
+		// Sticky on mobile only, where the drink list runs long. `sticky` reserves its
+		// own space, so nothing hides underneath it. The background matches the page
+		// so it stays invisible on desktop, where it reverts to static.
+		<header className="app-container sticky top-0 z-30 flex items-center justify-between bg-paper pt-4 pb-3 md:static md:pb-0 dark:bg-coal">
 			<NavLink
 				to="/"
 				end

@@ -59,9 +59,28 @@ export function DrinkDetailModal({
           animate="center"
           exit="exit"
           transition={{ duration: 0.16, ease: "easeOut" }}
-          className="flex w-full min-w-0 flex-row flex-wrap overflow-hidden"
+          className="relative flex w-full min-w-0 flex-row flex-wrap overflow-hidden"
           {...swipeHandlers}
         >
+          {/* Anchored to the modal, not the photo: on mobile the photo spans the top
+              so this still lands on the image, while on desktop it moves to the top
+              right of the details panel. */}
+          <button
+            type="button"
+            onClick={onClose}
+            className={[
+              "absolute right-3 top-3 z-30 flex h-11 w-11 cursor-pointer items-center justify-center",
+              "rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/60",
+              // Over the panel it sits on paper, not a photo, so the scrim comes off.
+              "md:bg-transparent md:text-smoke md:backdrop-blur-none md:hover:bg-chalk md:hover:text-ink",
+              "md:dark:text-sand md:dark:hover:bg-carbon md:dark:hover:text-cream",
+            ].join(" ")}
+            aria-label="Close dialog"
+          >
+            <SvgIcon icon="close" size={24} />
+          </button>
+
           <div
             className={[
               "relative min-w-0 overflow-hidden bg-[linear-gradient(145deg,#2a2438,#1a1720)]",
@@ -85,24 +104,10 @@ export function DrinkDetailModal({
             ) : null}
             {/* todo set fallback drink image here instead of null */}
 
-            <button
-              type="button"
-              onClick={onClose}
-              className={[
-                "absolute right-3 top-3 z-20 flex h-11 w-11 cursor-pointer items-center justify-center",
-                "rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors",
-                "hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brass/60",
-              ].join(" ")}
-              aria-label="Close dialog"
-            >
-              <SvgIcon icon="close" size={24} />
-            </button>
-
             <SaveDrinkButton
               drinkId={drink.id}
               drinkName={drink.name}
               size="md"
-              tooltipSide="top"
               className="absolute right-3 bottom-3 z-20"
             />
 

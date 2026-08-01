@@ -82,7 +82,6 @@ export function CocktailCard({ drink, onSelect }: Props) {
 			<SaveDrinkButton
 				drinkId={drink.id}
 				drinkName={drink.name}
-				tooltipSide="bottom"
 				className="absolute right-2 bottom-2 z-10"
 			/>
 		</div>
