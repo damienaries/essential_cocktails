@@ -102,8 +102,8 @@ export function DrinkDetailModal({
               drinkId={drink.id}
               drinkName={drink.name}
               size="md"
-              tooltipSide="bottom"
-              className="absolute left-3 top-3 z-20"
+              tooltipSide="top"
+              className="absolute right-3 bottom-3 z-20"
             />
 
             {canNavigate && showHints ? (

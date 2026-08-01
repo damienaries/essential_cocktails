@@ -7,21 +7,11 @@ import { SvgIcon } from './atoms/SvgIcon';
 type Props = {
 	drinkId: string;
 	drinkName: string;
-	/** `sm` for the card corner, `md` to match the modal's close button. */
 	size?: 'sm' | 'md';
-	/**
-	 * Which way the tooltip opens. Default `top` suits the card corner; the modal
-	 * passes `bottom` because its photo container clips anything above the button.
-	 */
 	tooltipSide?: 'top' | 'bottom';
 	className?: string;
 };
 
-/**
- * Heart toggle for saving a drink. It sits over the drink photo on both the card and
- * the detail modal, so it carries the same dark scrim as the modal close button.
- * Signed-out users go to sign-in and come back to the page they left.
- */
 export function SaveDrinkButton({
 	drinkId,
 	drinkName,
@@ -51,12 +41,16 @@ export function SaveDrinkButton({
 
 	return (
 		// Named group so the tooltip reacts to this button alone, not the card's `group`.
-		<span className={['group/save relative', className].join(' ')}>
+		// `className` positions this wrapper (it's the tooltip's containing block), so
+		// it must carry `absolute` — adding `relative` here would fight it.
+		<span className={['group/save', className].join(' ')}>
 			<button
 				type="button"
 				onClick={handleClick}
 				aria-pressed={saved}
-				aria-label={saved ? `Remove ${drinkName} from saved` : `Save ${drinkName}`}
+				aria-label={
+					saved ? `Remove ${drinkName} from saved` : `Save ${drinkName}`
+				}
 				className={[
 					size === 'md' ? 'h-11 w-11' : 'h-7 w-7',
 					'flex cursor-pointer items-center justify-center rounded-full',
@@ -73,13 +67,12 @@ export function SaveDrinkButton({
 				role="tooltip"
 				aria-hidden
 				className={[
-					'pointer-events-none absolute z-20 whitespace-nowrap rounded',
-					'bg-ink/90 px-2 py-1 text-xs text-cream opacity-0 transition-opacity',
+					'pointer-events-none absolute right-0 z-20 whitespace-nowrap rounded',
+					// Same scrim as the button so the pair reads as one control.
+					'bg-black/40 backdrop-blur-sm px-2 py-1 text-xs text-white opacity-0 transition-opacity',
 					'group-hover/save:opacity-100 group-focus-within/save:opacity-100',
-					// Each side also picks the edge that keeps the tooltip inside the
-					// photo: below-left under the modal's top-left heart, above-right
-					// over the card's bottom-right one.
-					tooltipSide === 'bottom' ? 'top-full left-0 mt-1' : 'bottom-full right-0 mb-1',
+
+					tooltipSide === 'bottom' ? 'top-full mt-2' : 'bottom-full mb-2',
 				].join(' ')}>
 				{label}
 			</span>

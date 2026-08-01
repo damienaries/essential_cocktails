@@ -1,18 +1,16 @@
-/* Printed menu: one US Letter sheet in landscape, folded down the middle, with both
- * halves identical. Sized in real inches so print output is true to scale; on screen
- * the sheet shrinks to its container and every type size is expressed in `cqw`
- * (percent of sheet width) so the layout stays proportional at any size.
+/* Printed menu. One page (5.5 × 8.5in) until the drinks outgrow it; past that, a US
+ * Letter sheet in landscape folded down the middle, the list running across both
+ * halves. Sizes are in real inches so print is true to scale, and every type size is
+ * in `cqw` — percent of one page's width — so a page reads identically whether it's
+ * full size or shrunk into a preview grid.
  *
  * Serif here is deliberate — this is a printed artifact, not app chrome, so it does
  * not use --font-sans. */
 
 .menu-sheet {
-	container-type: inline-size;
 	position: relative;
 	display: flex;
 	width: 100%;
-	max-width: 11in;
-	aspect-ratio: 11 / 8.5;
 	margin-inline: auto;
 	background: #fffdf8;
 	color: #14110c;
@@ -22,7 +20,17 @@
 	overflow: hidden;
 }
 
-/* The fold. Sits above both halves, drawn as a hairline so it survives printing. */
+.menu-sheet--single {
+	max-width: 5.5in;
+	aspect-ratio: 5.5 / 8.5;
+}
+
+.menu-sheet--spread {
+	max-width: 11in;
+	aspect-ratio: 11 / 8.5;
+}
+
+/* The fold, on two-page sheets only. Drawn as a hairline so it survives printing. */
 .menu-sheet-fold {
 	position: absolute;
 	top: 0;
@@ -32,12 +40,19 @@
 	pointer-events: none;
 }
 
-.menu-sheet-half {
+/* Each page is its own query container, so `cqw` means the same thing on a single
+ * page and on one half of a spread. */
+.menu-sheet-page {
+	container-type: inline-size;
 	display: flex;
 	min-width: 0;
-	flex: 1 1 50%;
+	flex: 1 1 100%;
 	flex-direction: column;
-	padding: 3.2cqw 2.4cqw;
+	padding: 5cqw 4cqw;
+}
+
+.menu-sheet--spread .menu-sheet-page {
+	flex: 1 1 50%;
 }
 
 /* Double rule border, echoing the reference menu's frame. */
@@ -46,36 +61,35 @@
 	height: 100%;
 	min-height: 0;
 	flex-direction: column;
-	padding: 1.6cqw 1.4cqw;
-	border: 0.12cqw double rgb(0 0 0 / 0.55);
-	outline: 0.06cqw solid rgb(0 0 0 / 0.35);
-	outline-offset: 0.5cqw;
+	padding: 3cqw 2.6cqw;
+	border: 0.25cqw double rgb(0 0 0 / 0.55);
+	outline: 0.12cqw solid rgb(0 0 0 / 0.35);
+	outline-offset: 1cqw;
 }
 
 .menu-sheet-title {
-	margin: 0 0 0.4cqw;
-	font-size: 2.4cqw;
+	margin: 0 0 0.8cqw;
+	font-size: 5cqw;
 	font-weight: 400;
-	letter-spacing: 0.18em;
+	letter-spacing: 0.16em;
 	text-align: center;
 	text-transform: uppercase;
 }
 
 .menu-sheet-rule {
-	width: 22%;
-	margin: 0 auto 1.6cqw;
+	width: 24%;
+	margin: 0 auto 3cqw;
 	border: 0;
-	border-top: 0.06cqw solid rgb(0 0 0 / 0.5);
+	border-top: 0.12cqw solid rgb(0 0 0 / 0.5);
 }
 
-/* Drinks share the remaining height; 8–10 entries fill a half comfortably. */
 .menu-sheet-drinks {
 	display: flex;
 	min-height: 0;
 	flex: 1;
 	flex-direction: column;
 	justify-content: center;
-	gap: 1.5cqw;
+	gap: 3cqw;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -86,7 +100,7 @@
 }
 
 .menu-sheet-drink-name {
-	font-size: 1.4cqw;
+	font-size: 3.4cqw;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 }
@@ -95,20 +109,20 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 0.6cqw;
-	margin: 0.35cqw 0;
+	gap: 1.2cqw;
+	margin: 0.8cqw 0;
 	color: rgb(0 0 0 / 0.68);
 }
 
 /* SvgIcon writes width/height attributes; CSS overrides them so icons scale too. */
 .menu-sheet-drink-icons svg {
-	width: 1.9cqw;
-	height: 1.9cqw;
+	width: 4cqw;
+	height: 4cqw;
 }
 
 .menu-sheet-drink-ingredients {
 	margin: 0;
-	font-size: 1.1cqw;
+	font-size: 2.4cqw;
 	line-height: 1.35;
 }
 
@@ -117,16 +131,25 @@
 	flex: 1;
 	align-items: center;
 	justify-content: center;
-	font-size: 1.2cqw;
+	font-size: 2.6cqw;
 	font-style: italic;
 	color: rgb(0 0 0 / 0.45);
 }
 
-/* Print: the sheet becomes the whole page, everything else drops out. */
+/* Print: the sheet marked printable becomes the whole page and everything else drops
+ * out — including the preview sheets on the menus index. A spread fills a landscape
+ * sheet; a single page keeps its proportions and centres on a portrait one. */
 @media print {
 	@page {
-		size: letter landscape;
 		margin: 0;
+	}
+
+	@page sheet-spread {
+		size: letter landscape;
+	}
+
+	@page sheet-single {
+		size: letter portrait;
 	}
 
 	body {
@@ -134,19 +157,30 @@
 		background: #fff;
 	}
 
-	.menu-sheet,
-	.menu-sheet * {
+	.menu-sheet-print,
+	.menu-sheet-print * {
 		visibility: visible;
 	}
 
-	.menu-sheet {
+	.menu-sheet-print {
 		position: fixed;
 		inset: 0;
-		width: 100vw;
-		height: 100vh;
+		margin: auto;
 		max-width: none;
-		aspect-ratio: auto;
 		border: 0;
 		box-shadow: none;
+	}
+
+	.menu-sheet-print.menu-sheet--spread {
+		page: sheet-spread;
+		width: 100vw;
+		height: 100vh;
+		aspect-ratio: auto;
+	}
+
+	.menu-sheet-print.menu-sheet--single {
+		page: sheet-single;
+		height: 100vh;
+		width: auto;
 	}
 }

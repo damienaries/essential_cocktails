@@ -57,6 +57,8 @@ export function AddToMenuPicker({ drinkId }: Props) {
 		setOpen((v) => !v);
 	};
 
+	// Picking a menu is the whole job, so the dropdown closes on the way out. The
+	// pills below it handle removals, so nothing needs the list to stay open.
 	const setMembership = (
 		menuId: string,
 		drinkIds: string[],
@@ -66,6 +68,7 @@ export function AddToMenuPicker({ drinkId }: Props) {
 			? [...drinkIds, drinkId]
 			: drinkIds.filter((id) => id !== drinkId);
 		updateMenu.mutate({ menuId, patch: { drinkIds: next } });
+		setOpen(false);
 	};
 
 	const handleCreate = () => {
@@ -74,6 +77,7 @@ export function AddToMenuPicker({ drinkId }: Props) {
 		// New menus start with this drink on them — that's why we're here.
 		createMenu.mutate({ name, drinkIds: [drinkId] });
 		setNewName('');
+		setOpen(false);
 	};
 
 	return (
@@ -161,7 +165,7 @@ export function AddToMenuPicker({ drinkId }: Props) {
 								aria-label={`Remove from ${menu.name}`}
 								className="flex cursor-pointer items-center gap-1 rounded-full border border-brass/40 bg-brass/10 px-2 py-0.5 text-xs text-ink transition-colors hover:border-brass dark:text-cream">
 								<span className="max-w-40 truncate">{menu.name}</span>
-								<span aria-hidden className="text-smoke dark:text-sand">
+								<span aria-hidden className="text-smoke dark:text-sand mb-1">
 									×
 								</span>
 							</button>

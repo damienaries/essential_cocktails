@@ -3,12 +3,20 @@ import { glassIconName, iceIconName, methodIconName } from '../../lib/metaIcons'
 import type { Drink } from '../../types/drink';
 import { SvgIcon } from '../atoms/SvgIcon';
 
-/** Drinks per half before the type starts to crowd. Used for the over-capacity hint. */
-export const MENU_SHEET_CAPACITY = 10;
+/** Drinks that fit one page at a readable size. Beyond this a second page opens. */
+export const MENU_PAGE_CAPACITY = 6;
+
+/** A folded sheet has two sides, so this is the point where the type starts to crowd. */
+export const MENU_SHEET_CAPACITY = MENU_PAGE_CAPACITY * 2;
 
 type Props = {
 	name: string;
 	drinks: Drink[];
+	/**
+	 * Marks this sheet as the one to print. The menus index renders several sheets
+	 * as previews; without this the print stylesheet couldn't tell which is which.
+	 */
+	printable?: boolean;
 };
 
 function DrinkEntry({ drink }: { drink: Drink }) {
@@ -35,10 +43,10 @@ function DrinkEntry({ drink }: { drink: Drink }) {
 	);
 }
 
-/** One half of the folded sheet. Both halves render identically. */
-function SheetHalf({ name, drinks }: Props) {
+/** One printed page — half of the folded sheet when there are two. */
+function SheetPage({ name, drinks }: { name: string; drinks: Drink[] }) {
 	return (
-		<div className="menu-sheet-half">
+		<div className="menu-sheet-page">
 			<div className="menu-sheet-frame">
 				<h2 className="menu-sheet-title">{name}</h2>
 				<hr className="menu-sheet-rule" />
@@ -57,18 +65,33 @@ function SheetHalf({ name, drinks }: Props) {
 }
 
 /**
- * A US Letter sheet in landscape, folded down the middle. Both halves carry the same
- * content so the folded card reads the same from either side.
+ * A printable menu. One page until the drinks outgrow it; past that it becomes a US
+ * Letter sheet in landscape, folded down the middle, with the list running across
+ * both halves. Pages are never duplicates of each other.
  */
-export function MenuSheet({ name, drinks }: Props) {
+export function MenuSheet({ name, drinks, printable = false }: Props) {
+	const spread = drinks.length > MENU_PAGE_CAPACITY;
+	// Anything past two pages keeps piling onto the second rather than vanishing.
+	const pages = spread
+		? [drinks.slice(0, MENU_PAGE_CAPACITY), drinks.slice(MENU_PAGE_CAPACITY)]
+		: [drinks];
+
 	return (
-		<section className="menu-sheet" aria-label={`${name} menu`}>
-			<SheetHalf name={name} drinks={drinks} />
-			<div className="menu-sheet-fold" aria-hidden />
-			{/* The mirrored half is decorative — the first one is already announced. */}
-			<div aria-hidden className="contents">
-				<SheetHalf name={name} drinks={drinks} />
-			</div>
+		<section
+			className={[
+				'menu-sheet',
+				spread ? 'menu-sheet--spread' : 'menu-sheet--single',
+				printable ? 'menu-sheet-print' : '',
+			].join(' ')}
+			aria-label={`${name} menu`}>
+			{pages.map((pageDrinks, index) => (
+				<SheetPage
+					key={index === 0 ? 'front' : 'back'}
+					name={name}
+					drinks={pageDrinks}
+				/>
+			))}
+			{spread ? <div className="menu-sheet-fold" aria-hidden /> : null}
 		</section>
 	);
 }

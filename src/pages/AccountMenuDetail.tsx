@@ -6,12 +6,16 @@ import {
 	MenuSheet,
 } from '../components/menus/MenuSheet';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
-import { useMenu, useUpdateMenu } from '../hooks/useMenus';
+import { useMenus, useUpdateMenu } from '../hooks/useMenus';
+import { findMenuBySlug } from '../lib/menuName';
 import type { Drink } from '../types/drink';
 
 export function AccountMenuDetailPage() {
-	const { menuId } = useParams<{ menuId: string }>();
-	const { data: menu, isPending: menuPending, isError } = useMenu(menuId);
+	const { menuSlug } = useParams<{ menuSlug: string }>();
+	// Resolved from the already-cached list rather than a by-id fetch: the URL
+	// carries the name, and the list is what maps a name back to its document.
+	const { data: menus = [], isPending: menusPending } = useMenus();
+	const menu = findMenuBySlug(menus, menuSlug);
 	const { data: drinks, isPending: drinksPending } = useDrinksQuery();
 	const updateMenu = useUpdateMenu();
 
@@ -25,11 +29,11 @@ export function AccountMenuDetailPage() {
 			.filter((d): d is Drink => d !== undefined);
 	}, [menu, drinks]);
 
-	if (menuPending || drinksPending) {
+	if (menusPending || drinksPending) {
 		return <p className="text-sm text-smoke dark:text-sand">Loading…</p>;
 	}
 
-	if (isError || !menu) {
+	if (!menu) {
 		return (
 			<div>
 				<p role="alert">That menu could not be found.</p>
@@ -71,12 +75,13 @@ export function AccountMenuDetailPage() {
 
 			{overCapacity ? (
 				<p className="mb-4 text-sm text-smoke dark:text-sand">
-					{menuDrinks.length} drinks — a folded sheet reads best at{' '}
-					{MENU_SHEET_CAPACITY} or fewer, so this one will run tight.
+					{menuDrinks.length} drinks — both pages together hold{' '}
+					{MENU_SHEET_CAPACITY} at a comfortable size, so the second page will
+					run tight.
 				</p>
 			) : null}
 
-			<MenuSheet name={menu.name} drinks={menuDrinks} />
+			<MenuSheet name={menu.name} drinks={menuDrinks} printable />
 
 			<section className="mt-8">
 				<h3 className="mb-3 text-ink dark:text-cream">Drinks on this menu</h3>

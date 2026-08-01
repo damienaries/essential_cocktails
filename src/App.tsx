@@ -42,7 +42,7 @@ function App() {
           <Route path="profile" element={<AccountProfilePage />} />
           <Route path="saved" element={<AccountSavedPage />} />
           <Route path="menus" element={<AccountMenusPage />} />
-          <Route path="menus/:menuId" element={<AccountMenuDetailPage />} />
+          <Route path="menus/:menuSlug" element={<AccountMenuDetailPage />} />
         </Route>
         <Route
           path="admin"
