@@ -21,6 +21,14 @@ service cloud.firestore {
 			allow create, update, delete: if isAdmin();
 		}
 
+		// Cache validator for the library (`meta/library` holds `updatedAt`). Public
+		// read so any client can check it in one read; written only alongside a drink
+		// write, so it needs the same admin gate.
+		match /meta/{docId} {
+			allow read: if true;
+			allow create, update, delete: if isAdmin();
+		}
+
 		// Per-user private data (Phase B). Each user owns everything under their
 		// own uid; no one else — not even admins — can read or write it.
 		match /users/{uid} {

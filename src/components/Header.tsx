@@ -22,6 +22,8 @@ export function Header() {
 	const { user, isPending, isAdmin } = useAuthUser();
 	const logout = useLogout();
 
+	const closeDrawer = () => setDrawerOpen(false);
+
 	useEffect(() => {
 		setDrawerOpen(false);
 	}, [pathname]);
@@ -111,13 +113,23 @@ export function Header() {
 								<section>
 									<h2 className={drawerSectionClass}>Pages</h2>
 									<div className="flex flex-col gap-5 text-lg">
-										<NavLink to="/" end className={navLinkClass}>
+										<NavLink
+											to="/"
+											end
+											onClick={closeDrawer}
+											className={navLinkClass}>
 											Home
 										</NavLink>
-										<NavLink to="/families" className={navLinkClass}>
+										<NavLink
+											to="/families"
+											onClick={closeDrawer}
+											className={navLinkClass}>
 											Families
 										</NavLink>
-										<NavLink to="/about" className={navLinkClass}>
+										<NavLink
+											to="/about"
+											onClick={closeDrawer}
+											className={navLinkClass}>
 											About
 										</NavLink>
 									</div>
@@ -129,13 +141,22 @@ export function Header() {
 									<section>
 										<h2 className={drawerSectionClass}>My Swizzle</h2>
 										<div className="flex flex-col gap-5 text-lg">
-											<NavLink to="/account/menus" className={navLinkClass}>
+											<NavLink
+												to="/account/menus"
+												onClick={closeDrawer}
+												className={navLinkClass}>
 												Menus
 											</NavLink>
-											<NavLink to="/account/saved" className={navLinkClass}>
+											<NavLink
+												to="/account/saved"
+												onClick={closeDrawer}
+												className={navLinkClass}>
 												Saved
 											</NavLink>
-											<NavLink to="/account/profile" className={navLinkClass}>
+											<NavLink
+												to="/account/profile"
+												onClick={closeDrawer}
+												className={navLinkClass}>
 												Profile
 											</NavLink>
 										</div>
@@ -158,19 +179,28 @@ export function Header() {
 											</span>
 										</div>
 										{isAdmin ? (
-											<NavLink to="/admin" className={navLinkClass}>
+											<NavLink
+												to="/admin"
+												onClick={closeDrawer}
+												className={navLinkClass}>
 												Admin
 											</NavLink>
 										) : null}
 										<button
 											type="button"
 											className="link cursor-pointer text-left"
-											onClick={() => void logout()}>
+											onClick={() => {
+												closeDrawer();
+												void logout();
+											}}>
 											Logout
 										</button>
 									</div>
 								) : (
-									<NavLink to="/signin" className={navLinkClass}>
+									<NavLink
+										to="/signin"
+										onClick={closeDrawer}
+										className={navLinkClass}>
 										Login
 									</NavLink>
 								)}

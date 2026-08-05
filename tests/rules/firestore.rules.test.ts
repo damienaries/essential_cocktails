@@ -94,6 +94,26 @@ describe('drinks/{drinkId}', () => {
 	})
 })
 
+describe('meta/library (cache validator)', () => {
+	it('allows anonymous reads, so the cheap freshness check works signed out', async () => {
+		const anon = testEnv.unauthenticatedContext().firestore()
+		await assertSucceeds(getDoc(doc(anon, 'meta/library')))
+	})
+
+	it('denies writes from anonymous and signed-in non-admins', async () => {
+		const anon = testEnv.unauthenticatedContext().firestore()
+		await assertFails(setDoc(doc(anon, 'meta/library'), { updatedAt: 1 }))
+
+		const user = testEnv.authenticatedContext(NON_ADMIN_UID).firestore()
+		await assertFails(setDoc(doc(user, 'meta/library'), { updatedAt: 1 }))
+	})
+
+	it('allows admin to stamp it', async () => {
+		const admin = testEnv.authenticatedContext(ADMIN_UID).firestore()
+		await assertSucceeds(setDoc(doc(admin, 'meta/library'), { updatedAt: 1 }))
+	})
+})
+
 describe('any other collection (catch-all deny)', () => {
 	it('denies anonymous reads on unspecified paths', async () => {
 		const anon = testEnv.unauthenticatedContext().firestore()
