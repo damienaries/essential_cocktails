@@ -1,19 +1,18 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import heroBg from '../assets/images/hero-bg.webp';
 import { CocktailCard } from '../components/CocktailCard';
-import { DrinkDetailModal } from '../components/DrinkDetailModal';
+import { DataLoadError } from '../components/DataLoadError';
 import { LetterFilterToolbar } from '../components/LetterFilterToolbar';
 import { filterDrinks } from '../lib/filterDrinks';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
 import { useLetterFilter } from '../hooks/useLetterFilter';
-import type { Drink } from '../types/drink';
+import { useOpenDrink } from '../hooks/useDrinkRoute';
 
 export function HomePage() {
 	const [search, setSearch] = useState('');
-	const [selected, setSelected] = useState<Drink | null>(null);
-	const { data, isPending, isError, error } = useDrinksQuery();
+	const openDrink = useOpenDrink();
+	const { data, isPending, isError, error, refetch } = useDrinksQuery();
 
 	const sortedAfterSearch = useMemo(() => {
 		const filtered = filterDrinks(data ?? [], search);
@@ -80,16 +79,11 @@ export function HomePage() {
 			{isPending ? (
 				<p className="text-center">Loading drinks…</p>
 			) : isError ? (
-				<div>
-					<p role="alert">
-						Could not load drinks:{' '}
-						{error instanceof Error ? error.message : 'Unknown error'}
-					</p>
-					<p className="text-smoke dark:text-sand">
-						If you just cloned the repo, add Firebase config in{' '}
-						<code>.env.local</code> (see <code>.env.example</code>).
-					</p>
-				</div>
+				<DataLoadError
+					subject="the drinks"
+					error={error}
+					onRetry={() => void refetch()}
+				/>
 			) : filteredByLetter.length === 0 ? (
 				<p className="text-center text-sm text-smoke dark:text-sand">
 					No drinks match this filter.
@@ -97,21 +91,15 @@ export function HomePage() {
 			) : (
 				<section className="grid grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
 					{filteredByLetter.map((drink) => (
-						<CocktailCard key={drink.id} drink={drink} onSelect={setSelected} />
+						<CocktailCard
+							key={drink.id}
+							drink={drink}
+							onSelect={(d) => openDrink(d, filteredByLetter)}
+						/>
 					))}
 				</section>
 			)}
 
-			<AnimatePresence>
-				{selected ? (
-					<DrinkDetailModal
-						drink={selected}
-						drinks={filteredByLetter}
-						onNavigate={setSelected}
-						onClose={() => setSelected(null)}
-					/>
-				) : null}
-			</AnimatePresence>
 		</>
 	);
 }

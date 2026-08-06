@@ -1,19 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import { CocktailCard } from '../components/CocktailCard';
-import { DrinkDetailModal } from '../components/DrinkDetailModal';
+import { DataLoadError } from '../components/DataLoadError';
 import {
 	COCKTAIL_FAMILIES,
 	drinkInFamily,
 	normalizeFamilyName,
 } from '../constants/families';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
-import type { Drink } from '../types/drink';
+import { useOpenDrink } from '../hooks/useDrinkRoute';
 
 export function FamiliesIndexPage() {
-	const [selected, setSelected] = useState<Drink | null>(null);
-	const { data, isPending, isError, error } = useDrinksQuery();
+	const openDrink = useOpenDrink();
+	const { data, isPending, isError, error, refetch } = useDrinksQuery();
 
 	const families = useMemo(() => {
 		const drinks = data ?? [];
@@ -55,10 +54,11 @@ export function FamiliesIndexPage() {
 
 	if (isError) {
 		return (
-			<p role="alert" className="text-center">
-				Could not load drinks:{' '}
-				{error instanceof Error ? error.message : 'Unknown error'}
-			</p>
+			<DataLoadError
+				subject="the drinks"
+				error={error}
+				onRetry={() => void refetch()}
+			/>
 		);
 	}
 
@@ -93,7 +93,10 @@ export function FamiliesIndexPage() {
 									<div
 										role="listitem"
 										className="w-[78%] max-w-[460px] flex-none snap-start md:w-[420px]">
-										<CocktailCard drink={namesake} onSelect={setSelected} />
+										<CocktailCard
+										drink={namesake}
+										onSelect={(d) => openDrink(d, flatDrinks)}
+									/>
 									</div>
 								) : null}
 								{variations.map((d) => (
@@ -101,7 +104,10 @@ export function FamiliesIndexPage() {
 										key={d.id}
 										role="listitem"
 										className="w-[55%] max-w-[260px] flex-none snap-start md:w-[240px]">
-										<CocktailCard drink={d} onSelect={setSelected} />
+										<CocktailCard
+										drink={d}
+										onSelect={(picked) => openDrink(picked, flatDrinks)}
+									/>
 									</div>
 								))}
 							</div>
@@ -110,16 +116,6 @@ export function FamiliesIndexPage() {
 				})}
 			</div>
 
-			<AnimatePresence>
-				{selected ? (
-					<DrinkDetailModal
-						drink={selected}
-						drinks={flatDrinks}
-						onNavigate={setSelected}
-						onClose={() => setSelected(null)}
-					/>
-				) : null}
-			</AnimatePresence>
 		</>
 	);
 }

@@ -1,11 +1,14 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
+import { useDrinkRoute } from '../hooks/useDrinkRoute';
 import { BackToTop } from './BackToTop';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
 export function Layout() {
-	const { pathname } = useLocation();
+	const location = useLocation();
+	const { background } = useDrinkRoute();
+	const pathname = background?.pathname ?? location.pathname;
 	const isAdmin = pathname.startsWith('/admin');
 	// Only the long drink grids scroll far enough to need it.
 	const showBackToTop = pathname === '/' || pathname.startsWith('/families');

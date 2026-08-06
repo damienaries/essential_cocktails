@@ -1,18 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
-import { DrinkDetailModal } from '../components/DrinkDetailModal';
+import { DataLoadError } from '../components/DataLoadError';
 import { useGlossaryQuery } from '../hooks/useGlossaryQuery';
 import {
 	categoryLabel,
 	glossarySlug,
 } from '../lib/ingredientCategory';
 import { lookupGlossaryDefinition } from '../lib/glossaryDefinitions';
-import type { Drink } from '../types/drink';
+import { useOpenDrink } from '../hooks/useDrinkRoute';
 
 export function GlossaryPage() {
 	const { entries, isPending, isError, error } = useGlossaryQuery();
-	const [selected, setSelected] = useState<Drink | null>(null);
+	const openDrink = useOpenDrink();
 	const [query, setQuery] = useState('');
 	const [openRecipes, setOpenRecipes] = useState<Set<string>>(new Set());
 	const { hash } = useLocation();
@@ -44,10 +43,7 @@ export function GlossaryPage() {
 	if (isPending) return <p className="text-center">Loading glossary…</p>;
 	if (isError) {
 		return (
-			<p role="alert" className="text-center">
-				Could not load glossary:{' '}
-				{error instanceof Error ? error.message : 'Unknown error'}
-			</p>
+			<DataLoadError subject="the glossary" error={error} />
 		);
 	}
 
@@ -102,7 +98,7 @@ export function GlossaryPage() {
 										<li key={d.id}>
 											<button
 												type="button"
-												onClick={() => setSelected(d)}
+												onClick={() => openDrink(d, e.drinks)}
 												className="rounded-full border border-chalk bg-paper px-2.5 py-0.5 text-xs capitalize text-ink hover:border-brass/40 hover:bg-palm/10 dark:border-charcoal dark:bg-coal dark:text-cream dark:hover:border-brass/40 dark:hover:bg-brass/10">
 												{d.name}
 											</button>
@@ -159,14 +155,6 @@ export function GlossaryPage() {
 				</ul>
 			)}
 
-			<AnimatePresence>
-				{selected ? (
-					<DrinkDetailModal
-						drink={selected}
-						onClose={() => setSelected(null)}
-					/>
-				) : null}
-			</AnimatePresence>
 		</div>
 	);
 }

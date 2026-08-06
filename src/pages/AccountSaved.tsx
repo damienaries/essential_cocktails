@@ -1,14 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import { CocktailCard } from '../components/CocktailCard';
-import { DrinkDetailModal } from '../components/DrinkDetailModal';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
+import { useOpenDrink } from '../hooks/useDrinkRoute';
 import { useSavedDrinks } from '../hooks/useSavedDrinks';
 import type { Drink } from '../types/drink';
 
 export function AccountSavedPage() {
-	const [selected, setSelected] = useState<Drink | null>(null);
+	const openDrink = useOpenDrink();
 	const { data: saved = [], isLoading: savedLoading } = useSavedDrinks();
 	const { data: drinks, isPending: drinksPending } = useDrinksQuery();
 
@@ -45,20 +44,14 @@ export function AccountSavedPage() {
 
 			<section className="grid grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
 				{savedDrinks.map((drink) => (
-					<CocktailCard key={drink.id} drink={drink} onSelect={setSelected} />
+					<CocktailCard
+						key={drink.id}
+						drink={drink}
+						onSelect={(d) => openDrink(d, savedDrinks)}
+					/>
 				))}
 			</section>
 
-			<AnimatePresence>
-				{selected ? (
-					<DrinkDetailModal
-						drink={selected}
-						drinks={savedDrinks}
-						onNavigate={setSelected}
-						onClose={() => setSelected(null)}
-					/>
-				) : null}
-			</AnimatePresence>
 		</>
 	);
 }

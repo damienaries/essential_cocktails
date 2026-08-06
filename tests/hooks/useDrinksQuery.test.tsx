@@ -117,6 +117,18 @@ describe('useDrinksQuery', () => {
 		expect(mockFetchAll).toHaveBeenCalledTimes(1)
 	})
 
+	it('still serves drinks when the version check fails outright', async () => {
+		// The stamp is an optimization. A denied read (rules not deployed) or an
+		// offline blip must not take the whole library down with it.
+		const qc = client()
+		mockVersion.mockRejectedValue(new Error('permission-denied'))
+
+		const { result } = renderWith(qc)
+
+		await waitFor(() => expect(result.current.data).toEqual(library))
+		expect(result.current.isError).toBe(false)
+	})
+
 	it('refetches when the meta doc is missing entirely', async () => {
 		// Version 0 means "unknown" — before the doc exists, every load must fetch
 		// rather than pinning itself to a version that never changes.

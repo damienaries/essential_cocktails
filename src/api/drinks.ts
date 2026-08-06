@@ -27,13 +27,24 @@ function libraryMetaRef() {
 }
 
 /**
- * Millis of the last library change, or 0 when the doc doesn't exist yet — which
- * reads as "no known version" and forces a full fetch rather than trusting the cache.
+ * Millis of the last library change, or 0 for "unknown" — which forces a full fetch
+ * rather than trusting the cache.
+ *
+ * This is an optimization, never a dependency: if the doc is missing or the read is
+ * denied, it must degrade to fetching everything rather than take the drinks query down with it.
  */
 export async function fetchLibraryVersion(): Promise<number> {
-	const snap = await getDoc(libraryMetaRef());
-	if (!snap.exists()) return 0;
-	return (snap.data().updatedAt as Timestamp | null)?.toMillis() ?? 0;
+	try {
+		const snap = await getDoc(libraryMetaRef());
+		if (!snap.exists()) return 0;
+		return (snap.data().updatedAt as Timestamp | null)?.toMillis() ?? 0;
+	} catch (err) {
+		console.warn(
+			'Library version check failed; falling back to a full fetch.',
+			err,
+		);
+		return 0;
+	}
 }
 
 /**
@@ -44,8 +55,8 @@ export async function fetchLibraryVersion(): Promise<number> {
 function prepareDrinkFirestoreData(
 	fields: Record<string, unknown>,
 ): Record<string, unknown> {
-	const { family: famRaw, families: famsRaw, ...rest } = fields
-	const out: Record<string, unknown> = { ...rest }
+	const { family: famRaw, families: famsRaw, ...rest } = fields;
+	const out: Record<string, unknown> = { ...rest };
 	const fams = Array.isArray(famsRaw)
 		? [
 				...new Set(
@@ -54,16 +65,16 @@ function prepareDrinkFirestoreData(
 						.filter(Boolean),
 				),
 			]
-		: []
-	const fam = typeof famRaw === 'string' ? famRaw.trim() : ''
-	const primary = fam || fams[0] || ''
+		: [];
+	const fam = typeof famRaw === 'string' ? famRaw.trim() : '';
+	const primary = fam || fams[0] || '';
 	if (primary !== '') {
-		out.family = primary
+		out.family = primary;
 	}
 	if (fams.length > 0) {
-		out.families = fams
+		out.families = fams;
 	}
-	return out
+	return out;
 }
 
 export async function fetchAllDrinks(): Promise<Drink[]> {

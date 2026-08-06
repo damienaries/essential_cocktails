@@ -21,7 +21,9 @@ export function useDrinksQuery() {
 	return useQuery({
 		queryKey: DRINKS_QUERY_KEY,
 		queryFn: async () => {
-			const version = await fetchLibraryVersion()
+			// The stamp is an optimization, never a dependency: whatever goes wrong
+			// with it, fall through to fetching the library rather than failing.
+			const version = await fetchLibraryVersion().catch(() => 0)
 			const cachedVersion = queryClient.getQueryData<number>(
 				LIBRARY_VERSION_KEY,
 			)

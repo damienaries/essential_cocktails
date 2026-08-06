@@ -1,5 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { AnimatePresence } from 'motion/react'
 import { Layout } from './components/Layout'
+import { DrinkRouteModal } from './components/DrinkRouteModal'
+import { useDrinkRoute, useRoutedLocation } from './hooks/useDrinkRoute'
 import { RequireAdmin } from './components/RequireAdmin'
 import { RequireAuth } from './components/RequireAuth'
 import { HomePage } from './pages/Home'
@@ -21,8 +24,14 @@ import { AccountMenusPage } from './pages/AccountMenus'
 import { AccountMenuDetailPage } from './pages/AccountMenuDetail'
 
 function App() {
+  // A drink URL renders the modal *over* a page rather than as a page, so the routed
+  // location is the page behind it rather than the drink's own URL.
+  const routedLocation = useRoutedLocation()
+  const { isOpen: drinkOpen } = useDrinkRoute()
+
   return (
-    <Routes>
+    <>
+    <Routes location={routedLocation}>
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="families" element={<FamiliesIndexPage />} />
@@ -59,6 +68,13 @@ function App() {
       <Route path="home" element={<Navigate to="/" replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
+
+    {/* Keyed once, not per drink: the modal handles its own prev/next slide, and
+        remounting it on every slug change would flash instead of animate. */}
+    <AnimatePresence>
+      {drinkOpen ? <DrinkRouteModal key="drink-modal" /> : null}
+    </AnimatePresence>
+    </>
   )
 }
 

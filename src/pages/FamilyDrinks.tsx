@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import { CocktailCard } from '../components/CocktailCard';
-import { DrinkDetailModal } from '../components/DrinkDetailModal';
+import { DataLoadError } from '../components/DataLoadError';
 import {
 	COCKTAIL_FAMILIES,
 	drinkInFamily,
@@ -10,12 +9,12 @@ import {
 	slugToFamilyFilter,
 } from '../constants/families';
 import { useDrinksQuery } from '../hooks/useDrinksQuery';
-import type { Drink } from '../types/drink';
+import { useOpenDrink } from '../hooks/useDrinkRoute';
 
 export function FamilyDrinksPage() {
 	const { slug } = useParams<{ slug: string }>();
-	const [selected, setSelected] = useState<Drink | null>(null);
-	const { data, isPending, isError, error } = useDrinksQuery();
+	const openDrink = useOpenDrink();
+	const { data, isPending, isError, error, refetch } = useDrinksQuery();
 
 	const label = useMemo(() => {
 		if (!slug || !isFamilySlug(slug)) return null;
@@ -45,14 +44,17 @@ export function FamilyDrinksPage() {
 
 	if (isError) {
 		return (
-			<div className="max-w-[720px]">
-				<p role="alert">
-					Could not load drinks:{' '}
-					{error instanceof Error ? error.message : 'Unknown error'}
+			<div>
+				<DataLoadError
+					subject="the drinks"
+					error={error}
+					onRetry={() => void refetch()}
+				/>
+				<p className="text-center">
+					<Link to="/families" className="link">
+						Back to families
+					</Link>
 				</p>
-				<Link to="/families" className="link">
-					Back to families
-				</Link>
 			</div>
 		);
 	}
@@ -68,20 +70,14 @@ export function FamilyDrinksPage() {
 
 			<section className="grid grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
 				{filtered.map((drink) => (
-					<CocktailCard key={drink.id} drink={drink} onSelect={setSelected} />
+					<CocktailCard
+						key={drink.id}
+						drink={drink}
+						onSelect={(d) => openDrink(d, filtered)}
+					/>
 				))}
 			</section>
 
-			<AnimatePresence>
-				{selected ? (
-					<DrinkDetailModal
-						drink={selected}
-						drinks={filtered}
-						onNavigate={setSelected}
-						onClose={() => setSelected(null)}
-					/>
-				) : null}
-			</AnimatePresence>
 		</>
 	);
 }

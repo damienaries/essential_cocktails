@@ -1,3 +1,4 @@
+import { slugify } from './slug';
 import type { CustomMenu } from '../types/user';
 
 /** Menu names print as a heading on the sheet, so they stay short enough to fit. */
@@ -8,15 +9,7 @@ export function normalizeMenuName(value: string): string {
 }
 
 export function menuSlug(name: string): string {
-	const slug = name
-		.trim()
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/[̀-ͯ]/g, '')
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '');
-	// Names made entirely of symbols would slug to nothing; keep them addressable.
-	return slug || encodeURIComponent(name.trim().toLowerCase());
+	return slugify(name);
 }
 
 export function findMenuBySlug(
