@@ -79,11 +79,9 @@ export function CocktailCard({ drink, onSelect }: Props) {
 					/>
 				</span>
 			</motion.button>
-			<SaveDrinkButton
-				drinkId={drink.id}
-				drinkName={drink.name}
-				className="absolute right-2 bottom-2 z-10"
-			/>
+			<div className="absolute right-2 bottom-2 z-10">
+				<SaveDrinkButton drinkId={drink.id} drinkName={drink.name} />
+			</div>
 		</div>
 	);
 }
