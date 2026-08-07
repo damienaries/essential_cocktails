@@ -22,7 +22,7 @@ export function BackToTop() {
 
 	return (
 		// Named group so the tooltip only answers to this button.
-		<span className="group/top fixed right-6 bottom-6 z-30 hidden md:block">
+		<span className="group/top fixed right-6 bottom-30 lg:bottom-18 z-30">
 			<button
 				type="button"
 				onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
